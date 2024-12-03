@@ -31,7 +31,8 @@ def clean(col) :
 
 df['clean_dir'] = clean(df['directions'])
 
-
+if 'titre' not in st.session_state : 
+    st.session_state.titre = ' '
 
 # Use a text_input to get the keywords to filter the dataframe
 text_search = st.text_input("Search recipies by ingredients", value="")
@@ -46,9 +47,37 @@ rep = df[df['NER'].str.contains(base.format(''.join(expr.format(w) for w in sent
 #df_search = df[m1 | m2]
 
 if text_search:
-    st.header("Il y a", len(rep), "recettes correspondantes")
+    st.write(len(rep), "recettes correspondantes")
     rep['%'] = rep['NER'].apply(lambda ing: round((nb / len(ast.literal_eval(ing)))*100,1))
-    for i in rep.sort_values('%', ascending=False).head(15)['title'] :
-        st.write(i, "pourcentage d'ingrédients déjà à disposition", rep.sort_values('%', ascending=False)['%'])
+    rep = rep.sort_values('%', ascending=False).head(15)
+    st.markdown(
+    """
+    <style>
+    button {
+        background: none!important;
+        border: none;
+        padding: 0!important;
+        color: black !important;
+        text-decoration: none;
+        cursor: pointer;
+        border: none !important;
+    }
+    button:hover {
+        text-decoration: none;
+        color: black !important;
+    }
+    button:focus {
+        outline: none !important;
+        box-shadow: none !important;
+        color: black !important;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
+    for i in range(len(rep)) :
+        if st.button(rep.iloc[i]['title']):
+            st.session_state.titre = rep.iloc[i]['title']
+            st.switch_page("pages/page1.py")
 
 
