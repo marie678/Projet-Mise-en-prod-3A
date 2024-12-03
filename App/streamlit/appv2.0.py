@@ -46,21 +46,9 @@ rep = df[df['NER'].str.contains(base.format(''.join(expr.format(w) for w in sent
 #df_search = df[m1 | m2]
 
 if text_search:
+    st.header("Il y a", len(rep), "recettes correspondantes")
     rep['%'] = rep['NER'].apply(lambda ing: round((nb / len(ast.literal_eval(ing)))*100,1))
-    best = rep['%'].idxmax()
-    df_search = df.loc[best]
-    st.header(df.loc[best]['title'])
-    st.write("pourcentage d'ingrédients déjà à disposition", rep['%'].max())
-    st.subheader("Ingrédients et leurs proportions:")
-    for i in ast.literal_eval(df.loc[best]['ingredients']) : 
-        st.write(i, "\n")
-    st.subheader("Instructions:")
-    for i in df.loc[best]['clean_dir'] : 
-        st.write(i, "\n")
-    st.write("> Lien vers la recette:", df.loc[best]['link'])
-    #html = """
-    #<a style='background:yellow'>This text has a yellow background</a>
-    #"""
-    #st.markdown(html,unsafe_allow_html=True)
+    for i in rep.sort_values('%', ascending=False).head(15)['title'] :
+        st.write(i, "pourcentage d'ingrédients déjà à disposition", rep.sort_values('%', ascending=False)['%'])
 
 
