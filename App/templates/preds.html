@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{{ url_for('static', filename= 'style.css') }}">
+    <title>Predictions</title>
+</head>
+<body>
+    <h1>Enter Text for Prediction</h1>
+    <form action="/spacy/prediction" method="POST">
+        <label for="text">Text:</label>
+        <input type="text" id="text" name="text" required>
+        <button type="submit">Get Predictions</button>
+    </form>
+
+    {% if predictions %}
+        <h2>Predictions:</h2>
+        <ul>
+            {% for val in predictions %}
+                <li><strong>{{ col }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    {% if text %}
+        <p><strong>Text processed:</strong> "{{ text }}"</p>
+    {% endif %}
+</body>
+</html>
