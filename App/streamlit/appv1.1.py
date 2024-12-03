@@ -5,9 +5,8 @@ import operator
 import ast
 
  
-st.write("""
-# My first app
-Hello *world!*
+st.title("""
+Welcome to frigo vide app
 """)
  
 df = pd.read_csv("c:\\Users\\guibe\\OneDrive\\Documents\\ENSAE\\3A\\S1\\Infra\\projet\\Projet-Infra-3A\\Data\\echant_10k_recipes.csv")
@@ -29,4 +28,13 @@ if text_search:
     rep['%'] = rep['NER'].apply(lambda ing: round((nb / len(ast.literal_eval(ing)))*100,1))
     best = rep['%'].idxmax()
     df_search = df.loc[best]
-    st.write(df_search)
+    st.header(df.loc[best]['title'])
+    st.write("Réponse à la requête:", sentence)
+    st.write("pourcentage d'ingrédients déjà à disposition", rep['%'].max())
+    st.subheader("Ingrédients et leurs proportions:")
+    st.write(ast.literal_eval(df.loc[best]['ingredients']))
+    st.subheader("Instructions:")
+    st.write([i.split('. ') for i in ast.literal_eval(df.loc[best]['directions'])])
+    st.write("> Lien vers la recette:", df.loc[best]['link'])
+
+
