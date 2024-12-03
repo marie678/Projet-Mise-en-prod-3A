@@ -1,6 +1,6 @@
 ########################################### app v1.1 #################################################
-# display the query results in a list 
-# pb : just extract of list, not cliquable
+# display the query results clearly 
+# pb : absence retour à la ligne pour les points virgules (ex : cheese)
 
 import streamlit as st
 import pandas as pd
@@ -46,12 +46,39 @@ rep = df[df['NER'].str.contains(base.format(''.join(expr.format(w) for w in sent
 #m2 = df["Title"].str.contains(text_search)
 #df_search = df[m1 | m2]
 
+
 if text_search:
     st.write(len(rep), "recettes correspondantes")
     rep['%'] = rep['NER'].apply(lambda ing: round((nb / len(ast.literal_eval(ing)))*100,1))
     rep = rep.sort_values('%', ascending=False).head(15)
+    st.markdown(
+    """
+    <style>
+    button {
+        background: none!important;
+        border: none;
+        padding: 0!important;
+        color: black !important;
+        text-decoration: none;
+        cursor: pointer;
+        border: none !important;
+    }
+    button:hover {
+        text-decoration: none;
+        color: black !important;
+    }
+    button:focus {
+        outline: none !important;
+        box-shadow: none !important;
+        color: black !important;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
     for i in range(len(rep)) :
-        st.write(rep.iloc[i]['title'], " - ", rep.iloc[i]['%'], " '%' d'ingrédient déjà à disposition")
+        st.button(rep.iloc[i]['title'])
+        st.write(" - ", rep.iloc[i]['%'], " '%' d'ingrédient déjà à disposition")
 
 
 
