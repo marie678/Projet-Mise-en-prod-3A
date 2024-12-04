@@ -56,44 +56,45 @@ rep = df[df['NER'].str.contains(base.format(''.join(expr.format(w) for w in sent
 #df_search = df[m1 | m2]
 
 if text_search:
-    st.write(len(rep), "recettes correspondantes")
-    rep['%'] = rep['NER'].apply(lambda ing: round((nb / len(ast.literal_eval(ing)))*100,1))
-    rep = rep.sort_values('%', ascending=False).head(15)
-    best = rep['%'].idxmax()
-    df_search = df.loc[best]
-    
-    st.markdown(
-    """
-    <style>
-    button {
-        background: none!important;
-        border: none;
-        padding: 0!important;
-        color: black !important;
-        text-decoration: none;
-        cursor: pointer;
-        border: none !important;
-    }
-    button:hover {
-        text-decoration: none;
-        color: black !important;
-    }
-    button:focus {
-        outline: none !important;
-        box-shadow: none !important;
-        color: black !important;
-    }
-    </style>
-    """,
-    unsafe_allow_html=True,
-)
-    for i in range(len(rep)) :
-        if st.button(rep.iloc[i]['title']):
-            st.session_state.title = rep.iloc[i]['title']
-            st.session_state.ingredients = df_search['ingredients']
-            st.session_state.instructions = df_search['directions']
-            st.session_state.link = df_search['link']
-            st.session_state.correspondance_rate = rep['%'].max()
-            st.switch_page("./pages/Recettes.py")
+    st.write(f"{len(rep)} recettes correspondantes")
+    if len(rep) > 0 :
+        rep['%'] = rep['NER'].apply(lambda ing: round((nb / len(ast.literal_eval(ing)))*100,1))
+        rep = rep.sort_values('%', ascending=False).head(15)
+        best = rep['%'].idxmax()
+        df_search = df.loc[best]
+
+        st.markdown(
+        """
+        <style>
+        button {
+            background: none!important;
+            border: none;
+            padding: 0!important;
+            color: black !important;
+            text-decoration: none;
+            cursor: pointer;
+            border: none !important;
+        }
+        button:hover {
+            text-decoration: none;
+            color: black !important;
+        }
+        button:focus {
+            outline: none !important;
+            box-shadow: none !important;
+            color: black !important;
+        }
+        </style>
+        """,
+        unsafe_allow_html=True,
+    )
+        for i in range(len(rep)) :
+            if st.button(rep.iloc[i]['title']):
+                st.session_state.title = rep.iloc[i]['title']
+                st.session_state.ingredients = df_search['ingredients']
+                st.session_state.instructions = df_search['directions']
+                st.session_state.link = df_search['link']
+                st.session_state.correspondance_rate = rep['%'].max()
+                st.switch_page("./pages/Recettes.py")
 
 
