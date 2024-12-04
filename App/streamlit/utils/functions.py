@@ -21,3 +21,17 @@ def reformat(col):
         i = ast.literal_eval(i)
         col2.append(i)
     return  reduce(operator.concat, col2)
+
+def split_frame(input_df, rows: int):
+    """
+    Splits the input DataFrame into chunks of a specified number of rows.
+
+    Args:
+        input_df (DataFrame): the dataset that will be split.
+        rows (int): the number of rows per split
+
+    Returns:
+        list[DataFrame]: A list of DataFrame chunks.
+    """
+    df = [input_df.iloc[i:i+rows-1,:] for i in range(0, len(input_df), rows)]
+    return df
