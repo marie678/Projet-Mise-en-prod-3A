@@ -8,13 +8,14 @@ from functools import reduce
 import operator
 import ast
 import re
+from app.config import SAMPLE_RECIPE_PATH
 
  
 st.title("""
 Welcome to frigo vide app
 """)
  
-df = pd.read_csv("c:\\Users\\guibe\\OneDrive\\Documents\\ENSAE\\3A\\S1\\Infra\\projet\\Projet-Infra-3A\\Data\\echant_10k_recipes.csv")
+df = pd.read_csv(SAMPLE_RECIPE_PATH)
 
 def clean(col) : 
     col2 = []
@@ -34,7 +35,7 @@ df['clean_dir'] = clean(df['directions'])
 
 
 # Use a text_input to get the keywords to filter the dataframe
-text_search = st.text_input("Search recipies by ingredients", value="")
+text_search = st.text_input("Search recipes by ingredients", value="").lower()
 
 # Filter the dataframe using masks
 sentence = text_search.split(' ')

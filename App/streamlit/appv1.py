@@ -3,18 +3,17 @@ import pandas as pd
 from functools import reduce
 import operator
 import ast
-
+from app.config import SAMPLE_RECIPE_PATH
  
 st.write("""
 # My first app
 Hello *world!*
 """)
  
-df = pd.read_csv("c:\\Users\\guibe\\OneDrive\\Documents\\ENSAE\\3A\\S1\\Infra\\projet\\Projet-Infra-3A\\Data\\echant_10k_recipes.csv")
-st.write(df)
+df = pd.read_csv(SAMPLE_RECIPE_PATH)
 
 # Use a text_input to get the keywords to filter the dataframe
-text_search = st.text_input("Search recipies by ingredients", value="")
+text_search = st.text_input("Search recipies by ingredients", value="").lower()
 
 # Filter the dataframe using masks
 sentence = text_search.split(' ')
@@ -30,3 +29,6 @@ if text_search:
     best = rep['%'].idxmax()
     df_search = df.loc[best]
     st.write(df_search)
+
+else :
+    st.write(df)
