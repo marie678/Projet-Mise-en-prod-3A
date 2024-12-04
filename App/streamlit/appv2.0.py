@@ -8,27 +8,12 @@ from functools import reduce
 import operator
 import ast
 import re
-from app.config import SAMPLE_RECIPE_PATH
- 
-st.title("""
-Welcome to frigo vide app
-""")
+from app.config import SAMPLE_RECIPE_PATH, APP_TITLE
+from utils.functions import clean
+
+st.title(APP_TITLE)
  
 df = pd.read_csv(SAMPLE_RECIPE_PATH)
-
-def clean(col) : 
-    col2 = []
-    col3 = []
-    for i in col : 
-        i = ast.literal_eval(i)
-        col2.append(i)
-    for j in col2 : 
-        if len(j) == 1 : 
-            col3.append(j[0].split('.'))
-        else : 
-            col3.append(j)
-    return col3
-
 df['clean_dir'] = clean(df['directions'])
 
 if 'titre' not in st.session_state : 

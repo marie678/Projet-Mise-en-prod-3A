@@ -3,14 +3,10 @@ import pandas as pd
 from functools import reduce
 import operator
 import ast
-from app.config import SAMPLE_RECIPE_PATH
+from app.config import SAMPLE_RECIPE_PATH, APP_TITLE
 
  
-st.write("""
-# My first app
-Hello *world!*
-""")
-
+st.write(APP_TITLE)
 df = pd.read_csv(SAMPLE_RECIPE_PATH)
 
 # Use a text_input to get the keywords to filter the dataframe
