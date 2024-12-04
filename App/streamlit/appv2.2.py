@@ -8,13 +8,13 @@ from functools import reduce
 import operator
 import ast
 import re
-
+from app.config import SAMPLE_RECIPE_PATH
  
 st.title("""
 Welcome to frigo vide app
 """)
  
-df = pd.read_csv("c:\\Users\\guibe\\OneDrive\\Documents\\ENSAE\\3A\\S1\\Infra\\projet\\Projet-Infra-3A\\Data\\echant_10k_recipes.csv")
+df = pd.read_csv(SAMPLE_RECIPE_PATH)
 
 def clean(col) : 
     col2 = []
@@ -31,11 +31,20 @@ def clean(col) :
 
 df['clean_dir'] = clean(df['directions'])
 
-if 'titre' not in st.session_state : 
-    st.session_state.titre = ' '
+# initialize session_state with recipe elements
+if 'title' not in st.session_state : 
+    st.session_state.titre = ''
+if 'ingredients' not in st.session_state :
+    st.session_state.ingredients = ''
+if 'instructions' not in st.session_state:
+    st.session_state.instructions = ''
+if 'link' not in st.session_state:
+    st.session_state.link = ''
+if 'correspondance_rate' not in st.session_state :
+    st.session_state.correspondance_rate = ''
 
 # Use a text_input to get the keywords to filter the dataframe
-text_search = st.text_input("Search recipies by ingredients", value="")
+text_search = st.text_input("Search recipes by ingredients", value="").lower()
 
 # Filter the dataframe using masks
 sentence = text_search.split(' ')
@@ -50,6 +59,9 @@ if text_search:
     st.write(len(rep), "recettes correspondantes")
     rep['%'] = rep['NER'].apply(lambda ing: round((nb / len(ast.literal_eval(ing)))*100,1))
     rep = rep.sort_values('%', ascending=False).head(15)
+    best = rep['%'].idxmax()
+    df_search = df.loc[best]
+    
     st.markdown(
     """
     <style>
@@ -77,7 +89,11 @@ if text_search:
 )
     for i in range(len(rep)) :
         if st.button(rep.iloc[i]['title']):
-            st.session_state.titre = rep.iloc[i]['title']
-            st.switch_page("pages/page1.py")
+            st.session_state.title = rep.iloc[i]['title']
+            st.session_state.ingredients = df_search['ingredients']
+            st.session_state.instructions = df_search['directions']
+            st.session_state.link = df_search['link']
+            st.session_state.correspondance_rate = rep['%'].max()
+            st.switch_page("./pages/Recettes.py")
 
 
