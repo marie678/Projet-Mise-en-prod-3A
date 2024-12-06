@@ -24,7 +24,7 @@ expr = '(?=.*{})'
 
 # initialize session_state with recipe elements
 if 'title' not in st.session_state : 
-    st.session_state.titre = ''
+    st.session_state.title = ''
 if 'ingredients' not in st.session_state :
     st.session_state.ingredients = ''
 if 'instructions' not in st.session_state:

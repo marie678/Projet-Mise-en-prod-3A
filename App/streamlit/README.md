@@ -18,5 +18,6 @@
 
 
 ## V3 Filtres
+3.0 ajout de filtres selon les ingrédients + de pages
 
 ## V4 Fonctionnalités avancées et performance : cache, multipage, site en plusieurs langues, login
