@@ -11,7 +11,7 @@ from app.config import SAMPLE_RECIPE_PATH, APP_TITLE
 from utils.functions import clean, reformat, split_frame
 from streamlit_extras.add_vertical_space import add_vertical_space
 
-st.set_page_config(layout="wide", page_title ='frigo vide')
+st.set_page_config(layout="wide", page_title ='frigo vide', initial_sidebar_state='collapsed')
 st.title(APP_TITLE)
 
 df = pd.read_csv(SAMPLE_RECIPE_PATH)

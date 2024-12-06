@@ -16,8 +16,8 @@
 
 1.2 affichage des résultats sous forme de liste puis redirection vers page détaillant la recette en cas de clic - passage au multipage
 
-
 ## V3 Filtres
 3.0 ajout de filtres selon les ingrédients + de pages
+3.1 
 
 ## V4 Fonctionnalités avancées et performance : cache, multipage, site en plusieurs langues, login
