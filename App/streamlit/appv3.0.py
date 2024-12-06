@@ -33,7 +33,10 @@ if 'link' not in st.session_state:
     st.session_state.link = ''
 if 'correspondance_rate' not in st.session_state :
     st.session_state.correspondance_rate = ''
-
+if 'search_button' not in st.session_state:
+    st.session_state.search_button = False
+if 'selected_ingredients' not in st.session_state:
+    st.session_state.selected_ingredients = []
 
 menu = st.columns(2) # changer, les mettre à la ligne
 with menu[0]:
@@ -43,10 +46,15 @@ if filter == 'Oui':
         filter_criteria = st.selectbox("Critère de filtre:", options=['ingrédients 🍅🍊', 'temps, appareil cuisson, difficulté ... si on a'])
     if filter_criteria == 'ingrédients 🍅🍊' :
         # with menu[2]:
-            ingredients = st.multiselect("Choisir un (ou plusieurs) ingrédient(s)", ingredient_list)
+            ingredients = st.multiselect("Choisir un (ou plusieurs) ingrédient(s)", ingredient_list, default=st.session_state.selected_ingredients)
             nb_ingredients = len(ingredients)
-    
-    if nb_ingredients > 0 :
+            st.session_state.selected_ingredients = ingredients  # Store selected ingredients in session state
+
+if st.button("Rechercher"):
+    st.session_state.search_triggered = True
+
+
+    if st.session_state.search_triggered and nb_ingredients > 0:
         # Filter on the chosen ingredients
         df_search = df[df['NER'].str.contains(base.format(''.join(expr.format(w) for w in ingredients)))]
         # Compute the correspondance rates
@@ -76,9 +84,26 @@ if filter == 'Oui':
 
         # faire le lien avec fichier CSS, pas encore actif
         st.markdown(
-    """
-    <link rel="stylesheet" href="./src/style.css">
-    """,
+            """
+    button {
+    background: none!important;
+    border: none;
+    padding: 0!important;
+    color: black !important;
+    text-decoration: none;
+    cursor: pointer;
+    border: none !important;
+}
+button:hover {
+    text-decoration: none;
+    color: black !important;
+}
+button:focus {
+    outline: none !important;
+    box-shadow: none !important;
+    color: black !important;
+}
+""",
     unsafe_allow_html=True
         )
         for i in range(len(page)) :
