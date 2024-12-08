@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }}</title>
+</head>
+
+<body>
+    <div>
+        <h1>{{ title }}</h1>
+        <img align = "right" style='height: 30%; width: 40%; object-fit: contain' src= {{ img }}>
+        <p> {{ prc }}  % of ingredients already at disposal</p>
+        <em style = "color:#060270;"> {{ desc }} ! </em>
+        <h2> Ingredients </h2>
+        <ul>
+            {% for item in items %}
+                <li>{{ item }}</li>
+            {% endfor %}
+        </ul>
+        <h2> Directions </h2>
+        <ul>
+            {% for item in dir %}
+                <li>{{ item }}</li>
+            {% endfor %}
+        </ul>
+        
+        <p> Here's the link to reciepe : <a href={{ link }}> {{ link }}</a>  </p>
+        <p> Enjoy ;)  </p>
+    </div>
+</body>
+</html>
