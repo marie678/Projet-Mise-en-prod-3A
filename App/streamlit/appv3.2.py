@@ -58,7 +58,7 @@ if search_button :
     # st.balloons()
 
 @st.cache_data
-def search_recipes(original_df):
+def search_recipes(original_df, ingredients: list):
     df_search = original_df[original_df['NER'].str.contains(base.format(''.join(expr.format(w) for w in ingredients)))]
     # Compute the correspondance rates
     df_search['%'] = df_search['NER'].apply(lambda ing: round((nb_ingredients / len(ast.literal_eval(ing)))*100,1))
@@ -75,7 +75,7 @@ if st.session_state.search_triggered and nb_ingredients > 0:
         # df_search['%'] = df_search['NER'].apply(lambda ing: round((nb_ingredients / len(ast.literal_eval(ing)))*100,1))
         # df_search = df_search.sort_values('%', ascending=False)
         # total_nr_recipes = len(df_search)
-        df_search, total_nr_recipes = search_recipes(df)
+        df_search, total_nr_recipes = search_recipes(df, ingredients)
 
         # Choose number of recipes to display + reduce the dataframe accordingly
         # with menu[3]:
