@@ -27,8 +27,6 @@ nb = len(sentence)
 base = r'^{}'
 expr = '(?=.*{})'
 rep = df[df['NER'].str.contains(base.format(''.join(expr.format(w) for w in sentence)))][['title','NER']]
-#m2 = df["Title"].str.contains(text_search)
-#df_search = df[m1 | m2]
 
 if text_search:
     rep['%'] = rep['NER'].apply(lambda ing: round((nb / len(ast.literal_eval(ing)))*100,1))
