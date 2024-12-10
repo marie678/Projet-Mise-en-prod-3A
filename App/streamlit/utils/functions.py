@@ -1,6 +1,7 @@
 import ast
 from functools import reduce
 import operator
+import pandas as pd
 
 def clean(col) :
     col2 = []
@@ -22,7 +23,7 @@ def reformat(col):
         col2.append(i)
     return  reduce(operator.concat, col2)
 
-def split_frame(input_df, rows: int):
+def split_frame(input_df: pd.DataFrame, rows: int) -> pd.DataFrame:
     """
     Splits the input DataFrame into chunks of a specified number of rows.
 
