@@ -4,14 +4,58 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ title }}</title>
+    <!-- Include Google Icons library -->
+    <link href=
+"https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined" rel="stylesheet" />
+
+<style type="text/css">
+    .boxed {
+      border: 1px solid green ;
+      border-radius: 20px ;
+      background-color: rgba(58, 30, 89, 0.086) ;
+      width:500px;
+        height:50px;
+        text-align: center;
+        vertical-align: middle;
+        display: table-cell;
+    }
+    </style>
 </head>
 
 <body>
+    <!-- Title -->
     <div>
-        <h1>{{ title }}</h1>
-        <img align = "right" style='height: 30%; width: 40%; object-fit: contain' src= {{ img }}>
+        <h1>{{ title }}</h1> 
         <p> {{ prc }}  % of ingredients already at disposal</p>
+    </div>
+    <!-- General caracteristics -->
+    <div class="boxed">
+        <!-- Include Google Icons for PrepTime -->
+        <span class="material-symbols-outlined">cooking</span>
+        {{ prep_time }} &nbsp; 
+        <!-- Include Google Icons for CookTime -->
+         <span class="material-symbols-outlined">oven</span>
+        {{ c_time }} &nbsp;
+         <!-- Include Google Icons for TotalTime -->
+         <span class="material-symbols-outlined">restaurant</span>
+         {{ tot_time}}
+      </div>
+      <!-- Image -->
+    <div> 
+        <img align = "right" style='height: 30%; width: 40%; object-fit: contain' src= {{ img }}>
+        
+    </div>
+
+      <!-- Description -->
+    <div>
         <em style = "color:#060270;"> {{ desc }} ! </em>
+        <p> {% for item in keywords %}
+            {{ item }}
+        {% endfor %}</p>
+    </div>
+
+      <!-- Main body -->
+    <div>
         <h2> Ingredients </h2>
         <ul>
             {% for item in items %}
