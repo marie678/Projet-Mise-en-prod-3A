@@ -2,6 +2,7 @@ import ast
 from functools import reduce
 import operator
 import pandas as pd
+import streamlit as st
 
 def clean(col) :
     col2 = []
@@ -36,3 +37,25 @@ def split_frame(input_df: pd.DataFrame, rows: int) -> pd.DataFrame:
     """
     df = [input_df.iloc[i:i+rows-1,:] for i in range(0, len(input_df), rows)]
     return df
+
+
+@st.cache_data(show_spinner=True)
+def search_recipes(original_df: pd.DataFrame, filters:list, dict_columns: dict): # -> pd.DataFrame, int:
+    """
+    dict_columns = corresponding column in a dataset to filter on, for a given filter
+    """
+    filtered_df = original_df.copy()
+    if 'ingredients' in filters.keys():
+        col, value = dict_columns['ingredients'], filters['ingredients']
+        filtered_df = filtered_df[filtered_df[col].str.contains(base.format(''.join(expr.format(w) for w in value)))]
+    if 'recipe_durations' in filters.keys():
+        col, value = dict_columns['recipe_durations'], filters['recipe_durations']
+        filtered_df = filtered_df[filtered_df[col] <= (value)]
+    if 'ratings' in filters.keys():
+        col, value = dict_columns['ratings'], filters['ratings']
+        filtered_df = filtered_df[filtered_df[col] >= (value)]
+    # # Compute the correspondance rates
+    # df_search['%'] = df_search['NER'].apply(lambda ing: round((nb_ingredients / len(ast.literal_eval(ing)))*100,1))
+    # df_search = df_search.sort_values('%', ascending=False)
+    total_nr_recipes : int = len(filtered_df)
+    return filtered_df, total_nr_recipes
