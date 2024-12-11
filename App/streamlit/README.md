@@ -18,6 +18,8 @@
 
 ## V3 Filtres
 3.0 ajout de filtres selon les ingrédients + de pages
-3.1 
+3.1 Reset bouton (non fonctionnel)
+3.2 Création d'une fonction pour filtrer le dataset + caching
+3.3 Ajout de filtres supplémentaires
 
 ## V4 Fonctionnalités avancées et performance : cache, multipage, site en plusieurs langues, login

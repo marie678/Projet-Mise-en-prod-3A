@@ -23,6 +23,7 @@ ingredient_list: set = {x for x in sorted(set(reformat(df['NER']))) if pd.notna(
 recipe_durations: set = {x for x in sorted(set(df['CookTime_minutes'])) if pd.notna(x)}
 ratings: set = {x for x in sorted(set(df['AggregatedRating'])) if pd.notna(x)}
 
+# define constants
 base: str = r'^{}'
 expr: str = '(?=.*{})'
 filter_columns: dict = {
@@ -96,14 +97,15 @@ with st.form("filter_form", clear_on_submit=True):
         research_summary += f'ingredients : *{ingredients}*'
 
     # Recipe duration filter CHANGE TO SLIDER ????
-    recipe_time = col2.selectbox("Choose the duration of your recipe", recipe_durations, index=None) #recipe_durations.index(st.session_state.selected_duration) if st.session_state.selected_duration else 
+    recipe_time = col2.slider("Choose the duration of your recipe", min_value=int(min(recipe_durations)), max_value=int(max(recipe_durations)), value=20, step=5)
+    # recipe_time = col2.selectbox("Choose the duration of your recipe", recipe_durations, index=None) #recipe_durations.index(st.session_state.selected_duration) if st.session_state.selected_duration else 
     st.session_state.selected_duration = recipe_time  # Update duration in session state
     if recipe_time: # default to 'Select recipe time'?
         filters['recipe_durations'] = recipe_time
         research_summary += f' - recipe duration <= *{recipe_time}* min.'
 
     # Ratings filter
-    rating = col3.selectbox("Choose a rating", ratings, index=None) #ratings.index(st.session_state.selected_rating) if st.session_state.selected_rating else 
+    rating = col3.slider("Choose a rating", min_value=(min(ratings)), max_value=(max(ratings)), value=3.0, step=2.5) #ratings.index(st.session_state.selected_rating) if st.session_state.selected_rating else 
     st.session_state.selected_rating = rating  # Update rating in session state
     if rating:
         filters['ratings'] = rating
