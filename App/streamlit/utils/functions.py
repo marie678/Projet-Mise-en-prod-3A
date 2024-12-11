@@ -39,11 +39,14 @@ def split_frame(input_df: pd.DataFrame, rows: int) -> pd.DataFrame:
     return df
 
 
+
 @st.cache_data(show_spinner=True)
 def search_recipes(original_df: pd.DataFrame, filters:list, dict_columns: dict): # -> pd.DataFrame, int:
     """
     dict_columns = corresponding column in a dataset to filter on, for a given filter
     """
+    base: str = r'^{}'
+    expr: str = '(?=.*{})'
     filtered_df = original_df.copy()
     if 'ingredients' in filters.keys():
         col, value = dict_columns['ingredients'], filters['ingredients']
