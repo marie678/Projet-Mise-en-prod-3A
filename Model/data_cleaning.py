@@ -6,15 +6,15 @@ import re
 import ast
 
 
-def load_nutrition_data(data_path: str) -> pd.DataFrame : 
+def load_nutrition_data(data_path: str) -> pd.DataFrame: 
     """
     Load and clean the recipe dataset with nutrition information. The dataset should be in the parquet format.
 
     Args:
-        - data_path (str): path to the recipe nutrition dataset in parquet format
+        data_path (str): path to the recipe nutrition dataset in parquet format
 
     Returns:
-        - pd.DataFrame: cleaned dataset
+        pd.DataFrame: cleaned dataset
     """
     # Import data
     df = pd.read_parquet(data_path)
@@ -58,15 +58,15 @@ def load_nutrition_data(data_path: str) -> pd.DataFrame :
     return df
 
 
-def load_measurements_data(data_path: str) -> pd.DataFrame : 
+def load_measurements_data(data_path: str) -> pd.DataFrame: 
     """
     Load and clean the recipe measurements dataset
 
     Args:
-        - data_path (str): path to the recipe dataset in csv format
+        data_path (str): path to the recipe dataset in csv format
 
     Returns:
-        - pd.DataFrame: cleaned dataset
+        pd.DataFrame: cleaned dataset
     """
     # Import data
     df = pd.read_csv(data_path)
@@ -92,11 +92,11 @@ def merge_datasets(df_nutrition: pd.DataFrame, df_measurements: pd.DataFrame) ->
     Merge the two recipe datasets
 
     Args:
-        - df_nutrition (pd.DataFrame): recipe dataset with nutrition information
-        - df_measurements (pd.DataFrame): recipe measurements dataset
+        df_nutrition (pd.DataFrame): recipe dataset with nutrition information
+        df_measurements (pd.DataFrame): recipe measurements dataset
 
     Returns:
-        - pd.DataFrame: merged dataset
+        pd.DataFrame: merged dataset
     """
     df_merged = pd.merge(df_nutrition, df_measurements, left_on='Name', right_on='title', how='left')
 
@@ -112,21 +112,25 @@ def merge_datasets(df_nutrition: pd.DataFrame, df_measurements: pd.DataFrame) ->
     return df
 
 
-def duration_to_minutes(duration: str) -> float:
+def categorize_time(duration: str) -> str:
     """
-    Function to convert ISO 8601 durations to total minutes
+    Categorizes a string of duration in ISO 8601 format into three categories:
+        - '< 30min' if the duration is less than 30 minutes
+        - '< 1h' if the duration is between 30 and 60 minutes
+        - '> 1h' if the duration is more than 60 minutes
 
     Args:
-        - duration (str): duration in ISO 8601 format (example: 'PT1H30M')
+        duration (str): duration in ISO 8601 format (example: 'PT1H30M')
 
     Returns:
-        - float: duration in minutes
+        str: the category string
     """
     if pd.isna(duration):
         return np.nan
     hours = re.search(r'(\d+)H', duration)
     minutes = re.search(r'(\d+)M', duration)
-    return (int(hours.group(1)) * 60 if hours else 0) + (int(minutes.group(1)) if minutes else 0)
+    total_minutes = (int(hours.group(1)) * 60 if hours else 0) + (int(minutes.group(1)) if minutes else 0)
+    return '< 30min' if total_minutes <= 30 else '< 1h' if total_minutes <= 60 else '> 1h'
     
 
 def duration_to_readable_format(duration: str) -> str:
@@ -134,10 +138,10 @@ def duration_to_readable_format(duration: str) -> str:
     Function to convert ISO 8601 durations to a more readable format
     
     Args:
-        - duration (str): duration in ISO 8601 format (example: 'PT1H30M')
+        duration (str): duration in ISO 8601 format (example: 'PT1H30M')
     
     Returns: 
-        - str: duration (example output: '1 h 30 min')
+        str: duration (example output: '1 h 30 min')
     """
     if pd.isna(duration): 
         return np.nan
@@ -182,20 +186,18 @@ def assign_category(row):
     return 'Other'
     
 
-def clean_data(df: pd.DataFrame) -> pd.DataFrame:
+def data_preprocessing(df: pd.DataFrame) -> pd.DataFrame:
     """
-    Clean and process the merged dataset
+    Process the merged dataset
 
     Args:
-        - df (pd.DataFrame): the merged Dataframe 
+        df (pd.DataFrame): the merged Dataframe 
 
     Returns:
-        - pd.DataFrame: cleaned and processed DataFrame.
+        pd.DataFrame: cleaned and processed DataFrame.
     """
-    # Create a new categorical variable 'TotalTime_cat' based on 'TotalTime'
-    df['TotalTime_min'] = df['TotalTime'].apply(duration_to_minutes)
-    df['TotalTime_cat'] = pd.cut(df['TotalTime_min'], bins=[0, 30, 60, np.inf], labels=['< 30 min', '< 1h', '> 1h'], right=False)
-    df = df.drop(columns=['TotalTime_min'])
+    # Categorize 'TotalTime'
+    df['TotalTime_cat'] = df['TotalTime'].apply(categorize_time)
 
     # Convert readable duration format
     for col in ['CookTime', 'PrepTime', 'TotalTime']:
@@ -203,7 +205,10 @@ def clean_data(df: pd.DataFrame) -> pd.DataFrame:
 
     # Assign recipe types
     df['RecipeType'] = df.apply(assign_category, axis=1)
-    df = df[df['RecipeType'] != 'Other']
+    df = df[df['RecipeType'] != 'Other'].reset_index(drop=True)
+
+    # Create boolean variable 'Beginner_Friendly'
+    df['Beginner_Friendly'] = df['Keywords'].apply(lambda x: 'Easy' in x)
 
     # Add '#' before each keyword
     df['Keywords'] = df['Keywords'].apply(lambda keywords: [f'#{word}' for word in keywords])
@@ -216,16 +221,16 @@ def main(nutrition_path: str, measurements_path: str) -> pd.DataFrame:
     Load and merge the two recipe datasets into a single DataFrame and perform final cleaning
     
     Args:
-        - nutrition_path (str): path to the recipe nutrition dataset in parquet format
-        - measurements_path (str): path to the recipe measurements dataset in csv format
+        nutrition_path (str): path to the recipe nutrition dataset in parquet format
+        measurements_path (str): path to the recipe measurements dataset in csv format
 
     Returns:
-        - pd.DataFrame: final dataset
+        pd.DataFrame: final dataset
     """
     df_nutrition = load_nutrition_data(nutrition_path)
     df_measurements = load_measurements_data(measurements_path)
     df = merge_datasets(df_nutrition, df_measurements)
-    return clean_data(df)
+    return data_preprocessing(df)
 
 
 
