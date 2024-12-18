@@ -184,6 +184,31 @@ def assign_category(row):
                 if re.search(pattern, text.lower()):
                     return category
     return 'Other'
+
+
+def is_non_vegetarian(ingredient_list):
+    """
+    Checks if any non-vegetarian keyword is present in the list of ingredients
+
+    Args:
+        ingredient_list (list): A list of ingredients
+
+    Returns:
+        boolean: True if any non-vegetarian keyword is found, False otherwise
+    """
+    # Define the list of non-vegetarian keywords
+    non_veg_keywords = {
+        'meat', 'chicken', 'beef', 'pork', 'fish', 'bacon', 'ham', 'steak', 'scallop'
+        'sausage', 'lamb', 'duck', 'goose', 'lobster', 'shrimp', 'prawn', 'crab',
+        'squid', 'octopus', 'calamari', 'oyster', 'mussel', 'clam', 'snail', 'seafood'
+        'prosciutto', 'salami', 'pepperoni', 'pancetta', 'chorizo', 'andouille', 'pate', 
+        'veal', 'venison', 'game', 'poultry', 'turkey', 'bison', 'boar', 
+        'fish', 'tuna', 'salmon', 'cod', 'haddock', 'halibut', 'tilapia', 'anchovy', 'anchovies'
+    }
+    for ingredient in ingredient_list:
+        if any(keyword in str(ingredient).lower() for keyword in non_veg_keywords):
+            return True
+    return False
     
 
 def data_preprocessing(df: pd.DataFrame) -> pd.DataFrame:
@@ -194,7 +219,7 @@ def data_preprocessing(df: pd.DataFrame) -> pd.DataFrame:
         df (pd.DataFrame): the merged Dataframe 
 
     Returns:
-        pd.DataFrame: cleaned and processed DataFrame.
+        pd.DataFrame: cleaned and processed DataFrame
     """
     # Categorize 'TotalTime'
     df['TotalTime_cat'] = df['TotalTime'].apply(categorize_time)
@@ -209,6 +234,9 @@ def data_preprocessing(df: pd.DataFrame) -> pd.DataFrame:
 
     # Create boolean variable 'Beginner_Friendly'
     df['Beginner_Friendly'] = df['Keywords'].apply(lambda x: 'Easy' in x)
+
+    # Create boolean variable 'Vegetarian_Friendly'
+    df['Vegetarian_Friendly'] = ~df['NER'].apply(lambda x: is_non_vegetarian(x)) 
 
     # Add '#' before each keyword
     df['Keywords'] = df['Keywords'].apply(lambda keywords: [f'#{word}' for word in keywords])
