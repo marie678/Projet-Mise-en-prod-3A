@@ -11,3 +11,11 @@ The goal of the preprocessing stage is to create a 10,000-recipe dataframe for o
 *  **Two categorical filters:**
     7.  **Recipe Type** (Main Course, Dessert, Beverage, or Breakfast)
     8.  **Total Time Range** (Under 30 minutes, Between 30 minutes and 1 hour, or Over 1 hour)
+
+*   Six binary filters (True/False):
+    1.  Vegetarian
+    2.  Beginner-Friendly
+    3.  Asian Cuisine
+*   Two categorical filters:
+    7.  Recipe Type
+    8.  Total Time Range
