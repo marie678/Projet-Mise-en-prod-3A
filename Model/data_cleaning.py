@@ -1,7 +1,5 @@
 import numpy as np
 import pandas as pd
-import matplotlib.pyplot as plt
-import seaborn as sns
 import re
 import ast
 
@@ -155,7 +153,7 @@ def duration_to_readable_format(duration: str) -> str:
     return ' '.join(result)
 
 
-def assign_category(row):
+def assign_category(row: pd.Series) -> str:
     """
     Assigns a recipe category based on the values in the Keywords, title and RecipeCategory columns using predefined patterns
 
@@ -186,7 +184,7 @@ def assign_category(row):
     return 'Other'
 
 
-def is_non_vegetarian(ingredient_list):
+def is_non_vegetarian(ingredient_list: list) -> bool:
     """
     Checks if any non-vegetarian keyword is present in the list of ingredients
 
@@ -194,7 +192,7 @@ def is_non_vegetarian(ingredient_list):
         ingredient_list (list): A list of ingredients
 
     Returns:
-        boolean: True if any non-vegetarian keyword is found, False otherwise
+        bool: True if any non-vegetarian keyword is found, False otherwise
     """
     # Define the list of non-vegetarian keywords
     non_veg_keywords = {
@@ -210,6 +208,34 @@ def is_non_vegetarian(ingredient_list):
             return True
     return False
     
+
+def create_cuisine_columns(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Adds 4 binary columns to the input DataFrame: 'Asian', 'African', 'North & South America' and 'Europe and Eastern Europe' based on whether the keywords related to the respective cuisine are found.
+
+    Args:
+        df (pd.Dataframe): The input DataFrame. It must contain a column named 'Keywords', which includes lists of strings.
+
+    Returns: 
+        pd.Dataframe: The input DataFrame with four additional columns.
+    """
+
+    asian_keywords = ['Asian', 'Indian', 'Chinese', 'Southwest Asia (middle East)', 'Thai', 'Japanese', 'Hawaiian', 'Russian', 'Korean', 'Vietnamese', 'Indonesian', 'Malaysian', 'Pakistani', 'Cantonese', 'Nepalese', 'Cambodian', 'Mongolian']
+    african_keywords = ['African', 'South African', 'Egyptian', 'Nigerian', 'Sudanese', 'Ecuadorean', 'Moroccan', 'Ethiopian', 'Somalian']
+    american_keywords = ['Mexican', 'Southwestern U.S.', 'Caribbean', 'South American', 'Hawaiian', 'Cuban', 'Venezuelan', 'Peruvian', 'Puerto Rican', 'Native American', 'Colombian', 'Chilean', 'Costa Rican', 'Guatemalan', 'Honduran']
+    european_keywords = ['Greek', 'Scandinavian', 'German', 'Spanish', 'Russian', 'Hungarian', 'Lebanese', 'Danish', 'Turkish', 'Finnish', 'Dutch', 'Belgian', 'Norwegian', 'Welsh', 'Czech', 'Icelandic']
+
+    def check_keywords(keywords, text):
+        text_lower = " ".join(str(item).lower() for item in text) if isinstance(text, list) else str(text).lower() 
+        return any(f' {keyword.lower()} ' in f' {text_lower} ' or text_lower.startswith(f'{keyword.lower()} ') or text_lower.endswith(f' {keyword.lower()}') for keyword in keywords)
+
+    df['Asian'] = df['Keywords'].apply(lambda x: check_keywords(asian_keywords, x))
+    df['African'] = df['Keywords'].apply(lambda x: check_keywords(african_keywords, x))
+    df['North & South America'] = df['Keywords'].apply(lambda x: check_keywords(american_keywords, x))
+    df['Europe and Eastern Europe'] = df['Keywords'].apply(lambda x: check_keywords(european_keywords, x))
+
+    return df
+
 
 def data_preprocessing(df: pd.DataFrame) -> pd.DataFrame:
     """
@@ -238,8 +264,14 @@ def data_preprocessing(df: pd.DataFrame) -> pd.DataFrame:
     # Create boolean variable 'Vegetarian_Friendly'
     df['Vegetarian_Friendly'] = ~df['NER'].apply(lambda x: is_non_vegetarian(x)) 
 
+    # Create world cuisine columns 
+    df = create_cuisine_columns(df)
+
     # Add '#' before each keyword
     df['Keywords'] = df['Keywords'].apply(lambda keywords: [f'#{word}' for word in keywords])
+
+    # Drop recipes with the same title
+    df = df.drop_duplicates(subset=['title']).reset_index(drop=True)
 
     return df
 
