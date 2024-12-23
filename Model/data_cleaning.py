@@ -53,6 +53,9 @@ def load_nutrition_data(data_path: str) -> pd.DataFrame:
     # Drop missing values
     df = df.dropna().reset_index(drop=True)
 
+    # Convert float to int
+    df[['ReviewCount', 'RecipeServings']] = df[['ReviewCount', 'RecipeServings']].astype(int)
+
     return df
 
 
@@ -342,9 +345,9 @@ def main(nutrition_path: str, measurements_path: str) -> pd.DataFrame:
 
 if __name__ == "__main__":
 
-    nutrition_path = ''
-    measurements_path = ''
+    nutrition_path = 'Data/recipes.parquet'
+    measurements_path = 'Data/recipes_data.csv'
     final_df = main(nutrition_path, measurements_path)
     final_df_sample = sample_df_10k(final_df)
     
-    #final_df_sample.to_csv('final_recipes_dataset.csv', index=False)
+    #final_df_sample.to_parquet('sample_recipes_10k.parquet', index=False)
