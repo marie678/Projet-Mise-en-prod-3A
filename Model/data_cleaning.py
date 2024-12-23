@@ -350,4 +350,4 @@ if __name__ == "__main__":
     final_df = main(nutrition_path, measurements_path)
     final_df_sample = sample_df_10k(final_df)
     
-    #final_df_sample.to_parquet('sample_recipes_10k.parquet', index=False)
+    final_df_sample.to_parquet('Data/sample_recipes_10k.parquet', index=False)
