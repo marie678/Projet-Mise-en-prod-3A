@@ -16,14 +16,7 @@ def load_nutrition_data(data_path: str) -> pd.DataFrame:
     """
     # Import data
     df = pd.read_parquet(data_path)
-
-    selected_columns = [
-        'Name', 'AuthorName', 'CookTime', 'PrepTime', 'TotalTime', 'Description', 'Images',
-        'RecipeCategory', 'Keywords', 'RecipeIngredientQuantities', 'RecipeIngredientParts',
-        'AggregatedRating', 'ReviewCount', 'Calories', 'FatContent', 'ProteinContent',
-        'RecipeServings', 'RecipeInstructions'
-    ]
-    df = df[selected_columns]
+    df = df.drop(columns=['RecipeId', 'AuthorId', 'DatePublished', 'RecipeYield'])
 
     # Drop duplicate recipes
     df = df.drop_duplicates(subset=['Name','AuthorName'])
