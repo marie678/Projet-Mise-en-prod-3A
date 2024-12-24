@@ -16,14 +16,7 @@ def load_nutrition_data(data_path: str) -> pd.DataFrame:
     """
     # Import data
     df = pd.read_parquet(data_path)
-
-    selected_columns = [
-        'Name', 'AuthorName', 'CookTime', 'PrepTime', 'TotalTime', 'Description', 'Images',
-        'RecipeCategory', 'Keywords', 'RecipeIngredientQuantities', 'RecipeIngredientParts',
-        'AggregatedRating', 'ReviewCount', 'Calories', 'FatContent', 'ProteinContent',
-        'RecipeServings', 'RecipeInstructions'
-    ]
-    df = df[selected_columns]
+    df = df.drop(columns=['RecipeId', 'AuthorId', 'DatePublished', 'RecipeYield'])
 
     # Drop duplicate recipes
     df = df.drop_duplicates(subset=['Name','AuthorName'])
@@ -52,6 +45,9 @@ def load_nutrition_data(data_path: str) -> pd.DataFrame:
 
     # Drop missing values
     df = df.dropna().reset_index(drop=True)
+
+    # Convert float to int
+    df[['ReviewCount', 'RecipeServings']] = df[['ReviewCount', 'RecipeServings']].astype(int)
 
     return df
 
@@ -342,9 +338,9 @@ def main(nutrition_path: str, measurements_path: str) -> pd.DataFrame:
 
 if __name__ == "__main__":
 
-    nutrition_path = ''
-    measurements_path = ''
+    nutrition_path = 'Data/recipes.parquet'
+    measurements_path = 'Data/recipes_data.csv'
     final_df = main(nutrition_path, measurements_path)
     final_df_sample = sample_df_10k(final_df)
     
-    #final_df_sample.to_csv('final_recipes_dataset.csv', index=False)
+    final_df_sample.to_parquet('Data/sample_recipes_10k.parquet', index=False)
