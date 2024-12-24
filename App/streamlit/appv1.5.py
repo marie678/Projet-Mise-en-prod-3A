@@ -14,7 +14,7 @@ import re
 
 
 # import of the cleaned and formated dataset of 10k recipes
-df = pd.read_csv(SAMPLE_RECIPE_PATH3)
+df = pd.read_parquet(SAMPLE_RECIPE_PATH3)
 
 st.write(APP_TITLE)
 
@@ -26,11 +26,11 @@ sentence = text_search.split(' ')
 nb = len(sentence)
 base = r'^{}'
 expr = '(?=.*{})'
-rep = df[df['NER'].str.contains(base.format(''.join(expr.format(w) for w in sentence)))][['title','NER']]
+rep = df[df['NER'].apply(lambda x : all(element in x for element in sentence))]
 
 
 if text_search:
-    rep['%'] = rep['NER'].apply(lambda ing: round((nb / len(ast.literal_eval(ing)))*100,1))
+    rep['%'] = rep['NER'].apply(lambda ing: round((nb / len(list(ing)))*100,1))
     best = rep['%'].idxmax()
     df_search = df.loc[best]
     recipe_title = df.loc[best]['title']
@@ -42,15 +42,21 @@ if text_search:
     servings = df.loc[best]['RecipeServings']
     tot_time = df.loc[best]['TotalTime']
     description = df.loc[best]['Description']
-    keywords = ast.literal_eval(df.loc[best]['Keywords'])
+    keywords = df.loc[best]['Keywords']
     img_link = df.loc[best]['Images']
-    ing = ast.literal_eval(df.loc[best]['ingredients'])
+    ing = df.loc[best]['ingredients']
     percent = rep['%'].max()
-    directions = ast.literal_eval(df.loc[best]['directions'])
+    directions = df.loc[best]['directions']
     rec_link = df.loc[best]['Images']
     calories = df.loc[best]['Calories']
     protein = df.loc[best]['ProteinContent']
     fat = df.loc[best]['FatContent']
+    sat_fat = df.loc[best]['SaturatedFatContent']
+    chol = df.loc[best]['CholesterolContent']
+    sodium = df.loc[best]['SodiumContent']
+    carbo = df.loc[best]['CarbohydrateContent']
+    fiber = df.loc[best]['FiberContent']
+    sugar = df.loc[best]['SugarContent']
     with open("pages/templatev1.3.html", "r") as template_file:
         template_content = template_file.read()
         jinja_template = Template(template_content)
@@ -61,10 +67,12 @@ if text_search:
                                           prep_time = prep_time, c_time = c_time, tot_time = tot_time,
                                           items=ing, prc = percent, dir =directions, keywords = keywords,
                                           link = rec_link, desc= description, img = img_link,
-                                          calories = calories, protein = protein, fat = fat)
+                                          calories = calories, protein = protein, fat = fat,
+                                          sat_fat=sat_fat, sugar=sugar, chol = chol, sodium=sodium,
+                                          carbo = carbo, fiber = fiber)
 
     # Display the HTML in Streamlit app
-    components.html(rendered_html, height=800, width = 900, scrolling=True)
+    components.html(rendered_html, height=1000, width = 900, scrolling=True)
     
     
     if st.button("For more details on recipe") : 

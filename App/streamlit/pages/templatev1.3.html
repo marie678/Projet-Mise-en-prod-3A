@@ -4,31 +4,39 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ title }}</title>
+    <link rel="stylesheet" href="../src/style_res.css">
     <!-- Include Google Icons library -->
     <link href=
 "https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined" rel="stylesheet" />
+    
 
-<style type="text/css">
+<style>
+    h1 {border: 2px #300a0a solid;
+    color: rgb(178, 144, 32);
+    text-align: center;
+    padding: 10px;}
+    
     .boxed {
-      border: 1px solid green ;
-      border-radius: 20px ;
-      background-color: rgba(58, 30, 89, 0.086) ;
-      width:450px;
-        height:40px;
-        text-align: center;
-        vertical-align: middle;
-        display: table-cell;
-    }
-    .serif { font-family: cursive;}
-    .material-symbols-outlined { font-size: 18px; vertical-align: middle; }
-    table, th, td {
+    border: 1px solid green ;
+    border-radius: 20px ;
+    background-color: rgba(58, 30, 89, 0.086) ;
+    width:450px;
+      height:40px;
+      text-align: center;
+      vertical-align: middle;
+      display: table-cell;
+  }
+  .key {font-size: small;}
+  .serif { font-family: cursive;}
+  .material-symbols-outlined { font-size: 18px; vertical-align: middle; }
+  table, th, td {
 border: 1px solid black;
 border-collapse: collapse;
 }
 th, td {
 padding: 10px;
 }
-    
+
 .stars {
     position: relative;
     display:inline-block;
@@ -52,16 +60,74 @@ padding: 10px;
 }
 
 li {
-  display: table;
+        display: list-item; 
+    }
+
+.list-two ul {
+    list-style:square;
 }
+
+/* Styling for ordered list (ol) inside .list-one */
+
+.list-one body {
+	font-family: 'Roboto Slab', serif;
+	font-size: 1.2rem;
+	margin: 0;
+	padding: 1rem;
+	display: grid;
+	place-items: center;
+	min-height: 100vh;
+}
+
+.list-one ol {
+  padding: 0;
+  margin: 0;
+  max-width: 400px;
+  position: relative;
+}
+
+/* Adding a pseudo-element before the ol */
+.list-one ol::before {
+  content: '';
+  width: 0.5rem;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 8%;
+  background: peachpuff;
+  z-index: -1;
+}
+
+/* Styling the list items (li) inside .list-one */
+.list-one li {
+  padding: 0.3rem 0.8rem;
+  border-radius: 1rem;
+  background: peachpuff;
+  max-width: 50%;          /* Adjusted width to 70% */
+  font-size: 1.2rem;       /* Reduced font size */
+  line-height: 1.2;
+}
+
+/* Adding margin to the second and subsequent list items */
+.list-one li + li {
+  margin-top: 1rem;
+}
+
+/* Styling the markers (numbers) of the ordered list */
+.list-one ::marker {
+  font-weight: 600;
+  color: tomato;
+  font-size: 1.6rem;
+}
+
     </style>
 </head>
 
 <body>
     <!-- Title -->
     <div>
-        <h1>{{ title }}</h1> 
-        <li><div class="stars" style="--w: {{rating * 20}}%;"> </div> {{ rating }} / 5 based on {{ vote }} votes</li> 
+        <h1 class="wsh">{{ title }}</h1> 
+        <div class="stars" style="--w: {{rating * 20}}%;"> </div> {{ rating }} / 5 based on {{ vote }} votes 
         
         <p class="serif"> {{ author }}  </p> 
     </div>
@@ -88,28 +154,30 @@ li {
       <!-- Description -->
     <div>
         <br />
-        <em style = "color:#060270;"> {{ desc }} ! </em>
-        <p> {% for item in keywords %}
-            {{ item }}
-        {% endfor %}</p>
+        <p style = "color:#3f3d41;" font size="large"> {{ desc }} ! </p>
+        <em class = "key", style = "color:#434174;"> 
+            {% for item in keywords %}
+            {{ item }} &thinsp;
+        {% endfor %}
+        </em>
     </div>
 
       <!-- Main body -->
     <div>
         <h2> Ingredients </h2>
-        <ul>
+        <ul class="list-two" >
             {% for item in items %}
                 <li>{{ item }}</li>
             {% endfor %}
         </ul>
         <h2> Directions </h2>
-        <ul>
+        <ol class="list-one">
             {% for item in dir %}
                 <li>{{ item }}</li>
             {% endfor %}
-        </ul>
+        </ol>
         
-        <p> Here's the link to reciepe : <a href={{ link }}> {{ link }}</a>  </p>
+        <p> Here's the <a href={{ link }}>  link </a>  to recipe   </p>
         <p> Enjoy ;)  </p>
     </div>
 
@@ -120,12 +188,24 @@ li {
             <tr>
             <th>Calories</th>
             <th>Fat</th>
+            <th>Saturated fat</th>
             <th>Protein</th>
+            <th>Sugar</th>
+            <th>Cholesterol</th>
+            <th>Carbohydrate</th>
+            <th>Sodium</th>
+            <th>Fiber</th>
             </tr>
             <tr>
             <td>{{ calories }}</td>
             <td>{{ fat }}</td>
+            <td>{{ sat_fat }}</td>
             <td>{{ protein }}</td>
+            <td>{{ sugar }}</td>
+            <td>{{ chol }}</td>
+            <td>{{ carbo }}</td>
+            <td>{{ sodium }}</td>
+            <td>{{ fiber }}</td>
             </tr>
             <tr>
             </table>
