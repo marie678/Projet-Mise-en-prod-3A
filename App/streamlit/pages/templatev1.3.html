@@ -13,12 +13,47 @@
       border: 1px solid green ;
       border-radius: 20px ;
       background-color: rgba(58, 30, 89, 0.086) ;
-      width:500px;
-        height:50px;
+      width:450px;
+        height:40px;
         text-align: center;
         vertical-align: middle;
         display: table-cell;
     }
+    .serif { font-family: cursive;}
+    .material-symbols-outlined { font-size: 18px; vertical-align: middle; }
+    table, th, td {
+border: 1px solid black;
+border-collapse: collapse;
+}
+th, td {
+padding: 10px;
+}
+    
+.stars {
+    position: relative;
+    display:inline-block;
+    font-size: 20pt;
+	  height: 1em;
+    line-height: 1em;
+}
+
+.stars:before {	
+    content: "\2606\2606\2606\2606\2606";
+}
+
+.stars:after {	
+    content: "\2605\2605\2605\2605\2605";
+    position:absolute;
+    left:0;
+    overflow:hidden;
+    width:var(--w,50%);
+    color: rgb(255, 200, 0);
+    z-index:-1;
+}
+
+li {
+  display: table;
+}
     </style>
 </head>
 
@@ -26,19 +61,23 @@
     <!-- Title -->
     <div>
         <h1>{{ title }}</h1> 
-        <p> {{ prc }}  % of ingredients already at disposal</p>
+        <li><div class="stars" style="--w: {{rating * 20}}%;"> </div> {{ rating }} / 5 based on {{ vote }} votes</li> 
+        
+        <p class="serif"> {{ author }}  </p> 
     </div>
     <!-- General caracteristics -->
     <div class="boxed">
+        <!-- Include Icons for Number of servings -->
+        &#x1F924; {{ servings }} &emsp;
         <!-- Include Google Icons for PrepTime -->
         <span class="material-symbols-outlined">cooking</span>
-        {{ prep_time }} &nbsp; 
+        {{ prep_time }} &emsp;
         <!-- Include Google Icons for CookTime -->
          <span class="material-symbols-outlined">oven</span>
-        {{ c_time }} &nbsp;
+        {{ c_time }} &emsp;
          <!-- Include Google Icons for TotalTime -->
          <span class="material-symbols-outlined">restaurant</span>
-         {{ tot_time}}
+         {{ tot_time }}
       </div>
       <!-- Image -->
     <div> 
@@ -48,6 +87,7 @@
 
       <!-- Description -->
     <div>
+        <br />
         <em style = "color:#060270;"> {{ desc }} ! </em>
         <p> {% for item in keywords %}
             {{ item }}
@@ -72,5 +112,24 @@
         <p> Here's the link to reciepe : <a href={{ link }}> {{ link }}</a>  </p>
         <p> Enjoy ;)  </p>
     </div>
+
+    <div>
+    <details class="details-example">
+        <summary> Click here for more details on the recipe</summary>
+        <table>
+            <tr>
+            <th>Calories</th>
+            <th>Fat</th>
+            <th>Protein</th>
+            </tr>
+            <tr>
+            <td>{{ calories }}</td>
+            <td>{{ fat }}</td>
+            <td>{{ protein }}</td>
+            </tr>
+            <tr>
+            </table>
+    </details>
+</div>
 </body>
 </html>

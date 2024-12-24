@@ -1,0 +1,71 @@
+########################################### app v1.5 #################################################
+# display the query results in a specially designed html page (sotred in "pages" folder) with new data
+import streamlit as st
+import streamlit.components.v1 as components
+from jinja2 import Template
+import pandas as pd
+from functools import reduce
+import operator
+import ast
+from app.config import SAMPLE_RECIPE_PATH3, APP_TITLE
+import numpy as np
+import re
+ 
+
+
+# import of the cleaned and formated dataset of 10k recipes
+df = pd.read_csv(SAMPLE_RECIPE_PATH3)
+
+st.write(APP_TITLE)
+
+# Use a text_input to get the keywords to filter the dataframe
+text_search = st.text_input("Search recipes by ingredients", value="").lower()
+
+# Filter the dataframe using masks
+sentence = text_search.split(' ')
+nb = len(sentence)
+base = r'^{}'
+expr = '(?=.*{})'
+rep = df[df['NER'].str.contains(base.format(''.join(expr.format(w) for w in sentence)))][['title','NER']]
+
+
+if text_search:
+    rep['%'] = rep['NER'].apply(lambda ing: round((nb / len(ast.literal_eval(ing)))*100,1))
+    best = rep['%'].idxmax()
+    df_search = df.loc[best]
+    recipe_title = df.loc[best]['title']
+    rating = df.loc[best]['AggregatedRating']
+    vote = df.loc[best]['ReviewCount']
+    author = df.loc[best]['AuthorName']
+    c_time = df.loc[best]['CookTime']
+    prep_time = df.loc[best]['PrepTime']
+    servings = df.loc[best]['RecipeServings']
+    tot_time = df.loc[best]['TotalTime']
+    description = df.loc[best]['Description']
+    keywords = ast.literal_eval(df.loc[best]['Keywords'])
+    img_link = df.loc[best]['Images']
+    ing = ast.literal_eval(df.loc[best]['ingredients'])
+    percent = rep['%'].max()
+    directions = ast.literal_eval(df.loc[best]['directions'])
+    rec_link = df.loc[best]['Images']
+    calories = df.loc[best]['Calories']
+    protein = df.loc[best]['ProteinContent']
+    fat = df.loc[best]['FatContent']
+    with open("pages/templatev1.3.html", "r") as template_file:
+        template_content = template_file.read()
+        jinja_template = Template(template_content)
+
+    # Render the template with dynamic data
+    rendered_html = jinja_template.render(title=recipe_title, author = author, servings = servings,
+                                          rating = rating, vote =vote,
+                                          prep_time = prep_time, c_time = c_time, tot_time = tot_time,
+                                          items=ing, prc = percent, dir =directions, keywords = keywords,
+                                          link = rec_link, desc= description, img = img_link,
+                                          calories = calories, protein = protein, fat = fat)
+
+    # Display the HTML in Streamlit app
+    components.html(rendered_html, height=800, width = 900, scrolling=True)
+    
+    
+    if st.button("For more details on recipe") : 
+        st.write(" details ")
