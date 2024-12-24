@@ -2,6 +2,8 @@ import numpy as np
 import pandas as pd
 import re
 import ast
+from typing import List
+import inflect
 
 
 def load_nutrition_data(data_path: str) -> pd.DataFrame: 
@@ -180,12 +182,12 @@ def assign_category(row: pd.Series) -> str:
     return 'Other'
 
 
-def is_non_vegetarian(ingredient_list: list) -> bool:
+def is_non_vegetarian(ingredient_list: List[str]) -> bool:
     """
     Checks if any non-vegetarian keyword is present in the list of ingredients
 
     Args:
-        ingredient_list (list): A list of ingredients
+        ingredient_list (List[str]): A list of ingredients
 
     Returns:
         bool: True if any non-vegetarian keyword is found, False otherwise
@@ -233,6 +235,22 @@ def create_cuisine_columns(df: pd.DataFrame) -> pd.DataFrame:
     return df
 
 
+def to_singular(ingredients_list: List[str]) -> List[str]:
+    """
+    Convert a list of ingredient names from plural to singular.
+
+    Args:
+        ingredient_list (List[str]): A list of ingredient names
+
+    Returns:
+        List[str]: A list of ingredient names where all plural words are converted to singular. Words that are already singular or unrecognized remain unchanged.
+    """
+    p = inflect.engine()
+    if isinstance(ingredients_list, list):
+        return [p.singular_noun(ingredient) or ingredient for ingredient in ingredients_list]
+    return ingredients_list
+
+
 def data_preprocessing(df: pd.DataFrame) -> pd.DataFrame:
     """
     Process the merged dataset
@@ -243,6 +261,9 @@ def data_preprocessing(df: pd.DataFrame) -> pd.DataFrame:
     Returns:
         pd.DataFrame: cleaned and processed DataFrame
     """
+    # Drop recipes with the same title
+    df = df.drop_duplicates(subset=['title']).reset_index(drop=True)
+
     # Categorize 'TotalTime'
     df['TotalTime_cat'] = df['TotalTime'].apply(categorize_time)
 
@@ -266,8 +287,8 @@ def data_preprocessing(df: pd.DataFrame) -> pd.DataFrame:
     # Add '#' before each keyword
     df['Keywords'] = df['Keywords'].apply(lambda keywords: [f'#{word}' for word in keywords])
 
-    # Drop recipes with the same title
-    df = df.drop_duplicates(subset=['title']).reset_index(drop=True)
+    # Convert ingredients to singular form
+    df['NER'] = df['NER'].apply(to_singular)
 
     return df
 
