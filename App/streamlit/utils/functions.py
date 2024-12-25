@@ -48,17 +48,25 @@ def search_recipes(original_df: pd.DataFrame, filters:list, dict_columns: dict):
     base: str = r'^{}'
     expr: str = '(?=.*{})'
     filtered_df = original_df.copy()
+
     if 'ingredients' in filters.keys():
         col, value = dict_columns['ingredients'], filters['ingredients']
-        filtered_df = filtered_df[filtered_df[col].str.contains(base.format(''.join(expr.format(w) for w in value)))]
+        filtered_df = filtered_df[filtered_df[col].apply(lambda x: all(element in x for element in value))]  
     if 'recipe_durations' in filters.keys():
         col, value = dict_columns['recipe_durations'], filters['recipe_durations']
-        filtered_df = filtered_df[filtered_df[col] <= (value)]
-    if 'ratings' in filters.keys():
-        col, value = dict_columns['ratings'], filters['ratings']
-        filtered_df = filtered_df[filtered_df[col] >= (value)]
+        filtered_df = filtered_df[filtered_df[col] == (value)]
+    total_nr_recipes : int = len(filtered_df)
+    return filtered_df, total_nr_recipes
+    # if 'ingredients' in filters.keys():
+    #     col, value = dict_columns['ingredients'], filters['ingredients']
+    #     filtered_df = filtered_df[filtered_df[col].str.contains(base.format(''.join(expr.format(w) for w in value)))]
+    # if 'recipe_durations' in filters.keys():
+    #     col, value = dict_columns['recipe_durations'], filters['recipe_durations']
+    #     filtered_df = filtered_df[filtered_df[col] <= (value)]
+    # if 'ratings' in filters.keys():
+    #     col, value = dict_columns['ratings'], filters['ratings']
+    #     filtered_df = filtered_df[filtered_df[col] >= (value)]
     # # Compute the correspondance rates
     # df_search['%'] = df_search['NER'].apply(lambda ing: round((nb_ingredients / len(ast.literal_eval(ing)))*100,1))
     # df_search = df_search.sort_values('%', ascending=False)
-    total_nr_recipes : int = len(filtered_df)
-    return filtered_df, total_nr_recipes
+    # total_nr_recipes : int = len(filtered_df)

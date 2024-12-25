@@ -4,32 +4,40 @@
 import streamlit as st
 import pandas as pd
 from functools import reduce
-from app.config import SAMPLE_RECIPE_PATH, APP_TITLE
+from app.config import SAMPLE_RECIPE_PATH, APP_TITLE, SAMPLE_RECIPE_PATH3
 from utils.functions import clean, reformat, split_frame, search_recipes
 from streamlit_extras.add_vertical_space import add_vertical_space
+import numpy as np
+from collections import Counter
 
 # configuration parameters
 st.set_page_config(layout="wide", page_title ='frigo vide', initial_sidebar_state='collapsed')
 # st.title(APP_TITLE)
 
 # Load Data
-dev_df = "C:\\Users\\marie\\OneDrive\\Documents\\cours\\ensae\\3A\\infras_et_systemes_logiciels\\df_development"
-df = pd.read_csv(dev_df)
+# dev_df = "C:\\Users\\marie\\OneDrive\\Documents\\cours\\ensae\\3A\\infras_et_systemes_logiciels\\df_development"
+# df = pd.read_csv(dev_df)
 # df = pd.read_csv(SAMPLE_RECIPE_PATH)
 # df['clean_dir'] = clean(df['directions'])
 
-# Extract filters values
-ingredient_list: set = {x for x in sorted(set(reformat(df['NER']))) if pd.notna(x)}
-recipe_durations: set = {x for x in sorted(set(df['CookTime_minutes'])) if pd.notna(x)}
-ratings: set = {x for x in sorted(set(df['AggregatedRating'])) if pd.notna(x)}
+# import of the cleaned and formated dataset of 10k recipes
+df = pd.read_parquet(SAMPLE_RECIPE_PATH3)
 
-# Define constants
-# base: str = r'^{}'
-# expr: str = '(?=.*{})'
+
+# Extract filters values
+# ingredient_list: set = {x for x in sorted(set(df['NER'])) if pd.notna(x)}
+# recipe_durations: set = {x for x in sorted(set(df['CookTime_minutes'])) if pd.notna(x)}
+# ratings: set = {x for x in sorted(set(df['AggregatedRating'])) if pd.notna(x)}
+
+counter_ingredients = Counter(x for row in df['NER'] for x in row)
+ingredient_list: set = {item[0] for item in counter_ingredients.most_common()} # ingredients sorted by frequency
+# recipe_durations: set = {x for x in sorted(set(df['TotalTime_cat'])) if pd.notna(x)}
+recipe_durations: list = ['< 30min', '< 1h', '> 1h']
+
 filter_columns: dict = {
     'ingredients': 'NER',
-    'recipe_durations': 'CookTime_minutes',
-    'ratings': 'AggregatedRating',
+    'recipe_durations': 'TotalTime_cat',
+    # 'ratings': 'AggregatedRating',
 }
 
 # initialize session_state with recipe elements + widgets
@@ -75,27 +83,28 @@ with st.form("filter_form", clear_on_submit=False):
     col1, col2, col3, col4 = st.columns(4)
     
     # Ingredients filter
-    # ingredients = col1.multiselect("Choose one or more ingredient(s)", ingredient_list, default=None) #st.session_state.selected_ingredients if st.session_state.selected_ingredients else 
-    # st.session_state.selected_ingredients = ingredients  # Update selected ingredients in session state
-    # if ingredients:
-    #     nb_ingredients = len(ingredients)
-    #     filters['ingredients'] = ingredients
-    #     research_summary += f'ingredients : *{ingredients}*'
+    ingredients = col1.multiselect("Choose one or more ingredient(s)", ingredient_list, default=None) #st.session_state.selected_ingredients if st.session_state.selected_ingredients else 
+    st.session_state.selected_ingredients = ingredients  # Update selected ingredients in session state
+    if ingredients:
+        nb_ingredients = len(ingredients)
+        filters['ingredients'] = ingredients
+        ingr: str = ', '.join(str(x) for x in ingredients)
+        research_summary += f'ingredients : *{ingr}*'
 
     # Recipe duration filter
-    recipe_time = col2.slider("Choose the duration of your recipe", min_value=int(min(recipe_durations)), max_value=int(max(recipe_durations)), value=20, step=5)
+    recipe_time = col2.select_slider("Choose the duration of your recipe", options=recipe_durations, value=None) #min_value=int(min(recipe_durations)), max_value=int(max(recipe_durations)), value=20, step=5)
     # recipe_time = col2.selectbox("Choose the duration of your recipe", recipe_durations, index=None) #recipe_durations.index(st.session_state.selected_duration) if st.session_state.selected_duration else 
     st.session_state.selected_duration = recipe_time  # Update duration in session state
     if recipe_time:
         filters['recipe_durations'] = recipe_time
-        research_summary += f' - recipe duration <= *{recipe_time}* min.'
+        research_summary += f' - recipe duration : *{recipe_time}*'
 
-    # Ratings filter
-    rating = col3.slider("Choose a rating", min_value=(min(ratings)), max_value=(max(ratings)), value=3.0, step=0.5) #ratings.index(st.session_state.selected_rating) if st.session_state.selected_rating else 
-    st.session_state.selected_rating = rating  # Update rating in session state
-    if rating:
-        filters['ratings'] = rating
-        research_summary += f' - rating >= *{rating}*'
+    # # Ratings filter
+    # rating = col3.slider("Choose a rating", min_value=(min(ratings)), max_value=(max(ratings)), value=3.0, step=0.5) #ratings.index(st.session_state.selected_rating) if st.session_state.selected_rating else 
+    # st.session_state.selected_rating = rating  # Update rating in session state
+    # if rating:
+    #     filters['ratings'] = rating
+    #     research_summary += f' - rating >= *{rating}*'
     
     other = col4.selectbox("Choose other", ['A', 'B', 'C'], index=None)
     if other:
@@ -104,6 +113,8 @@ with st.form("filter_form", clear_on_submit=False):
     st.session_state.filters = filters
     submitted = st.form_submit_button("Apply Filters")
 
+# st.write(st.session_state.filters)
+# print(st.session_state.filters)
 if submitted:
         # st.write(filters)
         df_search, total_nr_recipes = search_recipes(df, st.session_state.filters, filter_columns)
@@ -130,7 +141,8 @@ if st.session_state.search_df is not None:
     st.session_state.search_df['NER'].str.contains(title_search_query, case=False, na=False)
     ] if title_search_query else st.session_state.search_df
 
-    research_summary += f', Title search : {title_search_query}'
+    if title_search_query:
+        research_summary += f', Title search : **{title_search_query}**'
     number_recipes = (f"There are **{len(filtered_by_title_df)} recipes** matching your search :")
     st.write(research_summary)
     st.write(number_recipes)
