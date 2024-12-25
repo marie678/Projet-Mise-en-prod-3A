@@ -194,12 +194,12 @@ def is_non_vegetarian(ingredient_list: List[str]) -> bool:
     """
     # Define the list of non-vegetarian keywords
     non_veg_keywords = {
-        'meat', 'chicken', 'beef', 'pork', 'fish', 'bacon', 'ham', 'steak', 'scallop'
+        'meat', 'chicken', 'beef', 'pork', 'fish', 'bacon', 'ham', 'steak', 'scallop',
         'sausage', 'lamb', 'duck', 'goose', 'lobster', 'shrimp', 'prawn', 'crab',
-        'squid', 'octopus', 'calamari', 'oyster', 'mussel', 'clam', 'snail', 'seafood'
+        'squid', 'octopus', 'calamari', 'oyster', 'mussel', 'clam', 'snail', 'seafood',
         'prosciutto', 'salami', 'pepperoni', 'pancetta', 'chorizo', 'andouille', 'pate', 
         'veal', 'venison', 'game', 'poultry', 'turkey', 'bison', 'boar', 
-        'fish', 'tuna', 'salmon', 'cod', 'haddock', 'halibut', 'tilapia', 'anchovy', 'anchovies'
+        'fish', 'tuna', 'salmon', 'cod', 'haddock', 'halibut', 'tilapia', 'anchovy', 'anchovies',
     }
     for ingredient in ingredient_list:
         if any(keyword in str(ingredient).lower() for keyword in non_veg_keywords):
