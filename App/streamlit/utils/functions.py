@@ -58,6 +58,13 @@ def search_recipes(original_df: pd.DataFrame, filters:list, dict_columns: dict):
     if 'recipe_type' in filters.keys():
         col, value = dict_columns['recipe_types'], filters['recipe_type']
         filtered_df = filtered_df[filtered_df[col] == (value)]
+    if 'vegetarian' in filters.keys():
+        col, value = dict_columns['vegetarian'], filters['vegetarian']
+        filtered_df = filtered_df[filtered_df[col] == (value)]
+    if 'beginner' in filters.keys():
+        col, value = dict_columns['beginner'], filters['beginner']
+        filtered_df = filtered_df[filtered_df[col] == (value)]      
+ 
     total_nr_recipes : int = len(filtered_df)
     return filtered_df, total_nr_recipes
     # if 'ingredients' in filters.keys():

@@ -29,9 +29,6 @@ Six binary filters (True/False):
     African Cuisine (African)
     North & South American Cuisine (North & South America)
     European & Eastern European Cuisine (Europe and Eastern Europe)
-Two categorical filters:
-    Recipe Type (Main Course, Dessert, Beverage, or Breakfast) (RecipeType)
-    Total Time Range (Under 30 minutes, Between 30 minutes and 1 hour, or Over 1 hour) (TotalTime_cat)
 '''
 
 counter_ingredients: Counter = Counter(x for row in df['NER'] for x in row)
@@ -76,8 +73,8 @@ if 'filters' not in st.session_state:
     st.session_state.filters = None
 if 'search_input' not in st.session_state:
     st.session_state.search_input = None
-if 'recipe_type' not in st.session_state:
-    st.session_state.recipe_type = None
+# if 'recipe_type' not in st.session_state:
+#     st.session_state.recipe_type = None
 
 
 filters = {}
@@ -109,27 +106,28 @@ with st.form("filter_form", clear_on_submit=False):
 
     # Recipe Type filter
     recipe_type = col3.selectbox("Choose the type of your recipe", recipe_types, index=None)
-    st.session_state.recipe_type = recipe_type
+    # st.session_state.recipe_type = recipe_type
     if recipe_type:
         filters['recipe_type'] = recipe_type
         research_summary += f' - recipe type : *{recipe_type}*'
 
-    # # Ratings filter
-    # rating = col3.slider("Choose a rating", min_value=(min(ratings)), max_value=(max(ratings)), value=3.0, step=0.5) #ratings.index(st.session_state.selected_rating) if st.session_state.selected_rating else 
-    # st.session_state.selected_rating = rating  # Update rating in session state
-    # if rating:
-    #     filters['ratings'] = rating
-    #     research_summary += f' - rating >= *{rating}*'
+    # Vegetarian filter
+    vege = col4.toggle("Vegetarian recipes ", value=False)
+    if vege:
+        filters['vegetarian'] = vege
+        research_summary += f' - vegetarian recipes only'
     
-    other = col4.selectbox("Choose other", ['A', 'B', 'C'], index=None)
-    if other:
-        filters['other'] = other
+    # Beginner friendly filter
+    beginner = col4.toggle("Beginner friendly recipes ", value=False)
+    if beginner:
+        filters['beginner'] = beginner
+        research_summary += f' - beginner friendly recipes only'
+
+
     st.session_state.research_summary = research_summary
     st.session_state.filters = filters
     submitted = st.form_submit_button("Apply Filters")
 
-# st.write(st.session_state.filters)
-# print(st.session_state.filters)
 if submitted:
         # st.write(filters)
         df_search, total_nr_recipes = search_recipes(df, st.session_state.filters, filter_columns)
@@ -180,6 +178,30 @@ if st.session_state.search_df is not None:
     page = pages[current_page - 1] if len(pages) > 0 else pd.DataFrame()
 
     # Display filtered recipes with pagination
+    # for i in range(len(page)):
+    #     if recipe_placeholder.button(page.iloc[i]['title'], key=f"recipe_button_{i}"):
+    #         handle_recipe_click(i)
     for i in range(len(page)):
-        if recipe_placeholder.button(page.iloc[i]['title'], key=f"recipe_button_{i}"):
+        recipe = page.iloc[i]
+        
+        # Styled Markdown Block
+        recipe_placeholder.markdown(f"""
+        <div style="
+            border: 1px solid #ddd; 
+            border-radius: 10px; 
+            padding: 15px; 
+            margin-bottom: 10px; 
+            background-color: #f9f9f9; 
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.1);">
+            <h3 style="margin: 0; color: #333;">{recipe['title']}</h3>
+            <p style="margin: 5px 0; color: #777;">
+                <b>Cook Time:</b> {recipe['CookTime']} | 
+                <b>Rating:</b> {recipe['AggregatedRating']}
+            </p>
+            <p style="margin: 5px 0; color: #555;">
+                {', '.join(str(x) for x in recipe['ingredients'][:10])}...
+            </p>
+        </div>
+        """, unsafe_allow_html=True)
+        if recipe_placeholder.button(f"View Recipe: {recipe['title']}", key=f"recipe_button_{i}"):
             handle_recipe_click(i)

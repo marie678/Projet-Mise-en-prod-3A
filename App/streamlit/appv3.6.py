@@ -20,18 +20,18 @@ df = pd.read_parquet(SAMPLE_RECIPE_PATH3)
 
 
 ### FILTERS ###
-'''
-Six binary filters (True/False):
-    Vegetarian (Vegetarian_Friendly)
-    Beginner-Friendly (Beginner_Friendly)
-    Asian Cuisine (Asian)
-    African Cuisine (African)
-    North & South American Cuisine (North & South America)
-    European & Eastern European Cuisine (Europe and Eastern Europe)
-Two categorical filters:
-    Recipe Type (Main Course, Dessert, Beverage, or Breakfast) (RecipeType)
-    Total Time Range (Under 30 minutes, Between 30 minutes and 1 hour, or Over 1 hour) (TotalTime_cat)
-'''
+# '''
+# Six binary filters (True/False):
+#     Vegetarian (Vegetarian_Friendly)
+#     Beginner-Friendly (Beginner_Friendly)
+#     Asian Cuisine (Asian)
+#     African Cuisine (African)
+#     North & South American Cuisine (North & South America)
+#     European & Eastern European Cuisine (Europe and Eastern Europe)
+# Two categorical filters:
+#     Recipe Type (Main Course, Dessert, Beverage, or Breakfast) (RecipeType)
+#     Total Time Range (Under 30 minutes, Between 30 minutes and 1 hour, or Over 1 hour) (TotalTime_cat)
+# '''
 
 counter_ingredients: Counter = Counter(x for row in df['NER'] for x in row)
 ingredient_list: set = {item[0] for item in counter_ingredients.most_common()} # ingredients sorted by frequency
@@ -148,21 +148,23 @@ with st.form("filter_form", clear_on_submit=False):
 
     # Recipe Type filter
     recipe_type = col3.selectbox("Choose the type of your recipe", recipe_types, index=None)
-    st.session_state.recipe_type = recipe_type
+    # st.session_state.recipe_type = recipe_type
     if recipe_type:
         filters['recipe_type'] = recipe_type
         research_summary += f' - recipe type : *{recipe_type}*'
 
-    # # Ratings filter
-    # rating = col3.slider("Choose a rating", min_value=(min(ratings)), max_value=(max(ratings)), value=3.0, step=0.5) #ratings.index(st.session_state.selected_rating) if st.session_state.selected_rating else 
-    # st.session_state.selected_rating = rating  # Update rating in session state
-    # if rating:
-    #     filters['ratings'] = rating
-    #     research_summary += f' - rating >= *{rating}*'
+    # Vegetarian filter
+    vege = col4.toggle("Vegetarian recipes ", value=False)
+    if vege:
+        filters['vegetarian'] = vege
+        research_summary += f' - vegetarian recipes only'
     
-    other = col4.selectbox("Choose other", ['A', 'B', 'C'], index=None)
-    if other:
-        filters['other'] = other
+    # Beginner friendly filter
+    beginner = col4.toggle("Beginner friendly recipes ", value=False)
+    if beginner:
+        filters['beginner'] = beginner
+        research_summary += f' - beginner friendly recipes only'
+    
     st.session_state.research_summary = research_summary
     st.session_state.filters = filters
     submitted = st.form_submit_button("Apply Filters")
@@ -203,31 +205,6 @@ def handle_recipe_click(index):
     with st.spinner() :
         st.switch_page("./pages/Recettes.py")
 
-        # with open("pages/templatev1.3.html", "r") as template_file:
-        #     template_content = template_file.read()
-        #     jinja_template = Template(template_content)
-                
-        # # Render the template with dynamic data
-        # rendered_html = jinja_template.render(title=st.session_state.title, author = author, servings = servings,
-        #                                     rating = rating, vote =vote,
-        #                                     prep_time = prep_time, c_time = c_time, tot_time = tot_time,
-        #                                     items=st.session_state.ingredients, dir =directions, keywords = keywords,
-        #                                     link = rec_link, desc= description, img = img_link,
-        #                                     calories = calories, protein = protein, fat = fat,
-        #                                     sat_fat=sat_fat, sugar=sugar, chol = chol, sodium=sodium,
-        #                                     carbo = carbo, fiber = fiber)
-
-        # # Display the HTML in Streamlit app
-        # components.html(rendered_html, height=1000, width = 900, scrolling=True)
-        # if st.button("For more details on recipe") : 
-        #     st.write(" details ")
-        
-# if text_search:
-    # rep['%'] = rep['NER'].apply(lambda ing: round((nb / len(list(ing)))*100,1))
-    # best = rep['%'].idxmax()    
-    # percent = rep['%'].max()
-################
-
 
 # Filter the search_df by title search query if a query is entered
 if st.session_state.search_df is not None:
@@ -245,9 +222,8 @@ if st.session_state.search_df is not None:
     st.write(research_summary)
     st.write(number_recipes)
     add_vertical_space(2)
-    # Update the total recipes count for title-based filtering
     st.session_state.total_recipes = len(filtered_by_title_df)
-    
+
     recipe_placeholder = st.container()
     bottom_menu = st.columns((4,1,1))
     with bottom_menu[2]:
@@ -263,6 +239,31 @@ if st.session_state.search_df is not None:
     page = pages[current_page - 1] if len(pages) > 0 else pd.DataFrame()
 
     # Display filtered recipes with pagination
+    # for i in range(len(page)):
+    #     if recipe_placeholder.button(page.iloc[i]['title'], key=f"recipe_button_{i}"):
+    #         handle_recipe_click(i)
+
     for i in range(len(page)):
-        if recipe_placeholder.button(page.iloc[i]['title'], key=f"recipe_button_{i}"):
+        recipe = page.iloc[i]
+        
+        # Styled Markdown Block
+        recipe_placeholder.markdown(f"""
+        <div style="
+            border: 1px solid #ddd; 
+            border-radius: 10px; 
+            padding: 15px; 
+            margin-bottom: 10px; 
+            background-color: #f9f9f9; 
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.1);">
+            <h3 style="margin: 0; color: #333;">{recipe['title']}</h3>
+            <p style="margin: 5px 0; color: #777;">
+                <b>Cook Time:</b> {recipe['CookTime']} | 
+                <b>Rating:</b> {recipe['AggregatedRating']}
+            </p>
+            <p style="margin: 5px 0; color: #555;">
+                {', '.join(str(x) for x in recipe['ingredients'][:10])}...
+            </p>
+        </div>
+        """, unsafe_allow_html=True)
+        if recipe_placeholder.button(f"View Recipe: {recipe['title']}", key=f"recipe_button_{i}"):
             handle_recipe_click(i)

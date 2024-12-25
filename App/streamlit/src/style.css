@@ -1,5 +1,5 @@
 /* styles.css */
-button {
+/* button {
     background: none!important;
     border: none;
     padding: 0!important;
@@ -16,7 +16,7 @@ button:focus {
     outline: none !important;
     box-shadow: none !important;
     color: black !important;
-}
+} */
 
 /* Center all Streamlit widget labels */
 .css-10trblm {  /* Adjusts the label class for text */

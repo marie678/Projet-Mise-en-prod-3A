@@ -50,25 +50,3 @@ rendered_html = jinja_template.render(title=recipe_title, author = author, servi
 components.html(rendered_html, height=1000, width = 900, scrolling=True)
 if st.button("For more details on recipe") : 
     st.write(" details ")
-
-
-# st.markdown(
-#     f"""
-#     <h1 style="text-align: center; display: inline-block; padding: 10px; border: 2px solid; border-radius: 8px;">
-#         {recipe_title}
-#     </h1>
-#     """,
-#     unsafe_allow_html=True
-# )
-
-# add_vertical_space(4)
-# st.write(f"Pourcentage d'ingrédients déjà à disposition : {correspondance_rate} %.")
-# st.subheader("Ingrédients et leurs proportions:")
-# for ingr in ast.literal_eval(ingredients) : 
-#     st.write(f"- {ingr}")
-# st.subheader("Instructions:")
-# for line in ast.literal_eval(instructions) :
-#     st.write(f"- {line}")
-
-
-# st.write(f"> Lien vers la recette: {link}")
