@@ -3,9 +3,8 @@
 
 import streamlit as st
 import pandas as pd
-from functools import reduce
-from app.config import SAMPLE_RECIPE_PATH, APP_TITLE, SAMPLE_RECIPE_PATH3
-from utils.functions import clean, reformat, split_frame, search_recipes
+from app.config import SAMPLE_RECIPE_PATH, SAMPLE_RECIPE_PATH3
+from utils.functions import split_frame, search_recipes, handle_recipe_click
 from streamlit_extras.add_vertical_space import add_vertical_space
 import numpy as np
 from collections import Counter
@@ -34,6 +33,8 @@ filter_columns: dict = {
     'provenance' : 'World_Cuisine'
     # 'ratings': 'AggregatedRating',
 }
+filters = {}
+research_summary = ''
 
 # initialize session_state with recipe elements + widgets
 if 'title' not in st.session_state : 
@@ -66,8 +67,7 @@ if 'search_input' not in st.session_state:
 #     st.session_state.recipe_type = None
 
 
-filters = {}
-research_summary = ''
+
 
 # Text input for searching recipes by title
 title_search_query = st.text_input("Search recipes by title", key="title_search_query")
