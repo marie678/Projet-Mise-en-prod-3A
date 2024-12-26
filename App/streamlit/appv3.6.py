@@ -1,5 +1,5 @@
 ########################################### app v3.5 #################################################
-# add search bar
+# link with recipes 
 
 import streamlit as st
 import pandas as pd
@@ -9,6 +9,9 @@ from utils.functions import clean, reformat, split_frame, search_recipes
 from streamlit_extras.add_vertical_space import add_vertical_space
 import numpy as np
 from collections import Counter
+# from jinja2 import Template
+# import streamlit.components.v1 as components
+
 
 # configuration parameters
 st.set_page_config(layout="wide", page_title ='frigo vide', initial_sidebar_state='collapsed')
@@ -16,20 +19,19 @@ st.set_page_config(layout="wide", page_title ='frigo vide', initial_sidebar_stat
 df = pd.read_parquet(SAMPLE_RECIPE_PATH3)
 
 
-# Extract filters values
-# ingredient_list: set = {x for x in sorted(set(df['NER'])) if pd.notna(x)}
-# recipe_durations: set = {x for x in sorted(set(df['CookTime_minutes'])) if pd.notna(x)}
-# ratings: set = {x for x in sorted(set(df['AggregatedRating'])) if pd.notna(x)}
 ### FILTERS ###
-'''
-Six binary filters (True/False):
-    Vegetarian (Vegetarian_Friendly)
-    Beginner-Friendly (Beginner_Friendly)
-    Asian Cuisine (Asian)
-    African Cuisine (African)
-    North & South American Cuisine (North & South America)
-    European & Eastern European Cuisine (Europe and Eastern Europe)
-'''
+# '''
+# Six binary filters (True/False):
+#     Vegetarian (Vegetarian_Friendly)
+#     Beginner-Friendly (Beginner_Friendly)
+#     Asian Cuisine (Asian)
+#     African Cuisine (African)
+#     North & South American Cuisine (North & South America)
+#     European & Eastern European Cuisine (Europe and Eastern Europe)
+# Two categorical filters:
+#     Recipe Type (Main Course, Dessert, Beverage, or Breakfast) (RecipeType)
+#     Total Time Range (Under 30 minutes, Between 30 minutes and 1 hour, or Over 1 hour) (TotalTime_cat)
+# '''
 
 counter_ingredients: Counter = Counter(x for row in df['NER'] for x in row)
 ingredient_list: set = {item[0] for item in counter_ingredients.most_common()} # ingredients sorted by frequency
@@ -46,7 +48,7 @@ filter_columns: dict = {
     # 'ratings': 'AggregatedRating',
 }
 
-# initialize session_state with recipe elements + widgets
+####################################### INITIALIZE SESSION STATE ######################################
 if 'title' not in st.session_state : 
     st.session_state.title = ''
 if 'ingredients' not in st.session_state :
@@ -73,9 +75,49 @@ if 'filters' not in st.session_state:
     st.session_state.filters = None
 if 'search_input' not in st.session_state:
     st.session_state.search_input = None
-# if 'recipe_type' not in st.session_state:
-#     st.session_state.recipe_type = None
-
+if 'recipe_type' not in st.session_state:
+    st.session_state.recipe_type = None
+if 'rating' not in st.session_state:
+    st.session_state.rating = None
+if 'vote' not in st.session_state:
+    st.session_state.vote = None
+if 'author' not in st.session_state:
+    st.session_state.author = None
+if 'c_time' not in st.session_state:
+    st.session_state.c_time = None
+if 'prep_time' not in st.session_state:
+    st.session_state.prep_time = None
+if 'servings' not in st.session_state:
+    st.session_state.servings = None
+if 'tot_time' not in st.session_state:
+    st.session_state.tot_time = None
+if 'description' not in st.session_state:
+    st.session_state.description = None
+if 'keywords' not in st.session_state:
+    st.session_state.keywords = None
+if 'img_link' not in st.session_state:
+    st.session_state.img_link = None
+if 'rec_link' not in st.session_state:
+    st.session_state.rec_link = None
+if 'calories' not in st.session_state:
+    st.session_state.calories = None
+if 'protein' not in st.session_state:
+    st.session_state.protein = None
+if 'fat' not in st.session_state:
+    st.session_state.fat = None
+if 'sat_fat' not in st.session_state:
+    st.session_state.sat_fat = None
+if 'chol' not in st.session_state:
+    st.session_state.chol = None
+if 'sodium' not in st.session_state:
+    st.session_state.sodium = None
+if 'carbo' not in st.session_state:
+    st.session_state.carbo = None
+if 'fiber' not in st.session_state:
+    st.session_state.fiber = None
+if 'sugar' not in st.session_state:
+    st.session_state.sugar = None
+#####################################################################################################
 
 filters = {}
 research_summary = ''
@@ -122,8 +164,7 @@ with st.form("filter_form", clear_on_submit=False):
     if beginner:
         filters['beginner'] = beginner
         research_summary += f' - beginner friendly recipes only'
-
-
+    
     st.session_state.research_summary = research_summary
     st.session_state.filters = filters
     submitted = st.form_submit_button("Apply Filters")
@@ -134,12 +175,33 @@ if submitted:
         df_search = df_search.sort_values(by=['AggregatedRating'], ascending=False)
         st.session_state.search_df, st.session_state.total_recipes = df_search, total_nr_recipes
 
+
 def handle_recipe_click(index):
     st.session_state.title = page.iloc[index]['title']
     st.session_state.ingredients = page.iloc[index]['ingredients']
     st.session_state.instructions = page.iloc[index]['directions']
     st.session_state.link = page.iloc[index]['link']
     # st.session_state.correspondance_rate = page.iloc[index]['%']
+    st.session_state.rating = page.iloc[index]['AggregatedRating']
+    st.session_state.vote = page.iloc[index]['ReviewCount']
+    st.session_state.author = page.iloc[index]['AuthorName']
+    st.session_state.c_time = page.iloc[index]['CookTime']
+    st.session_state.prep_time = page.iloc[index]['PrepTime']
+    st.session_state.servings = page.iloc[index]['RecipeServings']
+    st.session_state.tot_time = page.iloc[index]['TotalTime']
+    st.session_state.description = page.iloc[index]['Description']
+    st.session_state.keywords = page.iloc[index]['Keywords']
+    st.session_state.img_link = page.iloc[index]['Images']
+    # st.session_state.rec_link = page.iloc[index]['Images']
+    st.session_state.calories = page.iloc[index]['Calories']
+    st.session_state.protein = page.iloc[index]['ProteinContent']
+    st.session_state.fat = page.iloc[index]['FatContent']
+    st.session_state.sat_fat = page.iloc[index]['SaturatedFatContent']
+    st.session_state.chol = page.iloc[index]['CholesterolContent']
+    st.session_state.sodium = page.iloc[index]['SodiumContent']
+    st.session_state.carbo = page.iloc[index]['CarbohydrateContent']
+    st.session_state.fiber = page.iloc[index]['FiberContent']
+    st.session_state.sugar = page.iloc[index]['SugarContent']
     with st.spinner() :
         st.switch_page("./pages/Recettes.py")
 
@@ -160,9 +222,8 @@ if st.session_state.search_df is not None:
     st.write(research_summary)
     st.write(number_recipes)
     add_vertical_space(2)
-    # Update the total recipes count for title-based filtering
     st.session_state.total_recipes = len(filtered_by_title_df)
-    
+
     recipe_placeholder = st.container()
     bottom_menu = st.columns((4,1,1))
     with bottom_menu[2]:
@@ -181,6 +242,7 @@ if st.session_state.search_df is not None:
     # for i in range(len(page)):
     #     if recipe_placeholder.button(page.iloc[i]['title'], key=f"recipe_button_{i}"):
     #         handle_recipe_click(i)
+
     for i in range(len(page)):
         recipe = page.iloc[i]
         
