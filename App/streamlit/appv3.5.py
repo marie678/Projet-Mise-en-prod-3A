@@ -15,34 +15,23 @@ st.set_page_config(layout="wide", page_title ='frigo vide', initial_sidebar_stat
 # import of the cleaned and formated dataset of 10k recipes
 df = pd.read_parquet(SAMPLE_RECIPE_PATH3)
 
-
-# Extract filters values
-# ingredient_list: set = {x for x in sorted(set(df['NER'])) if pd.notna(x)}
-# recipe_durations: set = {x for x in sorted(set(df['CookTime_minutes'])) if pd.notna(x)}
-# ratings: set = {x for x in sorted(set(df['AggregatedRating'])) if pd.notna(x)}
 ### FILTERS ###
-'''
-Six binary filters (True/False):
-    Vegetarian (Vegetarian_Friendly)
-    Beginner-Friendly (Beginner_Friendly)
-    Asian Cuisine (Asian)
-    African Cuisine (African)
-    North & South American Cuisine (North & South America)
-    European & Eastern European Cuisine (Europe and Eastern Europe)
-'''
 
 counter_ingredients: Counter = Counter(x for row in df['NER'] for x in row)
 ingredient_list: set = {item[0] for item in counter_ingredients.most_common()} # ingredients sorted by frequency
-recipe_durations: list = ['< 30min', '< 1h', '> 1h']
+recipe_durations_cat: list = ['< 30min', '< 1h', '> 1h']
+recipe_durations_min: set = {x for x in sorted(set(df['TotalTime_minutes'])) if pd.notna(x)}
 recipe_types: set = {x for x in sorted(set(df['RecipeType'])) if pd.notna(x)}
-
+provenance: set = {x for x in sorted(set(df['World_Cuisine'])) if pd.notna(x)}
 
 filter_columns: dict = {
     'ingredients': 'NER',
-    'recipe_durations': 'TotalTime_cat',
+    'recipe_durations_cat': 'TotalTime_cat',
+    'recipe_durations_min': 'TotalTime_minutes',
     'recipe_types': 'RecipeType',
     'vegetarian': 'Vegetarian_Friendly',
     'beginner': 'Beginner_Friendly',
+    'provenance' : 'World_Cuisine'
     # 'ratings': 'AggregatedRating',
 }
 
@@ -85,24 +74,41 @@ title_search_query = st.text_input("Search recipes by title", key="title_search_
 
 with st.form("filter_form", clear_on_submit=False):
     st.write("Filters")
-    col1, col2, col3, col4 = st.columns(4)
+    col1, col2, col3, col4, col5 = st.columns(5)
     
     # Ingredients filter
     ingredients = col1.multiselect("Choose one or more ingredient(s)", ingredient_list, default=None) #st.session_state.selected_ingredients if st.session_state.selected_ingredients else 
     st.session_state.selected_ingredients = ingredients  # Update selected ingredients in session state
     if ingredients:
-        nb_ingredients = len(ingredients)
+        # nb_ingredients = len(ingredients)
         filters['ingredients'] = ingredients
         ingr: str = ', '.join(str(x) for x in ingredients)
         research_summary += f'ingredients : *{ingr}*'
 
-    # Recipe duration filter
-    recipe_time = col2.select_slider("Choose the duration of your recipe", options=recipe_durations, value=None) #min_value=int(min(recipe_durations)), max_value=int(max(recipe_durations)), value=20, step=5)
-    # recipe_time = col2.selectbox("Choose the duration of your recipe", recipe_durations, index=None) #recipe_durations.index(st.session_state.selected_duration) if st.session_state.selected_duration else 
-    st.session_state.selected_duration = recipe_time  # Update duration in session state
-    if recipe_time:
-        filters['recipe_durations'] = recipe_time
-        research_summary += f' - recipe duration : *{recipe_time}*'
+    # Recipe duration filter categories
+    # recipe_time = col2.select_slider("Choose the duration of your recipe", options=recipe_durations, value=None) #min_value=int(min(recipe_durations)), max_value=int(max(recipe_durations)), value=20, step=5)
+    # st.session_state.selected_duration = recipe_time  # Update duration in session state
+    # if recipe_time:
+    #     filters['recipe_durations'] = recipe_time
+    #     research_summary += f' - recipe duration : *{recipe_time}*'
+    
+    # # Recipe duration filter continuous
+    # recipe_time = col2.slider("Choose the duration of your recipe", min_value=int(min(recipe_durations_min)), max_value=500, value=20, step=5)
+    # if recipe_time:
+    #     filters['recipe_durations_min'] = recipe_time
+    #     research_summary += f' - recipe duration <= *{recipe_time}* min.'
+
+    # Recipe duration filter continuous in hours
+    recipe_time_hours = col2.slider("Choose the duration of your recipe (in hours)",
+        min_value=0.0, #round(int(min(recipe_durations_min)) / 60, 2),
+        max_value=8.0,
+        value=round(20 / 60, 2),
+        step=0.1)
+    if recipe_time_hours:
+        recipe_time_minutes = int(recipe_time_hours * 60)     # Convert the selected value back to minutes for filtering
+        filters['recipe_durations_min'] = recipe_time_minutes
+        research_summary += f' - recipe duration <= *{recipe_time_hours}* hours.'
+
 
     # Recipe Type filter
     recipe_type = col3.selectbox("Choose the type of your recipe", recipe_types, index=None)
@@ -122,6 +128,13 @@ with st.form("filter_form", clear_on_submit=False):
     if beginner:
         filters['beginner'] = beginner
         research_summary += f' - beginner friendly recipes only'
+
+    # World Cuisine filter
+    cuisine = col5.multiselect("Choose a provenance for your recipe", provenance, default=None, key='cuisine_widget')
+    if cuisine:
+        filters['provenance'] = cuisine
+        prov: str = ', '.join(str(x) for x in cuisine)
+        research_summary += f' - provenance : *{cuisine}*'
 
 
     st.session_state.research_summary = research_summary

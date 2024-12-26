@@ -52,9 +52,12 @@ def search_recipes(original_df: pd.DataFrame, filters:list, dict_columns: dict):
     if 'ingredients' in filters.keys():
         col, value = dict_columns['ingredients'], filters['ingredients']
         filtered_df = filtered_df[filtered_df[col].apply(lambda x: all(element in x for element in value))]  
-    if 'recipe_durations' in filters.keys():
-        col, value = dict_columns['recipe_durations'], filters['recipe_durations']
+    if 'recipe_durations_cat' in filters.keys():
+        col, value = dict_columns['recipe_durations_cat'], filters['recipe_durations_cat']
         filtered_df = filtered_df[filtered_df[col] == (value)]
+    if 'recipe_durations_min' in filters.keys():
+        col, value = dict_columns['recipe_durations_min'], filters['recipe_durations_min']
+        filtered_df = filtered_df[filtered_df[col] <= (value)]
     if 'recipe_type' in filters.keys():
         col, value = dict_columns['recipe_types'], filters['recipe_type']
         filtered_df = filtered_df[filtered_df[col] == (value)]
@@ -64,6 +67,10 @@ def search_recipes(original_df: pd.DataFrame, filters:list, dict_columns: dict):
     if 'beginner' in filters.keys():
         col, value = dict_columns['beginner'], filters['beginner']
         filtered_df = filtered_df[filtered_df[col] == (value)]      
+    if 'provenance' in filters.keys():
+        col, value = dict_columns['provenance'], filters['provenance']
+        filtered_df = filtered_df[filtered_df[col].apply(lambda x: all(element in x for element in value))]
+        # filtered_df = filtered_df[filtered_df[col] == (value)]      
  
     total_nr_recipes : int = len(filtered_df)
     return filtered_df, total_nr_recipes
