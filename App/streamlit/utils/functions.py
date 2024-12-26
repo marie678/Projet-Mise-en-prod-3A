@@ -169,3 +169,44 @@ def search_recipes(original_df: pd.DataFrame, filters:list, dict_columns: dict) 
     total_nr_recipes : int = len(filtered_df)
 
     return filtered_df, total_nr_recipes
+
+def initialize_session_state() -> None:
+    """
+    Initializes all necessary keys in the Streamlit session state if they are not already present
+    Allows for better readability in the app file
+    """
+    default_values = {
+        'title': '',
+        'ingredients': '',
+        'instructions': '',
+        'link': '',
+        'total_recipes': None,
+        'search_df': None,
+        'research_summary': None,
+        'filters': None,
+        'recipe_type': None,
+        'rating': None,
+        'vote': None,
+        'author': None,
+        'c_time': None,
+        'prep_time': None,
+        'servings': None,
+        'tot_time': None,
+        'description': None,
+        'keywords': None,
+        'img_link': None,
+        'rec_link': None,
+        'calories': None,
+        'protein': None,
+        'fat': None,
+        'sat_fat': None,
+        'chol': None,
+        'sodium': None,
+        'carbo': None,
+        'fiber': None,
+        'sugar': None,
+    }
+
+    for key, value in default_values.items():
+        if key not in st.session_state:
+            st.session_state[key] = value

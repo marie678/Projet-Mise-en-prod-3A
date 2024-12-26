@@ -4,7 +4,7 @@
 import streamlit as st
 import pandas as pd
 from app.config import SAMPLE_RECIPE_PATH3
-from utils.functions import split_frame, search_recipes, handle_recipe_click
+from utils.functions import split_frame, search_recipes, handle_recipe_click, initialize_session_state
 from streamlit_extras.add_vertical_space import add_vertical_space
 from collections import Counter
 
@@ -14,7 +14,7 @@ st.set_page_config(layout="wide", page_title ='frigo vide', initial_sidebar_stat
 df = pd.read_parquet(SAMPLE_RECIPE_PATH3)
 
 
-####################################### FILTERS ######################################################
+####################################### FILTERS INITIALIZATION #############################################
 
 counter_ingredients: Counter = Counter(x for row in df['NER'] for x in row)
 ingredient_list: set = {item[0] for item in counter_ingredients.most_common()} # ingredients sorted by frequency
@@ -35,78 +35,13 @@ filter_columns: dict = {
 filters = {}
 research_summary = ''
 
-####################################### INITIALIZE SESSION STATE ######################################
-if 'title' not in st.session_state : 
-    st.session_state.title = ''
-if 'ingredients' not in st.session_state :
-    st.session_state.ingredients = ''
-if 'instructions' not in st.session_state:
-    st.session_state.instructions = ''
-if 'link' not in st.session_state:
-    st.session_state.link = ''
-# if 'correspondance_rate' not in st.session_state :
-#     st.session_state.correspondance_rate = ''
-# if 'selected_ingredients' not in st.session_state:
-#     st.session_state.selected_ingredients = None
-# if 'selected_duration' not in st.session_state:
-#     st.session_state.selected_duration = None
-# if 'selected_rating' not in st.session_state:
-#     st.session_state.selected_rating = None
-if 'total_recipes' not in st.session_state:
-    st.session_state.total_recipes = None
-if 'search_df' not in st.session_state:
-    st.session_state.search_df = None
-if 'research_summary' not in st.session_state:
-    st.session_state.research_summary = None
-if 'filters' not in st.session_state:
-    st.session_state.filters = None
-if 'recipe_type' not in st.session_state:
-    st.session_state.recipe_type = None
-if 'rating' not in st.session_state:
-    st.session_state.rating = None
-if 'vote' not in st.session_state:
-    st.session_state.vote = None
-if 'author' not in st.session_state:
-    st.session_state.author = None
-if 'c_time' not in st.session_state:
-    st.session_state.c_time = None
-if 'prep_time' not in st.session_state:
-    st.session_state.prep_time = None
-if 'servings' not in st.session_state:
-    st.session_state.servings = None
-if 'tot_time' not in st.session_state:
-    st.session_state.tot_time = None
-if 'description' not in st.session_state:
-    st.session_state.description = None
-if 'keywords' not in st.session_state:
-    st.session_state.keywords = None
-if 'img_link' not in st.session_state:
-    st.session_state.img_link = None
-if 'rec_link' not in st.session_state:
-    st.session_state.rec_link = None
-if 'calories' not in st.session_state:
-    st.session_state.calories = None
-if 'protein' not in st.session_state:
-    st.session_state.protein = None
-if 'fat' not in st.session_state:
-    st.session_state.fat = None
-if 'sat_fat' not in st.session_state:
-    st.session_state.sat_fat = None
-if 'chol' not in st.session_state:
-    st.session_state.chol = None
-if 'sodium' not in st.session_state:
-    st.session_state.sodium = None
-if 'carbo' not in st.session_state:
-    st.session_state.carbo = None
-if 'fiber' not in st.session_state:
-    st.session_state.fiber = None
-if 'sugar' not in st.session_state:
-    st.session_state.sugar = None
+####################################### SESSION STATE INITIALIZATION ######################################
+initialize_session_state()
 
 
 ######################################## WEB PAGE DISPLAY #################################################
 
-# Text input for searching recipes by title
+# Text input to search recipes by title
 title_search_query = st.text_input("Search a recipe (by title or ingredient(s))", key="title_search_query")
 
 with st.form("filter_form", clear_on_submit=False):
@@ -115,20 +50,19 @@ with st.form("filter_form", clear_on_submit=False):
     
     # Ingredients filter
     ingredients = col1.multiselect("Choose one or more ingredient(s)", ingredient_list, default=None)
-    # st.session_state.selected_ingredients = ingredients  # Update selected ingredients in session state
     if ingredients:
         filters['ingredients'] = ingredients
         ingr: str = ', '.join(str(x) for x in ingredients)
         research_summary += f'ingredients : *{ingr}*'
 
-    # Recipe duration filter categories
+    # # Recipe duration filter categories
     # recipe_time = col2.select_slider("Choose the duration of your recipe", options=recipe_durations, value=None) #min_value=int(min(recipe_durations)), max_value=int(max(recipe_durations)), value=20, step=5)
     # st.session_state.selected_duration = recipe_time  # Update duration in session state
     # if recipe_time:
     #     filters['recipe_durations'] = recipe_time
     #     research_summary += f' - recipe duration : *{recipe_time}*'
     
-    # # Recipe duration filter continuous
+    # # Recipe duration filter continuous (minutes)
     # recipe_time = col2.slider("Choose the duration of your recipe", min_value=int(min(recipe_durations_min)), max_value=500, value=20, step=5)
     # if recipe_time:
     #     filters['recipe_durations_min'] = recipe_time
@@ -145,10 +79,8 @@ with st.form("filter_form", clear_on_submit=False):
         filters['recipe_durations_min'] = recipe_time_minutes
         research_summary += f' - recipe duration <= *{recipe_time_hours}* hours.'
 
-
     # Recipe Type filter
     recipe_type = col3.selectbox("Choose the type of your recipe", recipe_types, index=None)
-    # st.session_state.recipe_type = recipe_type
     if recipe_type:
         filters['recipe_type'] = recipe_type
         research_summary += f' - recipe type : *{recipe_type}*'
@@ -176,13 +108,13 @@ with st.form("filter_form", clear_on_submit=False):
     st.session_state.filters = filters
     submitted = st.form_submit_button("Find a recipe")
 
-# Research recipes with filters
+# Research recipes in the original dataframe according to the filters 
 if submitted:
         df_search, total_nr_recipes = search_recipes(df, st.session_state.filters, filter_columns)
-        df_search = df_search.sort_values(by=['AggregatedRating'], ascending=False) # we sort by highest rated
+        df_search = df_search.sort_values(by=['AggregatedRating'], ascending=False) # we sort by higher rated
         st.session_state.search_df, st.session_state.total_recipes = df_search, total_nr_recipes
 
-# Filter the search_df (= filtered df) by title search query if a query is entered
+# Filter the search_df (= the filtered df) by title search query if a query is entered
 if st.session_state.search_df is not None:
     research_summary = f"**Research summary :** {st.session_state.research_summary} \n"
     number_recipes = f"There are **{st.session_state.total_recipes}** recipes corresponding :\n"
@@ -196,6 +128,7 @@ if st.session_state.search_df is not None:
     st.session_state.total_recipes = len(df_search)
     number_recipes = (f"There are **{st.session_state.total_recipes} recipes** matching your search :")
 
+# Display the results
     st.write(research_summary)
     st.write(number_recipes)
     add_vertical_space(2)
@@ -215,7 +148,6 @@ if st.session_state.search_df is not None:
     page = pages[current_page - 1] if len(pages) > 0 else pd.DataFrame()
 
     # Display filtered recipes with pagination + html formatting
-
     for i in range(len(page)):
         recipe = page.iloc[i]
         recipe_placeholder.markdown(f"""
