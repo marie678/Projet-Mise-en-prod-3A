@@ -29,24 +29,33 @@ def parse_list_column(column_data: Union[str, None]) -> Union[list, float]:
             return np.nan
     return np.nan
 
-def categorize_duration(duration: str) -> str:
+def iso_to_minutes(iso_duration: str) -> float:
     """
-    Categorizes a string of duration in ISO 8601 format into three categories:
+    Convert ISO 8601 durations to total minutes.
+
+    Args:
+        iso_duration (str): duration in ISO 8601 format (example: 'PT1H30M')
+
+    Returns:
+        float: duration in minutes
+    """
+    hours = int(re.search(r'(\d+)H', iso_duration).group(1)) if 'H' in iso_duration else 0
+    minutes = int(re.search(r'(\d+)M', iso_duration).group(1)) if 'M' in iso_duration else 0
+    return hours * 60 + minutes 
+
+def categorize_duration(total_minutes: float) -> str:
+    """
+    Categorizes durations into three categories:
         - '< 30min' if the duration is less than 30 minutes
         - '< 1h' if the duration is between 30 and 60 minutes
         - '> 1h' if the duration is more than 60 minutes
 
     Args:
-        duration (str): duration in ISO 8601 format (example: 'PT1H30M')
+        total_minutes (float): duration in minutes
 
     Returns:
         str: the category string
     """
-    if pd.isna(duration):
-        return np.nan
-    hours = re.search(r'(\d+)H', duration)
-    minutes = re.search(r'(\d+)M', duration)
-    total_minutes = (int(hours.group(1)) * 60 if hours else 0) + (int(minutes.group(1)) if minutes else 0)
     return '< 30min' if total_minutes <= 30 else '< 1h' if total_minutes <= 60 else '> 1h'
     
 def format_duration(duration: str) -> str:
@@ -246,10 +255,13 @@ def data_preprocessing(df: pd.DataFrame) -> pd.DataFrame:
         pd.DataFrame: cleaned and processed DataFrame
     """
     # Drop recipes with the same title
-    df = df.drop_duplicates(subset=['title']).reset_index(drop=True)
+    df = df.drop_duplicates(subset=['title'])
 
     # Create new variables
-    df['TotalTime_cat'] = df['TotalTime'].apply(categorize_duration)
+    for col in ['CookTime', 'PrepTime', 'TotalTime']:
+        df[f'{col}_minutes'] = df[col].apply(iso_to_minutes)
+    df = df[df['TotalTime_minutes']>0]
+    df['TotalTime_cat'] = df['TotalTime_minutes'].apply(categorize_duration)
     df['RecipeType'] = df.apply(assign_category, axis=1)
     df = df[df['RecipeType'] != 'Other'].reset_index(drop=True)
     df['Beginner_Friendly'] = df['Keywords'].apply(lambda x: 'Easy' in x) 
