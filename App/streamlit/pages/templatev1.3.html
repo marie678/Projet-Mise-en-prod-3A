@@ -11,10 +11,52 @@
     
 
 <style>
+/* Styling of the title of result page, i.e the recipe name */
     h1 {border: 2px #300a0a solid;
     color: rgb(178, 144, 32);
     text-align: center;
     padding: 10px;}
+
+/* Styling of the 5 star rating */
+    .stars {
+    position: relative;
+    display:inline-block;
+    font-size: 20pt;
+	  height: 1em;
+    line-height: 1em;
+    }
+
+    .stars:before {	
+    content: "\2606\2606\2606\2606\2606";
+    }
+
+    .stars:after {	
+    content: "\2605\2605\2605\2605\2605";
+    position:absolute;
+    left:0;
+    overflow:hidden;
+    width:var(--w,50%);
+    color: rgb(255, 200, 0);
+    z-index:-1;
+    }
+
+/* Styling and positioning of print to pdf button */
+
+    #printButton {
+        padding: 10px 20px;
+        font-size: 20px;
+        background-color: #af754c;
+        color: white;
+        border-radius: 5pt;
+        border: 2px solid #452e1e;
+        cursor: pointer;
+        float: right;
+    }
+    #printButton:hover {
+        background-color: #a07545;
+    }
+
+/* Styling of the general characteristics (servings, time) in a round edge box */
     
     .boxed {
     border: 1px solid green ;
@@ -26,50 +68,33 @@
       vertical-align: middle;
       display: table-cell;
   }
-  .key {font-size: small;}
-  .serif { font-family: cursive;}
-  .material-symbols-outlined { font-size: 18px; vertical-align: middle; }
-  table, th, td {
-border: 1px solid black;
-border-collapse: collapse;
-}
-th, td {
-padding: 10px;
-}
 
-.stars {
-    position: relative;
-    display:inline-block;
-    font-size: 20pt;
-	  height: 1em;
-    line-height: 1em;
-}
+  /* Adjusting position and size of google icons of the general characteristics */
+    .material-symbols-outlined { font-size: 18px; vertical-align: middle; }
 
-.stars:before {	
-    content: "\2606\2606\2606\2606\2606";
-}
+    .description{color:#3f3d41;
+        font-size:large;
+    }
 
-.stars:after {	
-    content: "\2605\2605\2605\2605\2605";
-    position:absolute;
-    left:0;
-    overflow:hidden;
-    width:var(--w,50%);
-    color: rgb(255, 200, 0);
-    z-index:-1;
-}
+/* Styling of the keywords in a small and italic font */
+    .key {font-size: small;
+         color : #434174;
+    }
 
-li {
+/* Styling font type of Author name */
+
+    .cursive { font-family: cursive;}
+
+/* Styling of main body in list format : unordered list for ingredients (list-two) and ordered list for directions (list-one) */
+    li {
         display: list-item; 
     }
 
-.list-two ul {
-    list-style:square;
-}
+    .list-two ul {
+        list-style:square;
+    }
 
-/* Styling for ordered list (ol) inside .list-one */
-
-.list-one body {
+    .list-one body {
 	font-family: 'Roboto Slab', serif;
 	font-size: 1.2rem;
 	margin: 0;
@@ -77,74 +102,116 @@ li {
 	display: grid;
 	place-items: center;
 	min-height: 100vh;
-}
+    }
 
-.list-one ol {
-  padding: 0;
-  margin: 0;
-  max-width: 400px;
-  position: relative;
-}
+    .list-one ol {
+    padding: 0;
+    margin: 0;
+    max-width: 400px;
+    position: relative;
+    }
 
-/* Adding a pseudo-element before the ol */
-.list-one ol::before {
-  content: '';
-  width: 0.5rem;
-  height: 100%;
-  position: absolute;
-  top: 0;
-  left: 8%;
-  background: peachpuff;
-  z-index: -1;
-}
+    /* Adding a pseudo-element before the ol */
+    .list-one ol::before {
+    content: '';
+    width: 0.5rem;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 8%;
+    background: peachpuff;
+    z-index: -1;
+    }
 
-/* Styling the list items (li) inside .list-one */
-.list-one li {
-  padding: 0.3rem 0.8rem;
-  border-radius: 1rem;
-  background: peachpuff;
-  max-width: 50%;          /* Adjusted width to 70% */
-  font-size: 1.2rem;       /* Reduced font size */
-  line-height: 1.2;
-}
+    /* Styling the list items (li) inside .list-one */
+    .list-one li {
+    padding: 0.3rem 0.8rem;
+    border-radius: 1rem;
+    background: peachpuff;
+    max-width: 50%;          
+    font-size: 1.2rem;       
+    line-height: 1.2;
+    }
 
-/* Adding margin to the second and subsequent list items */
-.list-one li + li {
-  margin-top: 1rem;
-}
+    /* Adding margin to the second and subsequent list items */
+    .list-one li + li {
+    margin-top: 1rem;
+    }
 
-/* Styling the markers (numbers) of the ordered list */
-.list-one ::marker {
-  font-weight: 600;
-  color: tomato;
-  font-size: 1.6rem;
-}
+    /* Styling the markers of the ordered list */
+    .list-one ::marker {
+    font-weight: 600;
+    color: tomato;
+    font-size: 1.6rem;
+    }
 
+/* Styling and display buton of table of detailed characteristics */
+    table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+    }
+    th, td {
+    padding: 10px;
+    }
+
+    #myTable {
+        display: none;
+        margin-top: 20px;
+        }
+
+    /* Display table when clicked */
+        #showTableButton {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #2196F3;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        #showTableButton:hover {
+            background-color: #1976D2;
+        }
+
+/* CSS for print to ensure table is shown when printing */
+@media print {
+            #myTable {
+                display: table; /* Show the table in the print version */
+            }
+            #showTableButton,
+            #printButton {
+                display: none; /* Hide buttons in print version */
+            }
+        }
     </style>
 </head>
 
 <body>
-    <!-- Title -->
+    <!-- Title, rating, author and print to pdf button -->
     <div>
-        <h1 class="wsh">{{ title }}</h1> 
-        <div class="stars" style="--w: {{rating * 20}}%;"> </div> {{ rating }} / 5 based on {{ vote }} votes 
-        
-        <p class="serif"> {{ author }}  </p> 
+        <h1>{{ title }}</h1> 
+        <div class="stars" style="--w: {{rating * 20}}%;"> </div> 
+            <span>{{ rating }} / 5 based on {{ vote }} votes </span>
+            <button id="printButton"> &#128424;&#65039; </button>
+        <p class="cursive"> {{ author }}  </p> 
     </div>
+
     <!-- General caracteristics -->
     <div class="boxed">
-        <!-- Include Icons for Number of servings -->
+        <!-- Include Icon for Number of servings -->
         &#x1F924; {{ servings }} &emsp;
-        <!-- Include Google Icons for PrepTime -->
+        <!-- Include Google Icon for PrepTime -->
         <span class="material-symbols-outlined">cooking</span>
         {{ prep_time }} &emsp;
-        <!-- Include Google Icons for CookTime -->
+        <!-- Include Google Icon for CookTime -->
          <span class="material-symbols-outlined">oven</span>
         {{ c_time }} &emsp;
-         <!-- Include Google Icons for TotalTime -->
+         <!-- Include Google Icon for TotalTime -->
          <span class="material-symbols-outlined">restaurant</span>
          {{ tot_time }}
       </div>
+      
       <!-- Image -->
     <div> 
         <img align = "right" style='height: 30%; width: 40%; object-fit: contain' src= {{ img }}>
@@ -154,8 +221,8 @@ li {
       <!-- Description -->
     <div>
         <br />
-        <p style = "color:#3f3d41;" font size="large"> {{ desc }} ! </p>
-        <em class = "key", style = "color:#434174;"> 
+        <p class = "description"> {{ desc }} </p>
+        <em class = "key"> 
             {% for item in keywords %}
             {{ item }} &thinsp;
         {% endfor %}
@@ -181,10 +248,13 @@ li {
         <p> Enjoy ;)  </p>
     </div>
 
-    <div>
-    <details class="details-example">
-        <summary> Click here for more details on the recipe</summary>
-        <table>
+
+    <!-- Show Table Button -->
+    <button id="showTableButton"> Click here for more details on the recipe </button>
+
+    <!-- Table that is initially hidden -->
+    
+    <table id="myTable">
             <tr>
             <th>Calories</th>
             <th>Fat</th>
@@ -209,7 +279,17 @@ li {
             </tr>
             <tr>
             </table>
-    </details>
-</div>
+
+<script>
+    // Show table when the "Show Table" button is clicked
+    document.getElementById('showTableButton').addEventListener('click', function() {
+            document.getElementById('myTable').style.display = 'table'; // Show the table
+        });
+    // Add event listener to the button
+    document.getElementById('printButton').addEventListener('click', function() {
+        window.print(); // This will open the browser's print dialog
+    });
+</script>
+
 </body>
 </html>

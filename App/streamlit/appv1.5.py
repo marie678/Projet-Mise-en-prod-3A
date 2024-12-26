@@ -18,6 +18,9 @@ df = pd.read_parquet(SAMPLE_RECIPE_PATH3)
 
 st.write(APP_TITLE)
 
+
+
+
 # Use a text_input to get the keywords to filter the dataframe
 text_search = st.text_input("Search recipes by ingredients", value="").lower()
 
@@ -74,6 +77,4 @@ if text_search:
     # Display the HTML in Streamlit app
     components.html(rendered_html, height=1000, width = 900, scrolling=True)
     
-    
-    if st.button("For more details on recipe") : 
-        st.write(" details ")
+
