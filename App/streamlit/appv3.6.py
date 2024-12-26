@@ -7,6 +7,7 @@ from app.config import SAMPLE_RECIPE_PATH3
 from utils.functions import split_frame, search_recipes, handle_recipe_click, initialize_session_state
 from streamlit_extras.add_vertical_space import add_vertical_space
 from collections import Counter
+from typing import Any
 
 # configuration parameters
 st.set_page_config(layout="wide", page_title ='frigo vide', initial_sidebar_state='collapsed')
@@ -16,14 +17,14 @@ df = pd.read_parquet(SAMPLE_RECIPE_PATH3)
 
 ####################################### FILTERS INITIALIZATION #############################################
 
-counter_ingredients: Counter = Counter(x for row in df['NER'] for x in row)
-ingredient_list: set = {item[0] for item in counter_ingredients.most_common()} # ingredients sorted by frequency
+counter_ingredients: Counter[str] = Counter(x for row in df['NER'] for x in row)
+ingredient_list: set[str] = {item[0] for item in counter_ingredients.most_common()} # ingredients sorted by frequency
 recipe_durations_cat: list = ['< 30min', '< 1h', '> 1h']
-recipe_durations_min: set = {x for x in sorted(set(df['TotalTime_minutes'])) if pd.notna(x)}
+recipe_durations_min: set[float] = {x for x in sorted(set(df['TotalTime_minutes'])) if pd.notna(x)}
 recipe_types: set = {x for x in sorted(set(df['RecipeType'])) if pd.notna(x)}
 provenance: set = {x for x in sorted(set(df['World_Cuisine'])) if pd.notna(x)}
 
-filter_columns: dict = {
+filter_columns: dict[str, str] = {
     'ingredients': 'NER',
     'recipe_durations_cat': 'TotalTime_cat',
     'recipe_durations_min': 'TotalTime_minutes',
@@ -32,7 +33,7 @@ filter_columns: dict = {
     'beginner': 'Beginner_Friendly',
     'provenance' : 'World_Cuisine'
 }
-filters = {}
+filters: dict[str, Any] = {}
 research_summary = ''
 
 ####################################### SESSION STATE INITIALIZATION ######################################
@@ -114,6 +115,9 @@ if submitted:
         df_search = df_search.sort_values(by=['AggregatedRating'], ascending=False) # we sort by higher rated
         st.session_state.search_df, st.session_state.total_recipes = df_search, total_nr_recipes
 
+# If no recipes found
+if st.session_state.search_df is None or st.session_state.search_df.empty or len(st.session_state.search_df)==0 :
+    st.write("No recipes found. Try adjusting your filters or your research.")
 # Filter the search_df (= the filtered df) by title search query if a query is entered
 if st.session_state.search_df is not None:
     research_summary = f"**Research summary :** {st.session_state.research_summary} \n"
@@ -126,12 +130,13 @@ if st.session_state.search_df is not None:
             ]
     df_search = st.session_state.search_df
     st.session_state.total_recipes = len(df_search)
-    number_recipes = (f"There are **{st.session_state.total_recipes} recipes** matching your search :")
 
 # Display the results
-    st.write(research_summary)
-    st.write(number_recipes)
-    add_vertical_space(2)
+    if st.session_state.total_recipes != 0 :
+        number_recipes = (f"There are **{st.session_state.total_recipes} recipes** matching your search :")
+        st.write(research_summary)
+        st .write(number_recipes)
+        add_vertical_space(2)
 
     recipe_placeholder = st.container()
     bottom_menu = st.columns((4,1,1))

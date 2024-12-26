@@ -1,6 +1,6 @@
 import pandas as pd
 import streamlit as st
-from typing import Tuple
+from typing import Tuple, Any
 
 
 # def clean(col) :
@@ -23,7 +23,7 @@ from typing import Tuple
 #         col2.append(i)
 #     return  reduce(operator.concat, col2)
 
-def split_frame(input_df: pd.DataFrame, rows: int) -> pd.DataFrame:
+def split_frame(input_df: pd.DataFrame, rows: int) -> list[pd.DataFrame]:
     """
     Splits the input DataFrame into chunks of a specified number of rows.
 
@@ -110,7 +110,7 @@ def handle_recipe_click(page: pd.DataFrame, index: int) -> None:
         st.switch_page("./pages/Recettes.py")
 
 @st.cache_data(show_spinner=True)
-def search_recipes(original_df: pd.DataFrame, filters:list, dict_columns: dict) -> Tuple[pd.DataFrame, int]:
+def search_recipes(original_df: pd.DataFrame, filters:dict[str, Any], dict_columns: dict[str, str]) -> Tuple[pd.DataFrame, int]:
     """
     Filters a DataFrame of recipes based on specific criterias and returns the filtered results.
 
