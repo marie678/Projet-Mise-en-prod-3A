@@ -144,30 +144,27 @@ def is_non_vegetarian(ingredient_list: List[str]) -> bool:
             return True
     return False
     
-def create_cuisine_columns(df: pd.DataFrame) -> pd.DataFrame:
+def find_world_cuisine(keywords: List[str]) -> str:
     """
-    Adds 4 binary columns to the input DataFrame: 'Asian', 'African', 'North & South America' and 'Europe and Eastern Europe' based on whether the keywords related to the respective cuisine are found.
+    Identifies and returns the first matching world cuisine keyword from a given list of keywords.
 
     Args:
-        df (pd.Dataframe): The input DataFrame. It must contain a column named 'Keywords', which includes lists of strings.
-
-    Returns: 
-        pd.Dataframe: The input DataFrame with four additional columns.
+        keywords (List[str]): A list of keywords related to the recipe.
+    
+    Returns:
+        str: The name of the matched cuisine from a predefined list, or 'Unknown' if no match is found.
     """
-    asian_keywords = ['Asian', 'Indian', 'Chinese', 'Southwest Asia (middle East)', 'Thai', 'Japanese', 'Hawaiian', 'Russian', 'Korean', 'Vietnamese', 'Indonesian', 'Malaysian', 'Pakistani', 'Cantonese', 'Nepalese', 'Cambodian', 'Mongolian']
-    african_keywords = ['African', 'South African', 'Egyptian', 'Nigerian', 'Sudanese', 'Ecuadorean', 'Moroccan', 'Ethiopian', 'Somalian']
-    american_keywords = ['Mexican', 'Southwestern U.S.', 'Caribbean', 'South American', 'Hawaiian', 'Cuban', 'Venezuelan', 'Peruvian', 'Puerto Rican', 'Native American', 'Colombian', 'Chilean', 'Costa Rican', 'Guatemalan', 'Honduran']
-    european_keywords = ['Greek', 'Scandinavian', 'German', 'Spanish', 'Russian', 'Hungarian', 'Lebanese', 'Danish', 'Turkish', 'Finnish', 'Dutch', 'Belgian', 'Norwegian', 'Welsh', 'Czech', 'Icelandic']
-
-    def check_keywords(keywords, text):
-        text_lower = " ".join(str(item).lower() for item in text) if isinstance(text, list) else str(text).lower() 
-        return any(f' {keyword.lower()} ' in f' {text_lower} ' or text_lower.startswith(f'{keyword.lower()} ') or text_lower.endswith(f' {keyword.lower()}') for keyword in keywords)
-
-    df['Asian'] = df['Keywords'].apply(lambda x: check_keywords(asian_keywords, x))
-    df['African'] = df['Keywords'].apply(lambda x: check_keywords(african_keywords, x))
-    df['North & South America'] = df['Keywords'].apply(lambda x: check_keywords(american_keywords, x))
-    df['Europe and Eastern Europe'] = df['Keywords'].apply(lambda x: check_keywords(european_keywords, x))
-    return df
+    world_cuisines = [
+        'Indian', 'Chinese', 'Thai', 'Japanese', 'Hawaiian', 'Russian', 'Korean', 'Vietnamese', 'Indonesian', 'Malaysian', 'Pakistani', 'Cantonese', 'Nepalese', 'Cambodian', 'Mongolian', 'Asian', 'Asia',
+        'Egyptian', 'Nigerian', 'Sudanese', 'Ecuadorean', 'Moroccan', 'Ethiopian', 'Somalian', 'African',
+        'Mexican', 'U.S.', 'Caribbean', 'American', 'Hawaiian', 'Cuban', 'Venezuelan', 'Peruvian', 'Puerto Rican', 'Colombian', 'Chilean', 'Costa Rican', 'Guatemalan', 'Honduran', 
+        'Greek', 'Scandinavian', 'German', 'Spanish', 'Russian', 'Hungarian', 'Lebanese', 'Danish', 'Turkish', 'Finnish', 'Dutch', 'Belgian', 'Norwegian', 'Welsh', 'Czech', 'Icelandic', 'European'
+    ]
+    keywords_lower = [str(k).lower() for k in keywords]
+    for cuisine in world_cuisines:
+        if cuisine.lower() in keywords_lower:
+            return cuisine
+    return 'Unknown'
 
 
 ## Dataset loading functions
@@ -266,7 +263,7 @@ def data_preprocessing(df: pd.DataFrame) -> pd.DataFrame:
     df = df[df['RecipeType'] != 'Other'].reset_index(drop=True)
     df['Beginner_Friendly'] = df['Keywords'].apply(lambda x: 'Easy' in x) 
     df['Vegetarian_Friendly'] = ~df['NER'].apply(lambda x: is_non_vegetarian(x)) 
-    df = create_cuisine_columns(df)
+    df['World_Cuisine'] = df['Keywords'].apply(find_world_cuisine)
 
     # Convert durations to a more readable format
     for col in ['CookTime', 'PrepTime', 'TotalTime']:
@@ -280,15 +277,15 @@ def data_preprocessing(df: pd.DataFrame) -> pd.DataFrame:
 
 def sample_df_10k(df: pd.DataFrame) -> pd.DataFrame:
     """
-    Samples 10,000 rows from the given DataFrame while following a predefined distribution of `RecipeType` and maximizing rows with `True` values in world cuisine columns.
+    Samples 10,000 rows from the given DataFrame while following a predefined distribution of `RecipeType` and prioritizing rows where the `World_Cuisine` column has values other than 'Unknown'.
 
     Args:
         df (pd.Dataframe): Input DataFrame containing at least the following columns:
             - 'RecipeType' (categorical): Specifies the type of recipe (e.g., 'Dessert', 'Main Course').
-            - 'Asian', 'African', 'North & South America', 'Europe and Eastern Europe' (boolean): Columns indicating a specific cuisine type.
+            - 'World_Cuisine' (categorical): Specifies the cuisine type or 'Unknown' if not available.
 
     Returns:
-        pd.Dataframe: A DataFrame with 10,000 sampled rows distributed according to `RecipeType` and prioritizing rows with `True` values in world cuisine columns.
+        pd.Dataframe: A DataFrame with 10,000 sampled rows distributed according to `RecipeType`.
     """
     sample_distribution = {
         'Beverages': 1500, 
@@ -303,10 +300,8 @@ def sample_df_10k(df: pd.DataFrame) -> pd.DataFrame:
         df_recipe_type = df[df['RecipeType'] == recipe_type]    
         if len(df_recipe_type) < sample_size:
             sample_size = len(df_recipe_type) 
-        # Prioritize rows with True values in any cuisine columns
-        df_cuisine = df_recipe_type[
-            df_recipe_type[['Asian', 'African', 'North & South America', 'Europe and Eastern Europe']].any(axis=1)
-        ]
+        # Prioritize rows where 'Cuisine' is not 'Unknown'
+        df_cuisine = df_recipe_type[df_recipe_type['World_Cuisine'] != 'Unknown']
         cuisine_sample_size = min(len(df_cuisine), sample_size)
         sampled_cuisine = df_cuisine.sample(n=cuisine_sample_size, random_state=42)
         # Sample remaining rows if needed
@@ -331,7 +326,7 @@ def main(base_dir: str) -> None:
     base_dir = Path(base_dir)
     nutrition_path = base_dir / 'recipes.parquet'
     measurements_path = base_dir / 'recipes_data.csv'
-    output_path = base_dir / 'sample_recipes_10k_test.parquet'
+    output_path = base_dir / 'sample_recipes_10k.parquet'
 
     try:
         df_nutrition = load_nutrition_data(nutrition_path)
