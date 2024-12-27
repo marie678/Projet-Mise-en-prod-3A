@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }}</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <style>
+        /* Basic body styling */
+        body {
+            font-family: sans-serif;
+            margin: 20px;
+            background-color: #f8f0e3;
+            color: #333;
+        }
+         /* Basic container styling */
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+         /* Styling for the header */
+         .header {
+        font-family: 'Playfair Display', serif; /* Example serif font */
+        font-size: 2em; /* Adjust size as needed */
+        text-align: center; /* Center the text */
+        margin-top: 20px; /* Add some top margin */
+        margin-bottom: 20px;
+        color: black;
+                }
+        
+        /*  Dispaly of the rating */
+        .rating {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .stars {
+            color: gold;
+            margin-right: 5px;
+        }
+         /*  Author name in italic */
+        .author {
+            font-style: italic;
+            margin-bottom: 20px;
+        }
+        /*  Display of some useful information and the print button in the same row */
+        .prep-time {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+        }
+        .time-item {
+            display: flex;
+            align-items: center;
+            background-color: #e8e8e8;
+            padding: 5px 10px;
+            border-radius: 5px;
+            white-space: nowrap;
+        }
+        /*  Adding tags about the recipe at the top of the recipe */
+        .description {
+            margin-bottom: 20px;
+        }
+        .tags{
+            margin-bottom: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+        }
+        .tag{
+            background-color: #d4af70;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+        }
+        /*  Display and positionning of the ingredients and the picture of the dish */
+        .ingredients {
+            margin-bottom: 20px;
+        }
+
+        .ingredients ul {
+            list-style-type: disc;
+            padding-left: 20px;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        /*  Display of the directions in oredered steps */
+        .directions {
+            margin-bottom: 20px;
+        }
+
+        .directions ol {
+            list-style-type: none;
+            counter-reset: my-counter;
+            padding-left: 0;
+        }
+
+        .directions li {
+            counter-increment: my-counter;
+            margin-bottom: 10px;
+            padding: 15px;
+            background-color: #ffe8d6;
+            border-radius: 30px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            position: relative;
+            padding-left: 40px;
+        }
+
+        .directions li::before {
+            content: counter(my-counter) ".";
+            font-weight: bold;
+            color: #d4af70;
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+      /* Styling of print to pdf button */
+
+    #printButton {
+        padding: 10px 20px;
+        font-size: 20px;
+        background-color: #af754c;
+        color: white;
+        border-radius: 5pt;
+        border: 2px solid #452e1e;
+        cursor: pointer;
+        float: right;
+    }
+    #printButton:hover {
+        background-color: #a07545;
+    }
+
+        .print-button:hover {
+            background-color: #b0894a;
+            transform: scale(1.1);
+        }
+        body {
+    font-family: sans-serif;
+    background-color: #f5f5dc;
+    margin: 20px;
+}
+
+#showTableButton, #printButton {
+    background-color: #3498db;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-bottom: 10px;
+    display: block;
+    width: fit-content;
+}
+
+#myTable {
+    width: 100%;
+    border-collapse: collapse;
+    display: none;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+    background-color: white;
+}
+
+#myTable th, #myTable td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+#myTable th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+}
+
+/* CSS for print to ensure table is shown when printing */
+@media print {
+    #myTable {
+        display: table !important; 
+    }
+    #showTableButton,
+    #printButton {
+        display: none; /*Important added*/
+    }
+    body{
+        background-color: white;
+    }
+}
+
+    </style>
+</head>
+
+<body>
+    <!-- Header, title, rating and author  -->
+    <div class="header">FRIDGE & COOK</div>
+    <div class="container">
+        <h1 class="header">{{ title }}</h1>
+        <div class="rating">
+            <div class="stars" style="--w: {{rating * 20}}%;">★★★★★</div>
+            {{ rating }} / 5 based on {{ vote }} votes
+        </div>
+        <p class="author">By {{ author }}</p>
+    
+     <!-- General caracteristics -->
+        <div class="prep-time">
+            <!-- Include Icon for Number of servings -->
+            <div class="time-item"> <span class="material-symbols-outlined">restaurant_menu</span> {{ servings }} Servings</div>
+            <div class="time-item">
+            <!-- Include Icon for PrepTime -->
+                <span class="emoji" aria-label="Preparation time">🔪</span><span>Prep: {{ prep_time }} </span>
+            </div>
+            <div class="time-item">
+             <!-- Include Icon for CookTime -->
+                <span class="emoji" aria-label="Cooking time">🍳</span><span>Cook: {{ c_time }}</span>
+            </div>
+            <div class="time-item">
+             <!-- Include Icon for TotalTime -->
+                <span class="emoji" aria-label="Total time">⏱️</span><span>Total: {{ tot_time }}</span>
+            </div>
+            <!-- Print to pdff button -->
+            <button id="printButton">&#128424;&#65039;</button>
+        </div>
+
+     
+        <!-- Description -->
+        <div class="description">
+            <p>{{ desc }}</p>
+            <div class="tags">
+                {% for item in keywords %}
+                    <span class="tag">{{ item }}</span>
+                {% endfor %}
+            </div>
+        </div>
+       <!-- Image -->
+       <img style='height: 30%; width: 40%; object-fit: contain' src="{{ img }}" alt="{{ title }}">
+
+        <!-- Main body -->
+        <div class="ingredients">
+            <h2>Ingredients</h2>
+            <ul>
+                {% for item in items %}
+                    <li>{{ item }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <div class="directions">
+            <h2>Directions</h2>
+            <ol>
+                {% for item in dir %}
+                    <li>{{ item }}</li>
+                {% endfor %}
+            </ol>
+        </div>
+        <!-- Link to the original recipe-->
+        <p> Here's the <a href={{ link }}>  link </a>  to recipe   </p>
+        <p> Enjoy ;)  </p>
+
+        <button id="showTableButton">Nutrition Facts</button>
+        
+        <table id="myTable">
+            <thead>
+                <tr>
+                    <th>Calories</th>
+                    <th>Fat</th>
+                    <th>Saturated fat</th>
+                    <th>Protein</th>
+                    <th>Sugar</th>
+                    <th>Cholesterol</th>
+                    <th>Carbohydrate</th>
+                    <th>Sodium</th>
+                    <th>Fiber</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>{{ calories }}</td>
+                    <td>{{ fat }}</td>
+                    <td>{{ sat_fat }}</td>
+                    <td>{{ protein }}</td>
+                    <td>{{ sugar }}</td>
+                    <td>{{ chol }}</td>
+                    <td>{{ carbo }}</td>
+                    <td>{{ sodium }}</td>
+                    <td>{{ fiber }}</td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <script>
+            document.getElementById('showTableButton').addEventListener('click', function() {
+                const table = document.getElementById('myTable');
+                table.style.display = table.style.display === 'table' ? 'none' : 'table';
+            });
+        
+            document.getElementById('printButton').addEventListener('click', function() {
+                window.print();
+            }); // This closing brace was missing!
+        </script>
+        
+        
+
+</body>
+</html>
