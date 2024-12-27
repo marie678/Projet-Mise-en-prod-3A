@@ -12,23 +12,6 @@ inflect_engine = inflect.engine()
 
 
 ## Utility functions
-def parse_list_column(column_data: Union[str, None]) -> Union[list, float]:
-    """
-    Parse stringified lists into Python lists.
-
-    Args: 
-        column_data (Union[str, None]): A string representing a list or other data to be parsed (e.g., '["item1", "item2"]')
-    
-    Returns:
-        Union[list, float]: The parsed Python list if successful; otherwise, `np.nan`
-    """
-    if isinstance(column_data, str):
-        try:
-            return ast.literal_eval(column_data)
-        except (ValueError, SyntaxError):
-            return np.nan
-    return np.nan
-
 def iso_to_minutes(iso_duration: str) -> float:
     """
     Convert ISO 8601 durations to total minutes.
@@ -79,26 +62,26 @@ def format_duration(duration: str) -> str:
 
 def assign_category(row: pd.Series) -> str:
     """
-    Assigns a recipe category based on the values in the Keywords, title and RecipeCategory columns using predefined patterns
+    Assigns a recipe category based on the values in the RecipeCategory, Keywords and title columns using predefined patterns
 
     Args:
         row (pd.Series): A row of the DataFrame containing the following columns:
+            - RecipeCategory: A string representing the recipe category 
             - Keywords: A list of keywords related to the recipe (e.g., ['Dessert', 'Oven', '< 4 Hours', 'Easy'])
             - title: A string representing the title of the recipe
-            - RecipeCategory: A string representing the recipe category 
 
     Returns:
         str: The assigned category for the recipe, between 4 possibilities: 'Main Course', 'Breakfast', 'Dessert', 'Beverages'
              If no match is found, returns 'Other'
     """
     patterns = {
-        'Main Course': r'lunch|meal|meat|chicken|beef|pork|steak|turkey|duck|fish|salmon|lamb|crab|shrimp|lobster|tuna|vegetable|potato|rice|noodle|pasta|penne|spaghetti|macaroni|linguine|pizza|quiche|bean|lentil|onion|soup|stew|dressing',
+        'Main Course': r'lunch|meal|meat|chicken|beef|pork|steak|turkey|duck|fish|salmon|lamb|crab|shrimp|lobster|tuna|vegetable|potato|rice|noodle|pasta|penne|spaghetti|macaroni|linguine|pizza|quiche|lentil|tofu|onion|soup|stew|dressing',
         'Breakfast': r'breakfast',
         'Dessert': r'dessert|cake|cookie|brownie|muffin|biscuit|babka|sweet|candy|sugar|banana',
         'Beverages': r'beverage|cocktail|smoothie|lemonade|coffee',
     }
-    # Check the Keywords, title, and RecipeCategory for patterns
-    for source in ['Keywords', 'title', 'RecipeCategory']:
+    # Check the RecipeCategory, Keywords and title for patterns
+    for source in ['RecipeCategory', 'Keywords', 'title']:
         value = row[source]
         if value is not None and isinstance(value, (str, list)):
             text = ' '.join([str(v) for v in value if v is not None]) if isinstance(value, list) else value
@@ -155,10 +138,10 @@ def find_world_cuisine(keywords: List[str]) -> str:
         str: The name of the matched cuisine from a predefined list, or 'Unknown' if no match is found.
     """
     world_cuisines = [
-        'Indian', 'Chinese', 'Thai', 'Japanese', 'Hawaiian', 'Russian', 'Korean', 'Vietnamese', 'Indonesian', 'Malaysian', 'Pakistani', 'Cantonese', 'Nepalese', 'Cambodian', 'Mongolian', 'Asian', 'Asia',
-        'Egyptian', 'Nigerian', 'Sudanese', 'Ecuadorean', 'Moroccan', 'Ethiopian', 'Somalian', 'African',
-        'Mexican', 'U.S.', 'Caribbean', 'American', 'Hawaiian', 'Cuban', 'Venezuelan', 'Peruvian', 'Puerto Rican', 'Colombian', 'Chilean', 'Costa Rican', 'Guatemalan', 'Honduran', 
-        'Greek', 'Scandinavian', 'German', 'Spanish', 'Russian', 'Hungarian', 'Lebanese', 'Danish', 'Turkish', 'Finnish', 'Dutch', 'Belgian', 'Norwegian', 'Welsh', 'Czech', 'Icelandic', 'European'
+        'Indian', 'Chinese', 'Thai', 'Japanese', 'Hawaiian', 'Russian', 'Korean', 'Vietnamese', 'Indonesian', 'Malaysian', 'Pakistani', 'Cantonese', 'Nepalese', 'Cambodian', 'Mongolian', 'Filipino', 'Asian', 'Asia', 'New Zeland', 'Australian',
+        'Lebanese', 'Turkish', 'Palestinian', 'Egyptian', 'Nigerian', 'Sudanese', 'Ecuadorean', 'Moroccan', 'Ethiopian', 'Somalian', 'African',
+        'Mexican', 'U.S.', 'Caribbean', 'American', 'Hawaiian', 'Cuban', 'Venezuelan', 'Peruvian', 'Puerto Rican', 'Colombian', 'Chilean', 'Costa Rican', 'Guatemalan', 'Honduran', 'Brazilian', 
+        'Greek', 'German', 'Spanish', 'Portuguese', 'French', 'Scottish', 'Polish', 'Austrian', 'Hungarian', 'Danish', 'Turkish', 'Finnish', 'Dutch', 'Belgian', 'Norwegian', 'Welsh', 'Czech', 'Scandinavian', 'Icelandic', 'European'
     ]
     keywords_lower = [str(k).lower() for k in keywords]
     for cuisine in world_cuisines:
@@ -215,7 +198,9 @@ def load_measurements_data(data_path: str) -> pd.DataFrame:
     df = df[['title', 'ingredients', 'directions', 'link', 'NER']]
     df = df.drop_duplicates(subset=['title', 'directions'])
     for col in ['ingredients', 'directions', 'NER']:
-        df[col] = df[col].apply(parse_list_column)
+        df[col] = df[col].apply(
+            lambda x: ast.literal_eval(x) if isinstance(x, str) else np.nan
+        )  
     df = df.dropna().reset_index(drop=True)
     return df
 
