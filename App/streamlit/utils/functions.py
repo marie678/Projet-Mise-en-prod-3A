@@ -2,27 +2,6 @@ import pandas as pd
 import streamlit as st
 from typing import Tuple, Any
 
-
-# def clean(col) :
-#     col2 = []
-#     col3 = []
-#     for i in col : 
-#         i = ast.literal_eval(i)
-#         col2.append(i)
-#     for j in col2 : 
-#         if len(j) == 1 : 
-#             col3.append(j[0].split('.'))
-#         else : 
-#             col3.append(j)
-#     return col3
-
-# def reformat(col):
-#     col2 = []
-#     for i in col : 
-#         i = ast.literal_eval(i)
-#         col2.append(i)
-#     return  reduce(operator.concat, col2)
-
 def split_frame(input_df: pd.DataFrame, rows: int) -> list[pd.DataFrame]:
     """
     Splits the input DataFrame into chunks of a specified number of rows.

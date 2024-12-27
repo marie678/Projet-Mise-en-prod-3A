@@ -48,5 +48,3 @@ rendered_html = jinja_template.render(title=recipe_title, author = author, servi
 
 # Display the HTML in Streamlit app
 components.html(rendered_html, height=1000, width = 900, scrolling=True)
-if st.button("For more details on recipe") : 
-    st.write(" details ")

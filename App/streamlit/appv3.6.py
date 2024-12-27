@@ -14,7 +14,6 @@ st.set_page_config(layout="wide", page_title ='frigo vide', initial_sidebar_stat
 # import of the cleaned and formated dataset of 10k recipes :
 df = pd.read_parquet(SAMPLE_RECIPE_PATH3)
 
-
 ####################################### FILTERS INITIALIZATION #############################################
 
 counter_ingredients: Counter[str] = Counter(x for row in df['NER'] for x in row)
@@ -39,7 +38,6 @@ research_summary = ''
 ####################################### SESSION STATE INITIALIZATION ######################################
 initialize_session_state()
 
-
 ######################################## WEB PAGE DISPLAY #################################################
 
 # Text input to search recipes by title
@@ -47,14 +45,14 @@ title_search_query = st.text_input("Search a recipe (by title or ingredient(s))"
 
 with st.form("filter_form", clear_on_submit=False):
     st.write("Filters")
-    col1, col2, col3, col4, col5 = st.columns(5)
+    col2, col3, col4, col5 = st.columns(4)
     
-    # Ingredients filter
-    ingredients = col1.multiselect("Choose one or more ingredient(s)", ingredient_list, default=None)
-    if ingredients:
-        filters['ingredients'] = ingredients
-        ingr: str = ', '.join(str(x) for x in ingredients)
-        research_summary += f'ingredients : *{ingr}*'
+    # # Ingredients filter
+    # ingredients = col1.multiselect("Choose one or more ingredient(s)", ingredient_list, default=None)
+    # if ingredients:
+    #     filters['ingredients'] = ingredients
+    #     ingr: str = ', '.join(str(x) for x in ingredients)
+    #     research_summary += f'ingredients : *{ingr}*'
 
     # # Recipe duration filter categories
     # recipe_time = col2.select_slider("Choose the duration of your recipe", options=recipe_durations, value=None) #min_value=int(min(recipe_durations)), max_value=int(max(recipe_durations)), value=20, step=5)
@@ -114,6 +112,8 @@ if submitted:
         df_search, total_nr_recipes = search_recipes(df, st.session_state.filters, filter_columns)
         df_search = df_search.sort_values(by=['AggregatedRating'], ascending=False) # we sort by higher rated
         st.session_state.search_df, st.session_state.total_recipes = df_search, total_nr_recipes
+        if len(df_search) == 0:
+            st.write("No recipes found. Try adjusting your filters or your research.")
 
 # If no recipes found
 if st.session_state.search_df is None or st.session_state.search_df.empty or len(st.session_state.search_df)==0 :
@@ -174,5 +174,7 @@ if st.session_state.search_df is not None:
         </div>
         """, unsafe_allow_html=True)
 
-        if recipe_placeholder.button(f"View Recipe: {recipe['title']}", key=f"recipe_button_{i}"):
+        if recipe_placeholder.button(f"Go to Recipe", key=f"recipe_button_{i}", help=f"View details for {recipe['title']}"):
             handle_recipe_click(page, i)
+        # if recipe_placeholder.button(f"View Recipe: {recipe['title']}", key=f"recipe_button_{i}"):
+        #     handle_recipe_click(page, i)
