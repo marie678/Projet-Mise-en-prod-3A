@@ -13,7 +13,30 @@ def test_split_frame():
     assert len(result[-1]) == 1
 
 def test_search_recipes():
-    df = 
+    df = pd.DataFrame({
+#         'ingredients': [['tomato', 'cheese'], ['tomato'], ['cheese', 'pepper']],
+#         'recipe_durations_cat': ['short', 'medium', 'long'],
+#         'recipe_types': ['dinner', 'lunch', 'snack'],
+#         'vegetarian': [True, False, True],
+#     })
+
+#     filters = {
+#         'ingredients': ['tomato'],
+#         'recipe_durations_cat': 'short',
+#         'recipe_type': 'dinner',
+#     }
+
+#     dict_columns = {
+#         'ingredients': 'ingredients',
+#         'recipe_durations_cat': 'recipe_durations_cat',
+#         'recipe_types': 'recipe_types',
+#     }
+
+#     result, total = search_recipes(df, filters, dict_columns)
+#     assert len(result) == 1
+#     assert total == 1
+#     assert result.iloc[0]['recipe_types'] == 'dinner'
+
 
 # from unittest.mock import patch, MagicMock
 # import pandas as pd
@@ -54,33 +77,6 @@ def test_search_recipes():
 #         assert mock_session_state.ingredients == 'Ingredient1, Ingredient2'
 #         mock_switch_page.assert_called_once_with("./pages/Recettes.py")
 
-# from your_module import search_recipes
-# import pandas as pd
-
-# def test_search_recipes():
-#     df = pd.DataFrame({
-#         'ingredients': [['tomato', 'cheese'], ['tomato'], ['cheese', 'pepper']],
-#         'recipe_durations_cat': ['short', 'medium', 'long'],
-#         'recipe_types': ['dinner', 'lunch', 'snack'],
-#         'vegetarian': [True, False, True],
-#     })
-
-#     filters = {
-#         'ingredients': ['tomato'],
-#         'recipe_durations_cat': 'short',
-#         'recipe_type': 'dinner',
-#     }
-
-#     dict_columns = {
-#         'ingredients': 'ingredients',
-#         'recipe_durations_cat': 'recipe_durations_cat',
-#         'recipe_types': 'recipe_types',
-#     }
-
-#     result, total = search_recipes(df, filters, dict_columns)
-#     assert len(result) == 1
-#     assert total == 1
-#     assert result.iloc[0]['recipe_types'] == 'dinner'
 
 # from your_module import initialize_session_state
 # from unittest.mock import patch, MagicMock
