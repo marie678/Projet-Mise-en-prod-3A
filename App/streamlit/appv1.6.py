@@ -50,7 +50,7 @@ if text_search:
     ing = df.loc[best]['ingredients']
     percent = rep['%'].max()
     directions = df.loc[best]['directions']
-    rec_link = "https://" + df.loc[best]['link']
+    rec_link = df.loc[best]['link']
     calories = df.loc[best]['Calories']
     protein = df.loc[best]['ProteinContent']
     fat = df.loc[best]['FatContent']
@@ -60,7 +60,7 @@ if text_search:
     carbo = df.loc[best]['CarbohydrateContent']
     fiber = df.loc[best]['FiberContent']
     sugar = df.loc[best]['SugarContent']
-    with open("pages/templatev1.3.html", "r") as template_file:
+    with open("pages/templatev1.4.html", "r") as template_file:
         template_content = template_file.read()
         jinja_template = Template(template_content)
 
@@ -76,4 +76,5 @@ if text_search:
 
     # Display the HTML in Streamlit app
     components.html(rendered_html, height=1000, width = 900, scrolling=True)
+    
 

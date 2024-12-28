@@ -19,7 +19,9 @@ df = pd.read_parquet(SAMPLE_RECIPE_PATH3)
 st.write(APP_TITLE)
 
 
-
+# Upload the CSS file
+with open("src\style_res.css") as f:
+    css = f.read()
 
 # Use a text_input to get the keywords to filter the dataframe
 text_search = st.text_input("Search recipes by ingredients", value="").lower()
@@ -65,7 +67,7 @@ if text_search:
         jinja_template = Template(template_content)
 
     # Render the template with dynamic data
-    rendered_html = jinja_template.render(title=recipe_title, author = author, servings = servings,
+    rendered_html = jinja_template.render(css = css, title=recipe_title, author = author, servings = servings,
                                           rating = rating, vote =vote,
                                           prep_time = prep_time, c_time = c_time, tot_time = tot_time,
                                           items=ing, prc = percent, dir =directions, keywords = keywords,

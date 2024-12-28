@@ -63,7 +63,7 @@ def handle_recipe_click(page: pd.DataFrame, index: int) -> None:
     st.session_state.title = page.iloc[index]['title']
     st.session_state.ingredients = page.iloc[index]['ingredients']
     st.session_state.instructions = page.iloc[index]['directions']
-    st.session_state.link = page.iloc[index]['link']
+    st.session_state.link = "https://" + page.iloc[index]['link']
     # st.session_state.correspondance_rate = page.iloc[index]['%']
     st.session_state.rating = page.iloc[index]['AggregatedRating']
     st.session_state.vote = page.iloc[index]['ReviewCount']
