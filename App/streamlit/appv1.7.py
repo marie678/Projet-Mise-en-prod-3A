@@ -10,6 +10,8 @@ import ast
 from app.config import SAMPLE_RECIPE_PATH3, APP_TITLE
 import numpy as np
 import re
+
+import os
  
 
 
@@ -18,8 +20,11 @@ df = pd.read_parquet(SAMPLE_RECIPE_PATH3)
 
 st.write(APP_TITLE)
 
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+CSS_PATH = os.path.join(BASE_DIR, 'Projet-Infra-3A\App\streamlit\src\style_res.css')
+
 # Upload the CSS file
-with open('App/streamlit/src/style_res.css') as f:
+with open("src\style_test.css") as f:
     css = f.read()
 
 

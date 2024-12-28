@@ -1,8 +1,175 @@
 /* style_res.css */
 
-h1 {
-    border: 2px #eee solid;
-    color: lightseagreen;
+/* Styling of the title of result page, i.e the recipe name */
+h1 {border: 2px #300a0a solid;
+    color: rgb(178, 144, 32);
     text-align: center;
+    padding: 10px;}
+
+/* Styling of the 5 star rating */
+    .stars {
+    position: relative;
+    display:inline-block;
+    font-size: 20pt;
+	  height: 1em;
+    line-height: 1em;
+    }
+
+    .stars:before {	
+    content: "\2606\2606\2606\2606\2606";
+    }
+
+    .stars:after {	
+    content: "\2605\2605\2605\2605\2605";
+    position:absolute;
+    left:0;
+    overflow:hidden;
+    width:var(--w,50%);
+    color: rgb(255, 200, 0);
+    z-index:-1;
+    }
+
+/* Styling and positioning of print to pdf button */
+
+    #printButton {
+        padding: 10px 20px;
+        font-size: 20px;
+        background-color: #af754c;
+        color: white;
+        border-radius: 5pt;
+        border: 2px solid #452e1e;
+        cursor: pointer;
+        float: right;
+    }
+    #printButton:hover {
+        background-color: #a07545;
+    }
+
+/* Styling of the general characteristics (servings, time) in a round edge box */
+    
+    .boxed {
+    border: 1px solid green ;
+    border-radius: 20px ;
+    background-color: rgba(58, 30, 89, 0.086) ;
+    width:450px;
+      height:40px;
+      text-align: center;
+      vertical-align: middle;
+      display: table-cell;
+  }
+
+  /* Adjusting position and size of google icons of the general characteristics */
+    .material-symbols-outlined { font-size: 18px; vertical-align: middle; }
+
+    .description{color:#3f3d41;
+        font-size:large;
+    }
+
+/* Styling of the keywords in a small and italic font */
+    .key {font-size: small;
+         color : #434174;
+    }
+
+/* Styling font type of Author name */
+
+    .cursive { font-family: cursive;}
+
+/* Styling of main body in list format : unordered list for ingredients (list-two) and ordered list for directions (list-one) */
+    li {
+        display: list-item; 
+    }
+
+    .list-two ul {
+        list-style:square;
+    }
+
+    .list-one body {
+	font-family: 'Roboto Slab', serif;
+	font-size: 1.2rem;
+	margin: 0;
+	padding: 1rem;
+	display: grid;
+	place-items: center;
+	min-height: 100vh;
+    }
+
+    .list-one ol {
+    padding: 0;
+    margin: 0;
+    max-width: 400px;
+    position: relative;
+    }
+
+    /* Adding a pseudo-element before the ol */
+    .list-one ol::before {
+    content: '';
+    width: 0.5rem;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 8%;
+    background: peachpuff;
+    z-index: -1;
+    }
+
+    /* Styling the list items (li) inside .list-one */
+    .list-one li {
+    padding: 0.3rem 0.8rem;
+    border-radius: 1rem;
+    background: peachpuff;
+    max-width: 50%;          
+    font-size: 1.2rem;       
+    line-height: 1.2;
+    }
+
+    /* Adding margin to the second and subsequent list items */
+    .list-one li + li {
+    margin-top: 1rem;
+    }
+
+    /* Styling the markers of the ordered list */
+    .list-one ::marker {
+    font-weight: 600;
+    color: tomato;
+    font-size: 1.6rem;
+    }
+
+/* Styling and display buton of table of detailed characteristics */
+    table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+    }
+    th, td {
     padding: 10px;
-}
+    }
+
+    #myTable {
+        display: none;
+        margin-top: 20px;
+        }
+
+    /* Display table when clicked */
+        #showTableButton {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #2196F3;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        #showTableButton:hover {
+            background-color: #1976D2;
+        }
+
+/* CSS for print to ensure table is shown when printing */
+@media print {
+            #myTable {
+                display: table; /* Show the table in the print version */
+            }
+            #showTableButton,
+            #printButton {
+                display: none; /* Hide buttons in print version */
+            }
+        }
