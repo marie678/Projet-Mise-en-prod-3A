@@ -4,7 +4,7 @@ from typing import Tuple, Any
 
 def split_frame(input_df: pd.DataFrame, rows: int) -> list[pd.DataFrame]:
     """
-    Splits the input DataFrame into chunks of a specified number of rows.
+    Splits the input DataFrame into chunks of a specified number of rows
 
     Args:
         input_df (DataFrame): the dataset that will be split
@@ -13,7 +13,7 @@ def split_frame(input_df: pd.DataFrame, rows: int) -> list[pd.DataFrame]:
     Returns:
         list[DataFrame]: A list of DataFrame chunks
     """
-    df = [input_df.iloc[i:i+rows-1,:] for i in range(0, len(input_df), rows)]
+    df = [input_df.iloc[i:i+rows,:] for i in range(0, len(input_df), rows)]
     return df
 
 

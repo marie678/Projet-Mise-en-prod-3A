@@ -141,7 +141,7 @@ if st.session_state.search_df is not None:
     recipe_placeholder = st.container()
     bottom_menu = st.columns((4,1,1))
     with bottom_menu[2]:
-        batch_size = st.selectbox('Recipes per page', options=[25,50,100])
+        batch_size = st.selectbox('Recipes per page', options=[10, 25,50,100])
         total_pages = int(len(df_search)/batch_size) if len(df_search)>batch_size else 1
     with bottom_menu[1]:
         current_page = st.number_input('Page', min_value=1, max_value=total_pages, step=1, key='page_input')
@@ -149,7 +149,7 @@ if st.session_state.search_df is not None:
         st.markdown(f"Page **{current_page}** of **{total_pages}**")
 
     # Paginate the filtered DataFrame
-    pages = split_frame(df_search, batch_size+1)
+    pages = split_frame(df_search, batch_size)
     page = pages[current_page - 1] if len(pages) > 0 else pd.DataFrame()
 
     # Display filtered recipes with pagination + html formatting
@@ -177,4 +177,3 @@ if st.session_state.search_df is not None:
         if recipe_placeholder.button(f"Go to Recipe", key=f"recipe_button_{i}", help=f"View details for {recipe['title']}"):
             handle_recipe_click(page, i)
         # if recipe_placeholder.button(f"View Recipe: {recipe['title']}", key=f"recipe_button_{i}"):
-        #     handle_recipe_click(page, i)
