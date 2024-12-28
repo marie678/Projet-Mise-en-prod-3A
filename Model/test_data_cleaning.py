@@ -43,3 +43,21 @@ def test_is_non_vegetarian():
 def test_find_world_cuisine():
     assert find_world_cuisine(['Indian', 'Spicy', 'Asian']) == 'Indian'
     assert find_world_cuisine(['Bevrages', 'Fruit', 'Healthy']) == 'Unknown'
+
+
+### Test main function ###
+def test_main():
+    data_dir = Path(__file__).resolve().parent.parent / 'Data'
+    test_recipe_nutrition_path = data_dir / 'test_recipes.parquet'
+    test_recipe_measurements_path = data_dir / 'test_recipes_data.csv'
+    df = main(test_recipe_nutrition_path, test_recipe_measurements_path)
+
+    assert len(df) <= 10000
+    assert df['title'].is_unique 
+    assert (df['TotalTime_minutes'] > 0).all()
+    assert set(df['RecipeType']).issubset(['Breakfast', 'Main Course', 'Dessert', 'Beverages']) 
+    assert all(isinstance(keywords, list) and all(k.startswith('#') for k in keywords) for keywords in df['Keywords'])
+    assert pd.api.types.is_integer_dtype(df['RecipeServings'])
+    assert pd.api.types.is_integer_dtype(df['ReviewCount'])
+    assert df['Images'].apply(lambda x: isinstance(x, str)).all()
+    
