@@ -189,3 +189,19 @@ def initialize_session_state() -> None:
     for key, value in default_values.items():
         if key not in st.session_state:
             st.session_state[key] = value
+
+
+def display_html_in_streamlit(html_file_path):
+    """Displays HTML content from a file in a Streamlit app.
+
+    Args:
+        html_file_path (str): The path to the HTML file.
+    """
+    try:
+        with open(html_file_path, "r", encoding="utf-8") as f:
+            html_content = f.read()
+        st.components.v1.html(html_content, height=1000, width=900, scrolling=True)
+    except FileNotFoundError:
+        st.error(f"Error: HTML file not found at {html_file_path}")
+    except Exception as e:
+        st.error(f"An error occurred: {e}")

@@ -141,7 +141,7 @@ if st.session_state.search_df is not None:
     recipe_placeholder = st.container()
     bottom_menu = st.columns((4,1,1))
     with bottom_menu[2]:
-        batch_size = st.selectbox('Recipes per page', options=[10, 25,50,100])
+        batch_size = st.selectbox('Recipes per page', options=[10,25,50,100])
         total_pages = int(len(df_search)/batch_size) if len(df_search)>batch_size else 1
     with bottom_menu[1]:
         current_page = st.number_input('Page', min_value=1, max_value=total_pages, step=1, key='page_input')

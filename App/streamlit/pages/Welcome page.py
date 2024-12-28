@@ -1,6 +1,6 @@
 import streamlit as st 
 
-st.logo("/Users/bianp/Desktop/logo_appli.png", size="large")
+# st.logo("/Users/bianp/Desktop/logo_appli.png", size="large")
 st.write("# :rainbow[Welcome to the Fridge Decoder App] ")
 
 intro = ''' ## Home from a long day of work at 8 pm ? Let us take the stress out of dinner. :bouquet:

@@ -1,10 +1,10 @@
 ########################################### app v3.5 #################################################
-# link with recipes 
+# added header
 
 import streamlit as st
 import pandas as pd
 from app.config import SAMPLE_RECIPE_PATH3
-from utils.functions2 import split_frame, search_recipes, handle_recipe_click, initialize_session_state
+from utils.functions import split_frame, search_recipes, handle_recipe_click, initialize_session_state
 from streamlit_extras.add_vertical_space import add_vertical_space
 from collections import Counter
 from typing import Any
@@ -40,8 +40,7 @@ initialize_session_state()
 
 ######################################## WEB PAGE DISPLAY #################################################
 
-# Text input to search recipes by title
-
+# Display header
 st.markdown(
     """
     <style>
@@ -54,39 +53,18 @@ st.markdown(
         color: black;
     }
     </style>
+    <div class='header'>FRIDGE & COOK</div>
     """,
     unsafe_allow_html=True,
 )
 
-# Display the header
-st.markdown("<div class='header'>FRIDGE & COOK</div>", unsafe_allow_html=True)
-
-
+# Text input to search recipes by title
 title_search_query = st.text_input("Search a recipe (by title or ingredient(s))", key="title_search_query")
 
 with st.form("filter_form", clear_on_submit=False):
     st.write("Filters")
     col2, col3, col4, col5 = st.columns(4)
     
-    # # Ingredients filter
-    # ingredients = col1.multiselect("Choose one or more ingredient(s)", ingredient_list, default=None)
-    # if ingredients:
-    #     filters['ingredients'] = ingredients
-    #     ingr: str = ', '.join(str(x) for x in ingredients)
-    #     research_summary += f'ingredients : *{ingr}*'
-
-    # # Recipe duration filter categories
-    # recipe_time = col2.select_slider("Choose the duration of your recipe", options=recipe_durations, value=None) #min_value=int(min(recipe_durations)), max_value=int(max(recipe_durations)), value=20, step=5)
-    # st.session_state.selected_duration = recipe_time  # Update duration in session state
-    # if recipe_time:
-    #     filters['recipe_durations'] = recipe_time
-    #     research_summary += f' - recipe duration : *{recipe_time}*'
-    
-    # # Recipe duration filter continuous (minutes)
-    # recipe_time = col2.slider("Choose the duration of your recipe", min_value=int(min(recipe_durations_min)), max_value=500, value=20, step=5)
-    # if recipe_time:
-    #     filters['recipe_durations_min'] = recipe_time
-    #     research_summary += f' - recipe duration <= *{recipe_time}* min.'
 
     # Recipe duration filter continuous in hours
     recipe_time_hours = col2.slider("Choose the duration of your recipe (in hours)",
@@ -162,7 +140,7 @@ if st.session_state.search_df is not None:
     recipe_placeholder = st.container()
     bottom_menu = st.columns((4,1,1))
     with bottom_menu[2]:
-        batch_size = st.selectbox('Recipes per page', options=[25,50,100])
+        batch_size = st.selectbox('Recipes per page', options=[10,25,50,100])
         total_pages = int(len(df_search)/batch_size) if len(df_search)>batch_size else 1
     with bottom_menu[1]:
         current_page = st.number_input('Page', min_value=1, max_value=total_pages, step=1, key='page_input')
@@ -170,7 +148,7 @@ if st.session_state.search_df is not None:
         st.markdown(f"Page **{current_page}** of **{total_pages}**")
 
     # Paginate the filtered DataFrame
-    pages = split_frame(df_search, batch_size+1)
+    pages = split_frame(df_search, batch_size)
     page = pages[current_page - 1] if len(pages) > 0 else pd.DataFrame()
 
     # Display filtered recipes with pagination + html formatting
@@ -197,5 +175,3 @@ if st.session_state.search_df is not None:
 
         if recipe_placeholder.button(f"Go to Recipe", key=f"recipe_button_{i}", help=f"View details for {recipe['title']}"):
             handle_recipe_click(page, i)
-        # if recipe_placeholder.button(f"View Recipe: {recipe['title']}", key=f"recipe_button_{i}"):
-        #     handle_recipe_click(page, i)

@@ -32,7 +32,9 @@ carbo = st.session_state.carbo
 fiber = st.session_state.fiber
 sugar = st.session_state.sugar
 
-with open("pages/templatev1.3.html", "r") as template_file:
+# with open("pages/templatev1.3.html", "r") as template_file:
+# with open("pages/templatev1.4.html", "r") as template_file:
+with open("pages/templatev1.8.html", "r") as template_file:
     template_content = template_file.read()
     jinja_template = Template(template_content)
         
