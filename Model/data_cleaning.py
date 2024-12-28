@@ -301,32 +301,42 @@ def sample_df_10k(df: pd.DataFrame) -> pd.DataFrame:
     sampled_df = sampled_df.sample(frac=1, random_state=42).reset_index(drop=True)
     return sampled_df
 
-def main(base_dir: str) -> None:
+def main(data_path_nutrition: str, data_path_measurements: str, output_path: str = None) -> None:
     """
-    Main function to process and save the final dataset.
+    Main function to process and return the final dataset.
     
     Args:
-        base_dir (str): base directory containing the datasets
-    """
-    base_dir = Path(base_dir)
-    nutrition_path = base_dir / 'recipes.parquet'
-    measurements_path = base_dir / 'recipes_data.csv'
-    output_path = base_dir / 'sample_recipes_10k.parquet'
+        data_path_nutrition (str): Path to the recipe nutrition dataset file (parquet format).
+        data_path_measurements (str): Path to the recipe measurements dataset file (csv format).
+        output_path (str, optional): Path where to save the processed dataset. If not provided, the dataset will not be saved.
 
-    try:
-        df_nutrition = load_nutrition_data(nutrition_path)
-        df_measurements = load_measurements_data(measurements_path)
-        df = merge_datasets(df_nutrition, df_measurements)
-        df = data_preprocessing(df)
-        df_sample = sample_df_10k(df)
-        df_sample.to_parquet(output_path, index=False)
+    Returns:
+        pd.DataFrame: The final dataset after merging, preprocessing, and optional sampling.
+    """
+    # Check if datasets exist
+    if not Path(data_path_nutrition).exists():
+        raise FileNotFoundError(f"Recipe nutrition dataset not found at {data_path_nutrition}")
+    if not Path(data_path_measurements).exists():
+        raise FileNotFoundError(f"Recipe measurements dataset not found at {data_path_measurements}")
+    
+    df_nutrition = load_nutrition_data(data_path_nutrition)
+    df_measurements = load_measurements_data(data_path_measurements)
+    df = merge_datasets(df_nutrition, df_measurements)
+    df = data_preprocessing(df)
+    if len(df) > 10000:
+        df = sample_df_10k(df)
+    if output_path:
+        df.to_parquet(output_path, index=False)
         print(f"Processed dataset saved to {output_path}")
-    except Exception as e:
-        print(f"An unexpected error occurred: {e}")
+    return df
 
 
 
 if __name__ == "__main__":
 
-    base_dir = 'Data'
-    main(base_dir)
+    data_dir = Path(__file__).resolve().parent.parent / 'Data'
+    recipe_nutrition_path = data_dir / 'recipes.parquet'
+    recipe_measurements_path = data_dir / 'recipes_data.csv'
+    output_path = data_dir / 'sample_recipes_10k.parquet'
+
+    main(recipe_nutrition_path, recipe_measurements_path, output_path)
