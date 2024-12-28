@@ -50,7 +50,7 @@ if text_search:
     ing = df.loc[best]['ingredients']
     percent = rep['%'].max()
     directions = df.loc[best]['directions']
-    rec_link = df.loc[best]['Images']
+    rec_link = "https://" + df.loc[best]['link']
     calories = df.loc[best]['Calories']
     protein = df.loc[best]['ProteinContent']
     fat = df.loc[best]['FatContent']
@@ -76,5 +76,4 @@ if text_search:
 
     # Display the HTML in Streamlit app
     components.html(rendered_html, height=1000, width = 900, scrolling=True)
-    
 
