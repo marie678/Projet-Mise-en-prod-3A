@@ -47,17 +47,18 @@ def test_find_world_cuisine():
 
 ### Test main function ###
 def test_main():
+    # Setup test file paths
     data_dir = Path(__file__).resolve().parent.parent / 'Data'
     test_recipe_nutrition_path = data_dir / 'test_recipes.parquet'
     test_recipe_measurements_path = data_dir / 'test_recipes_data.csv'
     df = main(test_recipe_nutrition_path, test_recipe_measurements_path)
 
-    assert len(df) <= 10000
-    assert df['title'].is_unique 
-    assert (df['TotalTime_minutes'] > 0).all()
-    assert set(df['RecipeType']).issubset(['Breakfast', 'Main Course', 'Dessert', 'Beverages']) 
-    assert all(isinstance(keywords, list) and all(k.startswith('#') for k in keywords) for keywords in df['Keywords'])
-    assert pd.api.types.is_integer_dtype(df['RecipeServings'])
-    assert pd.api.types.is_integer_dtype(df['ReviewCount'])
-    assert df['Images'].apply(lambda x: isinstance(x, str)).all()
-    
+    assert len(df) <= 10000  #Dataframe should have at most 10,000 rows
+    assert df['title'].is_unique  #Titles should be unique
+    assert (df['TotalTime_minutes'] > 0).all()  #TotalTime_minutes should be strictly positive
+    assert set(df['RecipeType']).issubset(['Breakfast', 'Main Course', 'Dessert', 'Beverages'])  #Check for unexpected recipe types
+    assert all(isinstance(keywords, list) and all(k.startswith('#') for k in keywords) for keywords in df['Keywords'])  #Keywords should be lists of strings starting with hashtags
+    assert pd.api.types.is_integer_dtype(df['RecipeServings'])  #RecipeServings should be integers
+    assert pd.api.types.is_integer_dtype(df['ReviewCount'])  #ReviewCount should be integers
+    assert df['Images'].apply(lambda x: isinstance(x, str)).all()  #Images column should only contain strings
+    assert not df.isnull().any().any() #DataFrame should not have missing values
