@@ -4,9 +4,11 @@
 
 1.0 affichage des résultats sous forme de dataframe
 
-1.1 résulats mis en forme
+1.1 résulats mis en forme avec streamlit
 
-1.2 avec un fichier html imprimable en pdf
+1.2 avec un fichier html appelé dans le script
+
+1.3 avec un fichier html et un fichier css
 
 ## V2 Interface de recherche donnant une liste de résultats parmi lesquels il est possible de choisir (navigation, aller retour)
 
