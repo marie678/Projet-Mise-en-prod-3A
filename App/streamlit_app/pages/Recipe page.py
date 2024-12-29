@@ -31,7 +31,7 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-if 'recipe_title' not in st.session_state.keys() :
+if 'title' not in st.session_state :
     st.markdown("Please go to the **Recipe Finder** page and enter filters to find a recipe.")
 
 else :
