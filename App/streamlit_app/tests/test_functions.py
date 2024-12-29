@@ -107,7 +107,7 @@ def test_search_recipes():
 #     at = AppTest.from_file("appv3.7.py").run()
     
 #     # Simulate the user input for searching a recipe by title
-#     title_search_query = "Pasta"
+#     title_search_query = "gratin"
 #     at.text_input[0].enter(title_search_query).run()  # text_input[0] is the title search box
     
 #     # Simulate form submission

@@ -1,4 +1,4 @@
-########################################### app v3.5 #################################################
+########################################### app v3.7 #################################################
 # added header
 
 import streamlit as st
@@ -13,7 +13,7 @@ import numpy as np
 from spellchecker import SpellChecker
 
 # configuration parameters
-st.set_page_config(layout="wide", page_title ='frigo vide', initial_sidebar_state='collapsed')
+st.set_page_config(layout="wide", page_title ='Recipe Finder', initial_sidebar_state='collapsed')
 # import of the cleaned and formated dataset of 10k recipes :
 df = pd.read_parquet(SAMPLE_RECIPE_PATH3)
 
@@ -65,13 +65,10 @@ st.markdown(
 title_search_query = st.text_input("Search a recipe (by title or ingredient(s))", key="title_search_query")
 
 # clean query
-
 # error handling
-ing = np.unique(np.concatenate(df['NER'].values))
-rec = df['title'].apply(lambda x : x.lower())
-rec = list(rec.values)
-
-query_error(title_search_query.split(' '), ing, rec)
+# ing = np.unique(np.concatenate(df['NER'].values))
+rec: list = list(df['title'].apply(lambda x : x.lower()).values)
+query_error(title_search_query.split(' '), ingredient_list, rec)
 
 with st.form("filter_form", clear_on_submit=False):
     st.write("Filters")
