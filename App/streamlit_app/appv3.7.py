@@ -1,4 +1,4 @@
-########################################### app v3.5 #################################################
+########################################### app v3.7 #################################################
 # added header
 
 import streamlit as st
@@ -65,13 +65,10 @@ st.markdown(
 title_search_query = st.text_input("Search a recipe (by title or ingredient(s))", key="title_search_query")
 
 # clean query
-
 # error handling
-ing = np.unique(np.concatenate(df['NER'].values))
-rec = df['title'].apply(lambda x : x.lower())
-rec = list(rec.values)
-
-query_error(title_search_query.split(' '), ing, rec)
+# ing = np.unique(np.concatenate(df['NER'].values))
+rec: list = list(df['title'].apply(lambda x : x.lower()).values)
+query_error(title_search_query.split(' '), ingredient_list, rec)
 
 with st.form("filter_form", clear_on_submit=False):
     st.write("Filters")
