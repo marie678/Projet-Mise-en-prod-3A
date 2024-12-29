@@ -1,5 +1,5 @@
-########################################### app v1.5 #################################################
-# display the query results in a specially designed html page (sotred in "pages" folder) with new data
+########################################### app v1.3 #################################################
+# display the query results in a specially designed html and css
 import streamlit as st
 import streamlit.components.v1 as components
 from jinja2 import Template

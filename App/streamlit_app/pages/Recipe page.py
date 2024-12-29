@@ -1,4 +1,6 @@
-###################### page d'affichage #################
+############################################ final results page ###########################################
+# display of the recipe content with an html file
+
 import streamlit as st
 import ast
 from streamlit_extras.add_vertical_space import add_vertical_space
@@ -65,9 +67,13 @@ else :
     with open("pages/templatev1.8.html", "r") as template_file:
         template_content = template_file.read()
         jinja_template = Template(template_content)
+    
+    # Upload the CSS file
+    with open("src\style_res.css") as f:
+        css = f.read()
             
     # Render the template with dynamic data
-    rendered_html = jinja_template.render(title=recipe_title, author = author, servings = servings,
+    rendered_html = jinja_template.render(css = css, title=recipe_title, author = author, servings = servings,
                                         rating = rating, vote = vote,
                                         prep_time = prep_time, c_time = c_time, tot_time = tot_time,
                                         items=ingredients, dir = directions, keywords = keywords,

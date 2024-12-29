@@ -1,5 +1,6 @@
-########################################### app v1.5 #################################################
-# display the query results in a specially designed html page (sotred in "pages" folder) with new data
+########################################### app v1.2 #################################################
+# display the query results in a structured way using html with dynamic data
+
 import streamlit as st
 import streamlit.components.v1 as components
 from jinja2 import Template
@@ -10,16 +11,11 @@ import ast
 from app.config import SAMPLE_RECIPE_PATH3, APP_TITLE
 import numpy as np
 import re
- 
-
 
 # import of the cleaned and formated dataset of 10k recipes
 df = pd.read_parquet(SAMPLE_RECIPE_PATH3)
 
 st.write(APP_TITLE)
-
-
-
 
 # Use a text_input to get the keywords to filter the dataframe
 text_search = st.text_input("Search recipes by ingredients", value="").lower()
@@ -27,8 +23,6 @@ text_search = st.text_input("Search recipes by ingredients", value="").lower()
 # Filter the dataframe using masks
 sentence = text_search.split(' ')
 nb = len(sentence)
-base = r'^{}'
-expr = '(?=.*{})'
 rep = df[df['NER'].apply(lambda x : all(element in x for element in sentence))]
 
 
@@ -76,4 +70,6 @@ if text_search:
 
     # Display the HTML in Streamlit app
     components.html(rendered_html, height=1000, width = 900, scrolling=True)
+
+
 
