@@ -26,7 +26,7 @@ provenance: set = {x for x in sorted(set(df['World_Cuisine'])) if pd.notna(x)}
 
 filter_columns: dict[str, str] = {
     'ingredients': 'NER',
-    'recipe_durations_cat': 'TotalTime_cat',
+    # 'recipe_durations_cat': 'TotalTime_cat',
     'recipe_durations_min': 'TotalTime_minutes',
     'recipe_types': 'RecipeType',
     'vegetarian': 'Vegetarian_Friendly',

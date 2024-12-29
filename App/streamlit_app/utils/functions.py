@@ -125,7 +125,7 @@ def search_recipes(original_df: pd.DataFrame, filters:dict[str, Any], dict_colum
 
     if 'ingredients' in filters.keys():
         col, value = dict_columns['ingredients'], filters['ingredients']
-        filtered_df = filtered_df[filtered_df[col].apply(lambda x: all(element in x for element in value))]  
+        filtered_df = filtered_df[filtered_df[col].apply(lambda x: all(element in x for element in value))]
     if 'recipe_durations_cat' in filters.keys():
         col, value = dict_columns['recipe_durations_cat'], filters['recipe_durations_cat']
         filtered_df = filtered_df[filtered_df[col] == (value)]
@@ -191,7 +191,7 @@ def initialize_session_state() -> None:
             st.session_state[key] = value
 
 
-def display_html_in_streamlit(html_file_path):
+def display_html_in_streamlit(html_file_path: str):
     """Displays HTML content from a file in a Streamlit app.
 
     Args:
