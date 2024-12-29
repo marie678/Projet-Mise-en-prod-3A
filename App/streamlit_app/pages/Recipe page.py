@@ -2,7 +2,6 @@
 # display of the recipe content with an html file
 
 import streamlit as st
-import ast
 from streamlit_extras.add_vertical_space import add_vertical_space
 from jinja2 import Template
 import streamlit.components.v1 as components
@@ -20,13 +19,6 @@ st.markdown(
         margin-bottom: 20px;
         color: black;
     }
-    </style>
-    <div class='header'>FRIDGE & COOK</div>
-     <style>
-    .css-1d391kg {
-        width: 200px;  # Set the width to your desired size
-    }
-    </style>
     """,
     unsafe_allow_html=True,
 )
@@ -63,8 +55,8 @@ else :
     sugar = st.session_state.sugar
 
     # with open("pages/templatev1.3.html", "r") as template_file:
-    # with open("pages/templatev1.4.html", "r") as template_file:
-    with open("pages/templatev1.8.html", "r") as template_file:
+    with open("pages/templatev1.4.html", "r", encoding='utf-8') as template_file:
+    # with open("pages/templatev1.8.html", "r") as template_file:
         template_content = template_file.read()
         jinja_template = Template(template_content)
     
