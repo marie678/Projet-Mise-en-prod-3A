@@ -1,6 +1,5 @@
 ########################################### app v1.1 #################################################
-# display the query results clearly 
-# pb : absence retour à la ligne pour les points virgules (ex : cheese)
+# display the query results in a structured way using streamlit 
 
 import streamlit as st
 import pandas as pd
@@ -41,9 +40,5 @@ if text_search:
     for i in df.loc[best]['clean_dir'] : 
         st.write(i, "\n")
     st.write("> Lien vers la recette:", df.loc[best]['link'])
-    #html = """
-    #<a style='background:yellow'>This text has a yellow background</a>
-    #"""
-    #st.markdown(html,unsafe_allow_html=True)
 
 

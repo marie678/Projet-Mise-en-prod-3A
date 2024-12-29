@@ -1,5 +1,5 @@
-########################################### app v1.1 #################################################
-# display the query results in list of cliquable elements that redirect to other page
+########################################### app v2.2 #################################################
+# display the query results in list of cliquable elements that redirect to an other page
 
 import streamlit as st
 import pandas as pd
@@ -36,8 +36,6 @@ nb = len(sentence)
 base = r'^{}'
 expr = '(?=.*{})'
 rep = df[df['NER'].str.contains(base.format(''.join(expr.format(w) for w in sentence)))][['title','NER']]
-#m2 = df["Title"].str.contains(text_search)
-#df_search = df[m1 | m2]
 
 if text_search:
     st.write(f"{len(rep)} recettes correspondantes")

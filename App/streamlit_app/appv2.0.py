@@ -1,6 +1,5 @@
-########################################### app v1.1 #################################################
-# display the query results in a list 
-# pb : just extract of list, not cliquable
+########################################### app v2.0 #################################################
+# display the query results in a list of recipes
 
 import streamlit as st
 import pandas as pd
@@ -28,8 +27,6 @@ nb = len(sentence)
 base = r'^{}'
 expr = '(?=.*{})'
 rep = df[df['NER'].str.contains(base.format(''.join(expr.format(w) for w in sentence)))][['title','NER']]
-#m2 = df["Title"].str.contains(text_search)
-#df_search = df[m1 | m2]
 
 if text_search:
     st.write(len(rep), "recettes correspondantes")
