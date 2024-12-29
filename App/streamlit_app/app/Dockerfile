@@ -1,15 +1,5 @@
 # app/Dockerfile
 
-# FROM python:3.10.15
-# WORKDIR /app
-# COPY requirements.txt /app/requirements.txt
-# RUN pip install -r requirements.txt
-# COPY my_app .
-# RUN python -m spacy download en_core_web_sm
-# CMD flask run --host 0.0.0.0 --port 3000
-# CMD sleep 100
-
-
 FROM python:3.11-slim
 WORKDIR /app
 RUN apt-get update && apt-get install -y \
