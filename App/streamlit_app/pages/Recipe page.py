@@ -69,7 +69,7 @@ else :
         jinja_template = Template(template_content)
     
     # Upload the CSS file
-    with open("src\style_res.css") as f:
+    with open("src/style_res.css") as f:
         css = f.read()
             
     # Render the template with dynamic data
