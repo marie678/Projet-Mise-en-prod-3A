@@ -3,8 +3,8 @@
 
 import streamlit as st
 import pandas as pd
-from app.config import SAMPLE_RECIPE_PATH3
-from utils.functions import split_frame, search_recipes, handle_recipe_click, initialize_session_state, query_error
+from streamlit_app.app.config import SAMPLE_RECIPE_PATH3
+from streamlit_app.utils.functions import split_frame, search_recipes, handle_recipe_click, initialize_session_state, query_error
 from streamlit_extras.add_vertical_space import add_vertical_space
 from collections import Counter
 from typing import Any
