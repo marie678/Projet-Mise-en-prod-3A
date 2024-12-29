@@ -1,6 +1,5 @@
-########################################### app v1.1 #################################################
-# display the query results clearly 
-# pb : absence retour à la ligne pour les points virgules (ex : cheese)
+########################################### app v2.1 #################################################
+# display the query results in list of recipes, each being a button that displays information if cliqued
 
 import streamlit as st
 import pandas as pd
@@ -30,8 +29,6 @@ nb = len(sentence)
 base = r'^{}'
 expr = '(?=.*{})'
 rep = df[df['NER'].str.contains(base.format(''.join(expr.format(w) for w in sentence)))][['title','NER']]
-#m2 = df["Title"].str.contains(text_search)
-#df_search = df[m1 | m2]
 
 
 if text_search:
