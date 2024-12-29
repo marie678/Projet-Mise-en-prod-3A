@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ title }}</title>
-    <link rel="stylesheet" href="../src/style_res.css">
     <!-- Include Google Icons library -->
     <link href=
 "https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined" rel="stylesheet" />
@@ -189,13 +188,13 @@
 
 <body>
     <!-- Title, rating, author and print to pdf button -->
-    <div>
+    <section>
         <h1>{{ title }}</h1> 
         <div class="stars" style="--w: {{rating * 20}}%;"> </div> 
             <span>{{ rating }} / 5 based on {{ vote }} votes </span>
             <button id="printButton"> &#128424;&#65039; </button>
         <p class="cursive"> {{ author }}  </p> 
-    </div>
+    </section>
 
     <!-- General caracteristics -->
     <div class="boxed">
@@ -213,24 +212,23 @@
       </div>
       
       <!-- Image -->
-    <div> 
+    <section> 
         <img align = "right" style='height: 30%; width: 40%; object-fit: contain' src= {{ img }}>
         
-    </div>
+    </section>
 
       <!-- Description -->
-    <div>
-        <br />
+    <section>
         <p class = "description"> {{ desc }} </p>
         <em class = "key"> 
             {% for item in keywords %}
             {{ item }} &thinsp;
         {% endfor %}
         </em>
-    </div>
+    </section>
 
-      <!-- Main body -->
-    <div>
+      <!-- Main body of the recipe -->
+    <section>
         <h2> Ingredients </h2>
         <ul class="list-two" >
             {% for item in items %}
@@ -246,14 +244,14 @@
         
         <p> Here's the <a href={{ link }} target="_blank">  link </a>  to recipe   </p>
         <p> Enjoy ;)  </p>
-    </div>
+    </section>
 
 
-    <!-- Show Table Button -->
+    <!-- Optional recipe details : nutrition facts -->
+    <section>
+        <!-- Show Table Button -->
     <button id="showTableButton"> Click here for more details on the recipe </button>
-
-    <!-- Table that is initially hidden -->
-    
+        <!-- Table that is initially hidden -->
     <table id="myTable">
             <tr>
             <th>Calories</th>
@@ -279,13 +277,14 @@
             </tr>
             <tr>
             </table>
+    </section>
 
 <script>
     // Show table when the "Show Table" button is clicked
     document.getElementById('showTableButton').addEventListener('click', function() {
             document.getElementById('myTable').style.display = 'table'; // Show the table
         });
-    // Add event listener to the button
+    // Print to pdf when button is clicked
     document.getElementById('printButton').addEventListener('click', function() {
         window.print(); // This will open the browser's print dialog
     });
