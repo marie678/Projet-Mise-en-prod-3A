@@ -15,7 +15,7 @@
         }
          /* Basic container styling */
         .container {
-            max-width: 800px;
+            max-width: 1300px;
             margin: 0 auto;
             background-color: white;
             padding: 20px;
@@ -167,6 +167,7 @@
     width: fit-content;
 }
 
+   /* Styling of nutrition facts information*/
 #myTable {
     width: 100%;
     border-collapse: collapse;
@@ -269,8 +270,9 @@
         <p> Here's the <a href={{ link }}>  link </a>  to recipe   </p>
         <p> Enjoy ;)  </p>
 
+        <!-- Additional facts about nutritions-->
         <button id="showTableButton">Nutrition Facts</button>
-        
+    
         <table id="myTable">
             <thead>
                 <tr>
@@ -308,7 +310,7 @@
         
             document.getElementById('printButton').addEventListener('click', function() {
                 window.print();
-            }); // This closing brace was missing!
+            }); 
         </script>
         
         
