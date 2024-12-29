@@ -13,7 +13,7 @@ import numpy as np
 from spellchecker import SpellChecker
 
 # configuration parameters
-st.set_page_config(layout="wide", page_title ='frigo vide', initial_sidebar_state='collapsed')
+st.set_page_config(layout="wide", page_title ='Recipe Finder', initial_sidebar_state='collapsed')
 # import of the cleaned and formated dataset of 10k recipes :
 df = pd.read_parquet(SAMPLE_RECIPE_PATH3)
 

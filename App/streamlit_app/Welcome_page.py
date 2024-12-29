@@ -2,6 +2,8 @@ import streamlit as st
 import os
 from utils.functions import display_html_in_streamlit
 
+st.set_page_config(layout="wide", page_title ='FRDIGE & COOK', initial_sidebar_state='collapsed')
+
 html_file_path = "pages/Welcome Page.html"
 
 # Check if the file exists before attempting to display it

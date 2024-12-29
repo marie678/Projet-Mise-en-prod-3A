@@ -88,7 +88,7 @@ def handle_recipe_click(page: pd.DataFrame, index: int) -> None:
     st.session_state.fiber = page.iloc[index]['FiberContent']
     st.session_state.sugar = page.iloc[index]['SugarContent']
     with st.spinner() :
-        st.switch_page("./pages/Recettes.py")
+        st.switch_page("./pages/Recipe page.py")
 
 @st.cache_data(show_spinner=True)
 def search_recipes(original_df: pd.DataFrame, filters:dict[str, Any], dict_columns: dict[str, str]) -> Tuple[pd.DataFrame, int]:
@@ -223,7 +223,7 @@ def query_error(query: list, ing: list, rec: list):
 
     # Check if all words in the query already match valid ingredients or recipes
     if all(word in ing or any(word in r for r in rec) for word in query):
-        return st.markdown("Matching recipes or ingredients found! Press *find a recipe*")
+        return st.markdown("Matching recipes or ingredients found! Fill out desired filters and press *find a recipe*")
 
     # else attempt a correction
     for word in query:
