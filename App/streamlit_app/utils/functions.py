@@ -1,6 +1,8 @@
 import pandas as pd
 import streamlit as st
 from typing import Tuple, Any
+import numpy as np
+from spellchecker import SpellChecker
 
 def split_frame(input_df: pd.DataFrame, rows: int) -> list[pd.DataFrame]:
     """
@@ -205,3 +207,24 @@ def display_html_in_streamlit(html_file_path: str):
         st.error(f"Error: HTML file not found at {html_file_path}")
     except Exception as e:
         st.error(f"An error occurred: {e}")
+
+def query_error(query : list, ing : list, rec : list) : 
+    """Handles query error by returning an error message when no recipe or ingredient are found, 
+    either the word might be missplelled and, when corrected, recognized or the word is unknown.
+
+    Args:
+       query (list): The search query of the user transformed into a list of words.
+       ing (list) : The list of unique ingredients.
+       rec (list) : The list of recipes.
+    """
+    response = []
+    spell = SpellChecker()
+    for word in query :
+        if word not in ing and not any(word in r for r in  rec): 
+            corrected_word = spell.correction(word)
+            if corrected_word in ing or any(corrected_word in r for r in  list(rec)): 
+                response.append(corrected_word)
+    if not response : 
+        return st.write('No recipes or ingredients found. Try changing your query')
+    else : 
+        return st.write(f'Did you mean {", ".join(response)} ?')

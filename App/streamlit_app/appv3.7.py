@@ -4,11 +4,13 @@
 import streamlit as st
 import pandas as pd
 from app.config import SAMPLE_RECIPE_PATH3
-from utils.functions import split_frame, search_recipes, handle_recipe_click, initialize_session_state
+from utils.functions import split_frame, search_recipes, handle_recipe_click, initialize_session_state, query_error
 from streamlit_extras.add_vertical_space import add_vertical_space
 from collections import Counter
 from typing import Any
 import string
+import numpy as np
+from spellchecker import SpellChecker
 
 # configuration parameters
 st.set_page_config(layout="wide", page_title ='frigo vide', initial_sidebar_state='collapsed')
@@ -61,6 +63,15 @@ st.markdown(
 
 # Text input to search recipes by title
 title_search_query = st.text_input("Search a recipe (by title or ingredient(s))", key="title_search_query")
+
+# clean query
+
+# error handling
+ing = np.unique(np.concatenate(df['NER'].values))
+rec = df['title'].apply(lambda x : x.lower())
+rec = list(rec.values)
+
+query_error(title_search_query.split(' '), ing, rec)
 
 with st.form("filter_form", clear_on_submit=False):
     st.write("Filters")
