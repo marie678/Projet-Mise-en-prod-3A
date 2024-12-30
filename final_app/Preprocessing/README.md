@@ -18,7 +18,7 @@ The final dataset includes new categorical and binary filters to enable users to
 * `RecipeType` ("Main Course", "Dessert", "Beverage", or "Breakfast")
 * `Beginner_Friendly`(True/False)
 * `Vegetarian_Friendly` (True/False)
-* `World_Cuisine` ("Indian", "Chinese", "Mexican", "European", etc.)
+* `World_Cuisine` ("Asian", "Mexican", "European", etc.)
 
 ### Usage
 
