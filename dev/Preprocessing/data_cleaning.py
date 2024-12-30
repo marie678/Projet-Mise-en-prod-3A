@@ -247,7 +247,7 @@ def data_preprocessing(df: pd.DataFrame) -> pd.DataFrame:
     df['RecipeType'] = df.apply(assign_category, axis=1)
     df = df[df['RecipeType'] != 'Other'].reset_index(drop=True)
     df['Beginner_Friendly'] = df['Keywords'].apply(lambda x: 'Easy' in x) 
-    df['Vegetarian_Friendly'] = ~df['NER'].apply(is_non_vegetarian) 
+    df['Vegetarian_Friendly'] = ~df['ingredients'].apply(is_non_vegetarian) 
     df['World_Cuisine'] = df['Keywords'].apply(find_world_cuisine)
 
     # Convert durations to a more readable format
