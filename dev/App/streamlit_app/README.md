@@ -1,27 +1,37 @@
-# Versions des applications streamlit
+# Streamlit applications versions
 
-## V1 Interface basique comprenant une barre de recherche et affichant la "meilleure" recette de manière lisible
+## V1 Basic interface including a search bar and displaying the "best" recipe in a legible way
 
-1.0 affichage des résultats sous forme de dataframe
+1.0 Display of results as a dataframe
 
-1.1 résulats mis en forme avec streamlit
+1.1 Results formatted with streamlit
 
-1.2 avec un fichier html appelé dans le script
+1.2 Results formatted with an html file called in the script
 
-1.3 avec un fichier html et un fichier css
+1.3 Results formatted with an html and a css file called in the script
 
-## V2 Interface de recherche donnant une liste de résultats parmi lesquels il est possible de choisir (navigation, aller retour)
+## V2 Search interface giving a list of results from which it is possible to choose 
 
-1.0 affichage des résultats sous forme de liste de nom de recette (de longueur limitée et non clicable)
+2.0 Display of results as recipe name list (not clickable)
 
-1.1 possibilité de cliquer sur une recette et d'obtenir des détails en dessous
+2.1 Ability to click on a recipe in the list and get details below
 
-1.2 affichage des résultats sous forme de liste puis redirection vers page détaillant la recette en cas de clic - passage au multipage
+2.2 Display of results in the form of a list and then redirection to page detailing the recipe if clicked -> switch to multipage
 
-## V3 Filtres
-3.0 ajout de filtres selon les ingrédients + de pages
-3.1 Reset bouton (non fonctionnel)
-3.2 Création d'une fonction pour filtrer le dataset + caching
-3.3 Ajout de filtres supplémentaires
+## V3 Advanced features and performance
 
-## V4 Fonctionnalités avancées et performance : cache, multipage, site en plusieurs langues, login
+3.0 Add filters and distribut results on multiple pages 
+
+3.1 Reset boutton 
+
+3.2 Creation of a function to filter the dataset - caching
+
+3.3 Additional filters
+
+3.4
+
+3.5
+
+3.6
+
+3.7 Up to date
