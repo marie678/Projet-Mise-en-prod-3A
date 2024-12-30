@@ -1,7 +1,10 @@
 ''' Test functions.py'''
 
 import pytest
-from streamlit_app.utils.functions import *
+import os
+import sys
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "utils")))
+from functions import *
 import pandas as pd
 import time
 from streamlit.testing.v1 import AppTest
