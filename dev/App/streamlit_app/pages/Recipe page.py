@@ -43,7 +43,7 @@ else :
     description = st.session_state.description
     keywords = st.session_state.keywords
     img_link = st.session_state.img_link
-    rec_link = st.session_state.rec_link
+    rec_link = st.session_state.link
     calories = st.session_state.calories
     protein = st.session_state.protein
     fat = st.session_state.fat
