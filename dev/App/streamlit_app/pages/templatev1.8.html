@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }}</title>
+    <!-- Include Google Icons library -->
+    <link href=
+"https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined" rel="stylesheet" />
+    
+
+<style> {{ css | safe }} </style>
+</head>
+
+<body>
+    <!-- Title, rating, author and print to pdf button -->
+    <div>
+        <h1>{{ title }}</h1> 
+        <div class="stars" style="--w: {{rating * 20}}%;"> </div> 
+            <span>{{ rating }} / 5 based on {{ vote }} votes </span>
+            <button id="printButton"> &#128424;&#65039; </button>
+        <p class="cursive"> {{ author }}  </p> 
+    </div>
+
+    <!-- General caracteristics -->
+    <div class="boxed">
+        <!-- Include Icon for Number of servings -->
+        &#x1F924; {{ servings }} &emsp;
+        <!-- Include Google Icon for PrepTime -->
+        <span class="material-symbols-outlined">cooking</span>
+        {{ prep_time }} &emsp;
+        <!-- Include Google Icon for CookTime -->
+         <span class="material-symbols-outlined">oven</span>
+        {{ c_time }} &emsp;
+         <!-- Include Google Icon for TotalTime -->
+         <span class="material-symbols-outlined">restaurant</span>
+         {{ tot_time }}
+      </div>
+      
+      <!-- Image -->
+    <div> 
+        <img align = "right" style='height: 30%; width: 40%; object-fit: contain' src= {{ img }}>
+        
+    </div>
+
+      <!-- Description -->
+    <div>
+        <br />
+        <p class = "description"> {{ desc }} </p>
+        <em class = "key"> 
+            {% for item in keywords %}
+            {{ item }} &thinsp;
+        {% endfor %}
+        </em>
+    </div>
+
+      <!-- Main body -->
+    <div>
+        <h2> Ingredients </h2>
+        <ul class="list-two" >
+            {% for item in items %}
+                <li>{{ item }}</li>
+            {% endfor %}
+        </ul>
+        <h2> Directions </h2>
+        <ol class="list-one">
+            {% for item in dir %}
+                <li>{{ item }}</li>
+            {% endfor %}
+        </ol>
+        
+        <p> Here's the <a href={{ link }} target="_blank">  link </a>  to recipe   </p>
+        <p> Enjoy ;)  </p>
+    </div>
+
+
+    <!-- Show Table Button -->
+    <button id="showTableButton"> Click here for more details on the recipe </button>
+
+    <!-- Table that is initially hidden -->
+    
+    <table id="myTable">
+            <tr>
+            <th>Calories</th>
+            <th>Fat</th>
+            <th>Saturated fat</th>
+            <th>Protein</th>
+            <th>Sugar</th>
+            <th>Cholesterol</th>
+            <th>Carbohydrate</th>
+            <th>Sodium</th>
+            <th>Fiber</th>
+            </tr>
+            <tr>
+            <td>{{ calories }}</td>
+            <td>{{ fat }}</td>
+            <td>{{ sat_fat }}</td>
+            <td>{{ protein }}</td>
+            <td>{{ sugar }}</td>
+            <td>{{ chol }}</td>
+            <td>{{ carbo }}</td>
+            <td>{{ sodium }}</td>
+            <td>{{ fiber }}</td>
+            </tr>
+            <tr>
+            </table>
+
+<script>
+    // Show table when the "Show Table" button is clicked
+    document.getElementById('showTableButton').addEventListener('click', function() {
+            document.getElementById('myTable').style.display = 'table'; // Show the table
+        });
+    // Add event listener to the button
+    document.getElementById('printButton').addEventListener('click', function() {
+        window.print(); // This will open the browser's print dialog
+    });
+</script>
+
+</body>
+</html>
