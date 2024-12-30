@@ -10,6 +10,8 @@
 
 1.3 Results formatted with an html and a css file called in the script
 
+1.4 Results formatted with an html with externalized css and javascript files for styling and fucntionality
+
 ## V2 Search interface giving a list of results from which it is possible to choose 
 
 2.0 Display of results as recipe name list (not clickable)
