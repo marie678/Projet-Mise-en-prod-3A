@@ -29,7 +29,7 @@ else:
 print(html_file_path)
 
 # Display images using st.image
-image1 = st.image("images/go_to_Recipe_Finder_page.png")
-image2 = st.image("images/hit_find_recipe_button.png")
-image3 = st.image("images/results_avocado_search.png")
-image4 = st.image("images/printable_recipe.png")
+#image1 = st.image("images/go_to_Recipe_Finder_page.png")
+#image2 = st.image("images/hit_find_recipe_button.png")
+#image3 = st.image("images/results_avocado_search.png")
+#image4 = st.image("images/printable_recipe.png")
