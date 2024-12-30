@@ -41,7 +41,8 @@ def test_is_non_vegetarian():
     assert is_non_vegetarian(['carrot', 'onion', 'tomato', 'egg']) == False
 
 def test_find_world_cuisine():
-    assert find_world_cuisine(['Indian', 'Spicy', 'Asian']) == 'Indian'
+    assert find_world_cuisine(['Vegetable', 'Mexican', '< 30 Mins']) == 'Mexican'
+    assert find_world_cuisine(['Asian', 'Spicy', 'Indian']) == 'Asian'
     assert find_world_cuisine(['Bevrages', 'Fruit', 'Healthy']) == 'Unknown'
 
 
