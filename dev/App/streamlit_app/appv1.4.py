@@ -1,15 +1,12 @@
 ########################################### app v1.3 #################################################
-# display the query results in a specially designed html and css
+# display the query results in a specially designed html 
+# with externalized css and javascript files for styling and fucntionality
 import streamlit as st
 import streamlit.components.v1 as components
 from jinja2 import Template
 import pandas as pd
-from functools import reduce
-import operator
-import ast
 from app.config import SAMPLE_RECIPE_PATH3, APP_TITLE
 import numpy as np
-import re
  
 
 
@@ -20,8 +17,15 @@ st.write(APP_TITLE)
 
 
 # Upload the CSS file
-with open("src\style_res.css") as f:
-    css = f.read()
+with open("src/style_res.css") as css_file:
+    css = css_file.read()
+
+# Upload the javascript file
+with open("pages/scripts.js") as js_file:
+    js_content = js_file.read()
+
+js_script = f"<script>{js_content}</script>"
+
 
 # Use a text_input to get the keywords to filter the dataframe
 text_search = st.text_input("Search recipes by ingredients", value="").lower()
@@ -60,7 +64,7 @@ if text_search:
     carbo = df.loc[best]['CarbohydrateContent']
     fiber = df.loc[best]['FiberContent']
     sugar = df.loc[best]['SugarContent']
-    with open("pages/templatev1.3.1.html", "r") as template_file:
+    with open("pages/templatev1.4.0.html", "r") as template_file:
         template_content = template_file.read()
         jinja_template = Template(template_content)
 
@@ -74,6 +78,7 @@ if text_search:
                                           sat_fat=sat_fat, sugar=sugar, chol = chol, sodium=sodium,
                                           carbo = carbo, fiber = fiber)
 
+    
     # Display the HTML in Streamlit app
-    components.html(rendered_html, height=1000, width = 900, scrolling=True)
+    components.html(rendered_html + js_script, height=1000, width = 900, scrolling=True)
 

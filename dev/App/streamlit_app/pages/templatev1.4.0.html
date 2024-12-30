@@ -1,0 +1,126 @@
+<!---------------------------------------------------------------------------
+    File: templatev1.4.0.html
+    Description: This is the main landing page of our streamlit application. It contains
+                 the content of the recipe that came out from the customer's query, 
+                 including the main characteristics (title, time, author, rating, image, etc), 
+                 a print to pdf button, the main body of the recipe (ingredients and instructions), 
+                 and additional nutrition facts (hidden by default for readabily).    
+    Version: 1.4.0
+    Notes:
+    - This file links to the 'style_res.css' for styling(it is called 
+    as dynamic data from python file in the <style> part due to streamlit restrictions).
+    - This file is linked to a and 'scripts.js' for functionality.
+    Note that the link is done in the python file due to streamlit restrictions.
+    - It is called by the appv1.3.py python file.
+    - The recipe data is dynamically updated through the python script calling it.
+    (We use  to call those parameters as we use Jinja2 in streamlit)
+    
+    --------------------------------------------------------------------------->
+
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title> Final result page </title>
+        <!-- Include Google Icons library -->
+        <link href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined" rel="stylesheet" />
+        <style> {{ css | safe }} </style>
+    </head>
+
+    <body>
+        <!-- Title, rating, author and print to pdf button -->
+        <section>
+            <h1>{{ title }}</h1> 
+            <div class="stars" style="--w: {{rating * 20}}%;"> </div> 
+                <span>{{ rating }} / 5 based on {{ vote }} votes </span>
+                <button id="printButton"> &#128424;&#65039; </button>
+            <p class="cursive"> {{ author }}  </p> 
+        </section>
+    
+        <!-- General caracteristics -->
+        <div class="boxed">
+            <!-- Include Icon for Number of servings -->
+            &#x1F924; {{ servings }} &emsp;
+            <!-- Include Google Icon for PrepTime -->
+            <span class="material-symbols-outlined">cooking</span>
+            {{ prep_time }} &emsp;
+            <!-- Include Google Icon for CookTime -->
+             <span class="material-symbols-outlined">oven</span>
+            {{ c_time }} &emsp;
+             <!-- Include Google Icon for TotalTime -->
+             <span class="material-symbols-outlined">restaurant</span>
+             {{ tot_time }}
+          </div>
+          
+          <!-- Image -->
+        <div> 
+            <img align = "right" style='height: 30%; width: 40%; object-fit: contain' src= {{ img }}>
+            
+        </div>
+    
+          <!-- Description -->
+        <section>
+            <p class = "description"> {{ desc }} </p>
+            <em class = "key"> 
+                {% for item in keywords %}
+                {{ item }} &thinsp;
+            {% endfor %}
+            </em>
+        </section>
+    
+          <!-- Main body -->
+        <section>
+            <h2> Ingredients </h2>
+            <ul class="list-two" >
+                {% for item in items %}
+                    <li>{{ item }}</li>
+                {% endfor %}
+            </ul>
+    
+            <h2> Directions </h2>
+            <ol class="list-one">
+                {% for item in dir %}
+                    <li>{{ item }}</li>
+                {% endfor %}
+            </ol>
+            
+            <p> Here's the <a href={{ link }} target="_blank">  link </a>  to recipe   </p>
+            <p> Enjoy ;)  </p>
+        </section>
+    
+    
+        <!-- Optional nutrition facts table -->
+        <section>
+             <!-- Show Table Button -->
+        <button id="showTableButton"> Click here for more details on the recipe </button>
+    
+            <!-- Table that is initially hidden -->
+        <table id="myTable">
+                <tr>
+                <th>Calories</th>
+                <th>Fat</th>
+                <th>Saturated fat</th>
+                <th>Protein</th>
+                <th>Sugar</th>
+                <th>Cholesterol</th>
+                <th>Carbohydrate</th>
+                <th>Sodium</th>
+                <th>Fiber</th>
+                </tr>
+                <tr>
+                <td>{{ calories }}</td>
+                <td>{{ fat }}</td>
+                <td>{{ sat_fat }}</td>
+                <td>{{ protein }}</td>
+                <td>{{ sugar }}</td>
+                <td>{{ chol }}</td>
+                <td>{{ carbo }}</td>
+                <td>{{ sodium }}</td>
+                <td>{{ fiber }}</td>
+                </tr>
+                <tr>
+                </table>
+        </section>
+    </body>
+    </html>
