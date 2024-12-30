@@ -138,10 +138,10 @@ def find_world_cuisine(keywords: List[str]) -> str:
         str: The name of the matched cuisine from a predefined list, or 'Unknown' if no match is found.
     """
     world_cuisines = [
-        'Indian', 'Chinese', 'Thai', 'Japanese', 'Hawaiian', 'Russian', 'Korean', 'Vietnamese', 'Indonesian', 'Malaysian', 'Pakistani', 'Cantonese', 'Nepalese', 'Cambodian', 'Mongolian', 'Filipino', 'Asian', 'Asia', 'New Zeland', 'Australian',
-        'Lebanese', 'Turkish', 'Palestinian', 'Egyptian', 'Nigerian', 'Sudanese', 'Ecuadorean', 'Moroccan', 'Ethiopian', 'Somalian', 'African',
+        'Asian', 'Indian', 'Chinese', 'Thai', 'Japanese', 'Hawaiian', 'Russian', 'Korean', 'Vietnamese', 'Indonesian', 'Malaysian', 'Pakistani', 'Cantonese', 'Nepalese', 'Cambodian', 'Mongolian', 'Filipino', 'Asia', 'New Zeland', 'Australian',
+        'Lebanese', 'Turkish', 'Palestinian', 'African', 'Egyptian', 'Nigerian', 'Sudanese', 'Ecuadorean', 'Moroccan', 'Ethiopian', 'Somalian',
         'Mexican', 'U.S.', 'Caribbean', 'American', 'Hawaiian', 'Cuban', 'Venezuelan', 'Peruvian', 'Puerto Rican', 'Colombian', 'Chilean', 'Costa Rican', 'Guatemalan', 'Honduran', 'Brazilian', 
-        'Greek', 'German', 'Spanish', 'Portuguese', 'French', 'Scottish', 'Polish', 'Austrian', 'Hungarian', 'Danish', 'Turkish', 'Finnish', 'Dutch', 'Belgian', 'Norwegian', 'Welsh', 'Czech', 'Scandinavian', 'Icelandic', 'European'
+        'European', 'Greek', 'German', 'Spanish', 'Portuguese', 'French', 'Scottish', 'Polish', 'Austrian', 'Hungarian', 'Danish', 'Turkish', 'Finnish', 'Dutch', 'Belgian', 'Norwegian', 'Welsh', 'Czech', 'Scandinavian', 'Icelandic'
     ]
     keywords_lower = [str(k).lower() for k in keywords]
     for cuisine in world_cuisines:
