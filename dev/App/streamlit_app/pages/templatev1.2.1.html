@@ -1,9 +1,26 @@
+<!---------------------------------------------------------------------------
+    File: templatev1.2.1.html
+    Description: This is the main landing page of our streamlit application. It contains
+                 the content of the recipe that came out from the customer's query, 
+                 including the main characteristics (title, time, author, rating, image, etc), 
+                 a print to pdf button, the main body of the recipe (ingredients and instructions), 
+                 and additional nutrition facts (hidden by default for readabily).    
+    Version: 1.2.1
+    Notes:
+    - This file contains the styling in its head part as it is a dev file 
+    (see v1.3.1 for externated css and javascript file).
+    - It is called by the appv1.2.py python file.
+    - The recipe data is dynamically updated through the python script calling it.
+    (We use {{}} to call those parameters as we use Jinja2 in streamlit)
+    
+    --------------------------------------------------------------------------->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ title }}</title>
+    <title> Final result page </title>
     <!-- Include Google Icons library -->
     <link href=
 "https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined" rel="stylesheet" />
