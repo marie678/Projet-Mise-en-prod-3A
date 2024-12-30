@@ -1,4 +1,4 @@
-########################################### app v1.3 #################################################
+########################################### app v1.4 #################################################
 # display the query results in a specially designed html 
 # with externalized css and javascript files for styling and fucntionality
 import streamlit as st
