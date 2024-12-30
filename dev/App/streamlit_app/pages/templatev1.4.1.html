@@ -1,0 +1,134 @@
+<!--
+-------------------------------------------------------------------------
+    File: templatev1.4.1.html
+    Description: This is the main landing page of our streamlit application. It contains
+                 the content of the recipe that came out from the customer's query, 
+                 including the main characteristics (title, time, author, rating, image, etc), 
+                 a print to pdf button, the main body of the recipe (ingredients and instructions), 
+                 and additional nutrition facts (hidden by default for readabily).    
+    Version: 1.4.1
+    Notes:
+    - This file links to the 'style_resv3.css' for styling (it is called 
+    as dynamic data from python file in the <style> part due to streamlit restrictions).
+    - This file is linked to a and 'scripts.js' for functionality.
+    Note that the link is done in the python file due to streamlit restrictions.
+    - It is called by the appv1.4.py python file.
+    - The recipe data is dynamically updated through the python script calling it.
+    (We use double curly brackets to call those parameters as we use Jinja2 in streamlit)
+    
+    -------------------------------------------------------------------------
+    -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Final result page </title>
+    <!-- Include Google Icons library -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <!-- Include css -->
+    <style> {{ css | safe }}  </style>
+</head>
+
+<body>
+    <!-- Header, title, rating and author  -->
+    <div class="header">FRIDGE & COOK</div>
+    <div class="container">
+        <h1 class="header">{{ title }}</h1>
+        <div class="rating">
+            <div class="stars" style="--w: {{rating * 20}}%;">★★★★★</div>
+            {{ rating }} / 5 based on {{ vote }} votes
+    </div>
+        <p class="author">By {{ author }}</p>
+    
+     <!-- General caracteristics -->
+        <div class="prep-time">
+            <!-- Include Icon for Number of servings -->
+            <div class="time-item"> <span class="material-symbols-outlined">restaurant_menu</span> {{ servings }} Servings</div>
+            <div class="time-item">
+            <!-- Include Icon for PrepTime -->
+                <span class="emoji" aria-label="Preparation time">🔪</span><span>Prep: {{ prep_time }} </span>
+            </div>
+            <div class="time-item">
+             <!-- Include Icon for CookTime -->
+                <span class="emoji" aria-label="Cooking time">🍳</span><span>Cook: {{ c_time }}</span>
+            </div>
+            <div class="time-item">
+             <!-- Include Icon for TotalTime -->
+                <span class="emoji" aria-label="Total time">⏱️</span><span>Total: {{ tot_time }}</span>
+            </div>
+            <!-- Print to pdff button -->
+            <button id="printButton">&#128424;&#65039;</button>
+        </div>
+
+     
+        <!-- Description -->
+        <div class="description">
+            <p>{{ desc }}</p>
+            <div class="tags">
+                {% for item in keywords %}
+                    <span class="tag">{{ item }}</span>
+                {% endfor %}
+            </div>
+        </div>
+       <!-- Image -->
+       <img style='height: 30%; width: 40%; object-fit: contain' src="{{ img }}" alt="{{ title }}">
+
+        <!-- Main body -->
+        <div class="ingredients">
+            <h2>Ingredients</h2>
+            <ul>
+                {% for item in items %}
+                    <li>{{ item }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <div class="directions">
+            <h2>Directions</h2>
+            <ol>
+                {% for item in dir %}
+                    <li>{{ item }}</li>
+                {% endfor %}
+            </ol>
+        </div>
+        <!-- Link to the original recipe-->
+        <p> Here's the <a href={{ link }}>  link </a>  to recipe   </p>
+        <p> Enjoy ;)  </p>
+
+        <!-- Additional facts about nutritions-->
+        <button id="showTableButton">Nutrition Facts</button>
+    
+        <table id="myTable">
+            <thead>
+                <tr>
+                    <th>Calories</th>
+                    <th>Fat</th>
+                    <th>Saturated fat</th>
+                    <th>Protein</th>
+                    <th>Sugar</th>
+                    <th>Cholesterol</th>
+                    <th>Carbohydrate</th>
+                    <th>Sodium</th>
+                    <th>Fiber</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>{{ calories }}</td>
+                    <td>{{ fat }}</td>
+                    <td>{{ sat_fat }}</td>
+                    <td>{{ protein }}</td>
+                    <td>{{ sugar }}</td>
+                    <td>{{ chol }}</td>
+                    <td>{{ carbo }}</td>
+                    <td>{{ sodium }}</td>
+                    <td>{{ fiber }}</td>
+                </tr>
+            </tbody>
+        </table>
+        
+
+</body>
+</html>

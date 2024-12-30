@@ -11,7 +11,7 @@ def display_html_in_streamlit(html_file_path):
     try:
         with open(html_file_path, "r", encoding="utf-8") as f:
             html_content = f.read()
-        st.components.v1.html(html_content, height=1000, width=900, scrolling=True)
+        st.components.v1.html(html_content, height=1500, width=1500, scrolling=True)
     except FileNotFoundError:
         st.error(f"Error: HTML file not found at {html_file_path}")
     except Exception as e:

@@ -20,7 +20,7 @@ st.write(APP_TITLE)
 
 
 # Upload the CSS file
-with open("src\style_res.css") as f:
+with open("src\style_resv2.css") as f:
     css = f.read()
 
 # Use a text_input to get the keywords to filter the dataframe

@@ -54,15 +54,20 @@ else :
     fiber = st.session_state.fiber
     sugar = st.session_state.sugar
 
-    # with open("pages/templatev1.3.html", "r") as template_file:
-    with open("pages/templatev1.4.html", "r", encoding='utf-8') as template_file:
-    # with open("pages/templatev1.8.html", "r") as template_file:
+    
+    with open("pages/templatev1.4.1.html", "r", encoding='utf-8') as template_file:
         template_content = template_file.read()
         jinja_template = Template(template_content)
     
     # Upload the CSS file
-    with open("src/style_res.css") as f:
+    with open("src/style_resv3.css") as f:
         css = f.read()
+    
+    # Upload the javascript file
+    with open("pages/scripts.js", encoding="utf-8") as js_file:
+        js_content = js_file.read()
+
+    js_script = f"<script>{js_content}</script>"
             
     # Render the template with dynamic data
     rendered_html = jinja_template.render(css = css, title=recipe_title, author = author, servings = servings,
@@ -75,4 +80,4 @@ else :
                                         carbo = carbo, fiber = fiber)
 
     # Display the HTML in Streamlit app
-    components.html(rendered_html, height=1000, width = 900, scrolling=True)
+    components.html(rendered_html + js_script, height=2000, width = 1200, scrolling=True)

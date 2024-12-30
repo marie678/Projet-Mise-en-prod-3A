@@ -1,13 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ title }}</title>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
-    <style>
-                /* Basic body styling */
-                body {
+/* css file to style the final results page  */
+        /* Basic body styling */
+        body {
             font-family: sans-serif;
             margin: 20px;
             background-color: #f8f0e3;
@@ -96,7 +89,7 @@
             border-radius: 8px;
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
-        /*  Display of the directions in oredered steps */
+        /*  Display of the directions in ordered steps */
         .directions {
             margin-bottom: 20px;
         }
@@ -200,120 +193,3 @@
         background-color: white;
     }
 }
-
-    </style>
-</head>
-
-<body>
-    <!-- Header, title, rating and author  -->
-    <div class="header">FRIDGE & COOK</div>
-    <div class="container">
-        <h1 class="header">{{ title }}</h1>
-        <div class="rating">
-            <div class="stars" style="--w: {{rating * 20}}%;">★★★★★</div>
-            {{ rating }} / 5 based on {{ vote }} votes
-    </div>
-        <p class="author">By {{ author }}</p>
-    
-     <!-- General caracteristics -->
-        <div class="prep-time">
-            <!-- Include Icon for Number of servings -->
-            <div class="time-item"> <span class="material-symbols-outlined">restaurant_menu</span> {{ servings }} Servings</div>
-            <div class="time-item">
-            <!-- Include Icon for PrepTime -->
-                <span class="emoji" aria-label="Preparation time">🔪</span><span>Prep: {{ prep_time }} </span>
-            </div>
-            <div class="time-item">
-             <!-- Include Icon for CookTime -->
-                <span class="emoji" aria-label="Cooking time">🍳</span><span>Cook: {{ c_time }}</span>
-            </div>
-            <div class="time-item">
-             <!-- Include Icon for TotalTime -->
-                <span class="emoji" aria-label="Total time">⏱️</span><span>Total: {{ tot_time }}</span>
-            </div>
-            <!-- Print to pdff button -->
-            <button id="printButton">&#128424;&#65039;</button>
-        </div>
-
-     
-        <!-- Description -->
-        <div class="description">
-            <p>{{ desc }}</p>
-            <div class="tags">
-                {% for item in keywords %}
-                    <span class="tag">{{ item }}</span>
-                {% endfor %}
-            </div>
-        </div>
-       <!-- Image -->
-       <img style='height: 30%; width: 40%; object-fit: contain' src="{{ img }}" alt="{{ title }}">
-
-        <!-- Main body -->
-        <div class="ingredients">
-            <h2>Ingredients</h2>
-            <ul>
-                {% for item in items %}
-                    <li>{{ item }}</li>
-                {% endfor %}
-            </ul>
-        </div>
-
-        <div class="directions">
-            <h2>Directions</h2>
-            <ol>
-                {% for item in dir %}
-                    <li>{{ item }}</li>
-                {% endfor %}
-            </ol>
-        </div>
-        <!-- Link to the original recipe-->
-        <p> Here's the <a href={{ link }}>  link </a>  to recipe   </p>
-        <p> Enjoy ;)  </p>
-
-        <!-- Additional facts about nutritions-->
-        <button id="showTableButton">Nutrition Facts</button>
-    
-        <table id="myTable">
-            <thead>
-                <tr>
-                    <th>Calories</th>
-                    <th>Fat</th>
-                    <th>Saturated fat</th>
-                    <th>Protein</th>
-                    <th>Sugar</th>
-                    <th>Cholesterol</th>
-                    <th>Carbohydrate</th>
-                    <th>Sodium</th>
-                    <th>Fiber</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>{{ calories }}</td>
-                    <td>{{ fat }}</td>
-                    <td>{{ sat_fat }}</td>
-                    <td>{{ protein }}</td>
-                    <td>{{ sugar }}</td>
-                    <td>{{ chol }}</td>
-                    <td>{{ carbo }}</td>
-                    <td>{{ sodium }}</td>
-                    <td>{{ fiber }}</td>
-                </tr>
-            </tbody>
-        </table>
-        
-        <script>
-            document.getElementById('showTableButton').addEventListener('click', function() {
-                const table = document.getElementById('myTable');
-                table.style.display = table.style.display === 'table' ? 'none' : 'table';
-            });
-        
-            document.getElementById('printButton').addEventListener('click', function() {
-                window.print();
-            }); 
-        </script>
-        
-        
-
-</body>
-</html>
