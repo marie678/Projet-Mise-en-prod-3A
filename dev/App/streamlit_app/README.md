@@ -32,8 +32,6 @@
 
 3.4 Integrated the html template for recipe display
 
-3.5
+3.5 Added more filters (provenance, vegetarian, beginner, recipe type) and a search bar to match with recipe titles and ingredients
 
-3.6
-
-3.7 Up to date
+3.6 Cleaned the code with functions + made the link with the recipe page/display on different page
