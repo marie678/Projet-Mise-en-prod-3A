@@ -1,5 +1,5 @@
-########################################### app v1.5 #################################################
-# display the query results in a specially designed html page (sotred in "pages" folder) with new data
+########################################### app v1.3 #################################################
+# display the query results in a specially designed html and css
 import streamlit as st
 import streamlit.components.v1 as components
 from jinja2 import Template
@@ -19,7 +19,9 @@ df = pd.read_parquet(SAMPLE_RECIPE_PATH3)
 st.write(APP_TITLE)
 
 
-
+# Upload the CSS file
+with open("src\style_res.css") as f:
+    css = f.read()
 
 # Use a text_input to get the keywords to filter the dataframe
 text_search = st.text_input("Search recipes by ingredients", value="").lower()
@@ -50,7 +52,7 @@ if text_search:
     ing = df.loc[best]['ingredients']
     percent = rep['%'].max()
     directions = df.loc[best]['directions']
-    rec_link = df.loc[best]['link']
+    rec_link = "https://" + df.loc[best]['link']
     calories = df.loc[best]['Calories']
     protein = df.loc[best]['ProteinContent']
     fat = df.loc[best]['FatContent']
@@ -60,12 +62,12 @@ if text_search:
     carbo = df.loc[best]['CarbohydrateContent']
     fiber = df.loc[best]['FiberContent']
     sugar = df.loc[best]['SugarContent']
-    with open("pages/templatev1.4.html", "r") as template_file:
+    with open("pages/templatev1.3.1.html", "r") as template_file:
         template_content = template_file.read()
         jinja_template = Template(template_content)
 
     # Render the template with dynamic data
-    rendered_html = jinja_template.render(title=recipe_title, author = author, servings = servings,
+    rendered_html = jinja_template.render(css = css, title=recipe_title, author = author, servings = servings,
                                           rating = rating, vote =vote,
                                           prep_time = prep_time, c_time = c_time, tot_time = tot_time,
                                           items=ing, prc = percent, dir =directions, keywords = keywords,
@@ -76,5 +78,4 @@ if text_search:
 
     # Display the HTML in Streamlit app
     components.html(rendered_html, height=1000, width = 900, scrolling=True)
-    
 

@@ -54,7 +54,7 @@ if text_search:
     carbo = df.loc[best]['CarbohydrateContent']
     fiber = df.loc[best]['FiberContent']
     sugar = df.loc[best]['SugarContent']
-    with open("pages/templatev1.3.html", "r") as template_file:
+    with open("pages/templatev1.2.1.html", "r") as template_file:
         template_content = template_file.read()
         jinja_template = Template(template_content)
 

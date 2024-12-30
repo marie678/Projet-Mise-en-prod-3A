@@ -128,7 +128,7 @@ if st.session_state.search_triggered and nb_ingredients > 0:
                 st.session_state.link = page.iloc[i]['link']
                 st.session_state.correspondance_rate = page.iloc[i]['%']
                 with st.spinner() :
-                    st.switch_page("./pages/Recettes.py")
+                    st.switch_page("./pages/Recipe page.py")
 
 
 # reset_button = st.button('Réinitialiser')

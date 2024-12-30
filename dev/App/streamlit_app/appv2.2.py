@@ -77,6 +77,6 @@ if text_search:
                 st.session_state.instructions = df_search['directions']
                 st.session_state.link = df_search['link']
                 st.session_state.correspondance_rate = rep['%'].max()
-                st.switch_page("./pages/Recettes.py")
+                st.switch_page("./pages/Recipe page.py")
 
 

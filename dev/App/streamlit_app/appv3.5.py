@@ -41,6 +41,8 @@ if 'title' not in st.session_state :
     st.session_state.title = ''
 if 'ingredients' not in st.session_state :
     st.session_state.ingredients = ''
+if 'rating' not in st.session_state : 
+    st.session_state.rating = ''
 if 'instructions' not in st.session_state:
     st.session_state.instructions = ''
 if 'link' not in st.session_state:
@@ -152,9 +154,10 @@ def handle_recipe_click(index):
     st.session_state.ingredients = page.iloc[index]['ingredients']
     st.session_state.instructions = page.iloc[index]['directions']
     st.session_state.link = page.iloc[index]['link']
+    st.session_state.rating = page.iloc[index]['AggregatedRating']
     # st.session_state.correspondance_rate = page.iloc[index]['%']
     with st.spinner() :
-        st.switch_page("./pages/Recettes.py")
+        st.switch_page("./pages/Recipe page.py")
 
 
 # Filter the search_df by title search query if a query is entered

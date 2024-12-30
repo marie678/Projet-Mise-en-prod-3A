@@ -134,7 +134,7 @@ def handle_recipe_click(index):
     # percent = rep['%'].max()
     directions = page.iloc[index]['clean_dir'] 
     rec_link = page.iloc[index]['link']
-    with open("pages/templatev1.3.html", "r") as template_file:
+    with open("pages/templatev1.2.1.html", "r") as template_file:
         template_content = template_file.read()
         jinja_template = Template(template_content)
 

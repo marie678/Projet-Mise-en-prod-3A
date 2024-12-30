@@ -113,4 +113,4 @@ button:focus {
                 st.session_state.instructions = page.iloc[i]['directions']
                 st.session_state.link = page.iloc[i]['link']
                 st.session_state.correspondance_rate = page.iloc[i]['%']
-                st.switch_page("./pages/Recettes.py")
+                st.switch_page("./pages/Recipe page.py")

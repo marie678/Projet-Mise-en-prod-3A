@@ -141,7 +141,7 @@ def handle_recipe_click(index):
     st.session_state.link = page.iloc[index]['link']
     # st.session_state.correspondance_rate = page.iloc[index]['%']
     with st.spinner() :
-        st.switch_page("./pages/Recettes.py")
+        st.switch_page("./pages/Recipe page.py")
 
 if st.session_state.search_df is not None :
     st.write(f"Research summary : {st.session_state.research_summary} \n")
