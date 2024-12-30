@@ -1,0 +1,195 @@
+/* css file to style the final results page  */
+        /* Basic body styling */
+        body {
+            font-family: sans-serif;
+            margin: 20px;
+            background-color: #f8f0e3;
+            color: #333;
+        }
+         /* Basic container styling */
+        .container {
+            max-width: 1300px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+         /* Styling for the header */
+         .header {
+        font-family: 'Playfair Display', serif; /* Example serif font */
+        font-size: 2em; /* Adjust size as needed */
+        text-align: center; /* Center the text */
+        margin-top: 20px; /* Add some top margin */
+        margin-bottom: 20px;
+        color: black;
+                }
+        
+        /*  Dispaly of the rating */
+        .rating {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .stars {
+            color: gold;
+            margin-right: 5px;
+        }
+         /*  Author name in italic */
+        .author {
+            font-style: italic;
+            margin-bottom: 20px;
+        }
+        /*  Display of some useful information and the print button in the same row */
+        .prep-time {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+        }
+        .time-item {
+            display: flex;
+            align-items: center;
+            background-color: #e8e8e8;
+            padding: 5px 10px;
+            border-radius: 5px;
+            white-space: nowrap;
+        }
+        /*  Adding tags about the recipe at the top of the recipe */
+        .description {
+            margin-bottom: 20px;
+        }
+        .tags{
+            margin-bottom: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+        }
+        .tag{
+            background-color: #d4af70;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+        }
+        /*  Display and positionning of the ingredients and the picture of the dish */
+        .ingredients {
+            margin-bottom: 20px;
+        }
+
+        .ingredients ul {
+            list-style-type: disc;
+            padding-left: 20px;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        /*  Display of the directions in ordered steps */
+        .directions {
+            margin-bottom: 20px;
+        }
+
+        .directions ol {
+            list-style-type: none;
+            counter-reset: my-counter;
+            padding-left: 0;
+        }
+
+        .directions li {
+            counter-increment: my-counter;
+            margin-bottom: 10px;
+            padding: 15px;
+            background-color: #ffe8d6;
+            border-radius: 30px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            position: relative;
+            padding-left: 40px;
+        }
+
+        .directions li::before {
+            content: counter(my-counter) ".";
+            font-weight: bold;
+            color: #d4af70;
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+      /* Styling of print to pdf button */
+
+    #printButton {
+        padding: 10px 20px;
+        font-size: 20px;
+        background-color: #af754c;
+        color: white;
+        border-radius: 5pt;
+        border: 2px solid #452e1e;
+        cursor: pointer;
+        float: right;
+    }
+    #printButton:hover {
+        background-color: #a07545;
+    }
+
+        .print-button:hover {
+            background-color: #b0894a;
+            transform: scale(1.1);
+        }
+        body {
+    font-family: sans-serif;
+    background-color: #f5f5dc;
+    margin: 20px;
+}
+
+#showTableButton, #printButton {
+    background-color: #3498db;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-bottom: 10px;
+    display: block;
+    width: fit-content;
+}
+
+   /* Styling of nutrition facts information*/
+#myTable {
+    width: 100%;
+    border-collapse: collapse;
+    display: none;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+    background-color: white;
+}
+
+#myTable th, #myTable td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+#myTable th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+}
+
+/* CSS for print to ensure table is shown when printing */
+@media print {
+    #myTable {
+        display: table !important; 
+    }
+    #showTableButton,
+    #printButton {
+        display: none; /*Important added*/
+    }
+    body{
+        background-color: white;
+    }
+}
