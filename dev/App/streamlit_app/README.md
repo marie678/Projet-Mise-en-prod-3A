@@ -22,15 +22,15 @@
 
 ## V3 Advanced features and performance
 
-3.0 Add filters and distribut results on multiple pages 
+3.0 Add filters and distribute results on multiple pages 
 
-3.1 Reset boutton 
+3.1 Attempt to add a reset boutton to clear the filters
 
 3.2 Creation of a function to filter the dataset - caching
 
-3.3 Additional filters
+3.3 Additional filters (ingredients, recipe duration and ratings) + better display and dynamic
 
-3.4
+3.4 Integrated the html template for recipe display
 
 3.5
 
