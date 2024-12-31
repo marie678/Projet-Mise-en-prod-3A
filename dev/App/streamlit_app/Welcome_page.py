@@ -1,6 +1,7 @@
 import streamlit as st
 import os
 
+# Add a title to the page_title 
 st.set_page_config(layout="wide", page_title ='FRIDGE & COOK', initial_sidebar_state='collapsed')
 def display_html_in_streamlit(html_file_path):
     """Displays HTML content from a file in a Streamlit app.
@@ -17,7 +18,7 @@ def display_html_in_streamlit(html_file_path):
     except Exception as e:
         st.error(f"An error occurred: {e}")
 
-# Example usage (adjust the path as needed):
+# Load Welcome page.html with the styling of the page 
 html_file_path = "Welcome page.html"
 
 # Check if the file exists before attempting to display it
