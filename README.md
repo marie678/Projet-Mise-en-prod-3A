@@ -74,6 +74,8 @@ Ensure that Docker is downloaded and installed on your system, and that you have
 ```
 docker pull marie678/streamlit-final-app:latest
 ```
+This part can take a few minutes to run.
+
 2. Run the Docker Container
 ```
 docker run -p 8501:8501 marie678/streamlit-final-app:latest
