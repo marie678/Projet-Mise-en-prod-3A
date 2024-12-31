@@ -61,17 +61,18 @@ You can then navigate through the different pages within the app.
 
 ### With Docker
 You can also run our app using the provided **Docker image** (*marie678/streamlit-final-app*) with the following steps :
-*Prerequisites*
+
+**Prerequisites :**
 Ensure that Docker is downloaded and installed on your system, and that you have an active internet connection to pull the image.
 
 1. Pull the Docker Image
-``
+```
 docker pull marie678/streamlit-final-app:latest
-``
+```
 2. Run the Docker Container
-``
-docker run -p 8501:8501 marie678/streamlit-app:latest
-``
+```
+docker run -p 8501:8501 marie678/streamlit-final-app:latest
+```
 3. Access the Application
 Once the container is running, open your web browser and go to
 ``
