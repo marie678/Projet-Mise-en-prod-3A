@@ -15,6 +15,6 @@ css_file_path = "src/style_welcome.css"
 
 # Check if the file exists before attempting to display it
 if os.path.exists(html_file_path):
-    display_html_in_streamlit(html_file_path, css_file_path, height=2700, width = 1200)
+    display_html_in_streamlit(html_file_path, css_file_path, height=2700, width = 1080)
 else:
     st.error(f"The HTML file '{html_file_path}' does not exist. Please check the path.")
