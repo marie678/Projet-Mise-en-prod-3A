@@ -1,5 +1,6 @@
 import pandas as pd
 import streamlit as st
+from jinja2 import Template
 from typing import Tuple, Any
 import numpy as np
 from spellchecker import SpellChecker
@@ -193,20 +194,28 @@ def initialize_session_state() -> None:
             st.session_state[key] = value
 
 
-def display_html_in_streamlit(html_file_path: str):
-    """Displays HTML content from a file in a Streamlit app.
+def display_html_in_streamlit(html_file_path, css_file_path, height, width):
+    """Displays HTML content from a file in a Streamlit app with its styling in seperate css file.
 
     Args:
         html_file_path (str): The path to the HTML file.
+        css_file_path (str) : The path to ths css file.
+        height (int) : The height of the html page to render.
+        width (int) : The width of the html page to render.
     """
     try:
         with open(html_file_path, "r", encoding="utf-8") as f:
             html_content = f.read()
-        st.components.v1.html(html_content, height=1000, width=900, scrolling=True)
+            jinja_template = Template(html_content)
+        with open(css_file_path, "r", encoding="utf-8") as css_file:
+            css = css_file.read()
+        rendered_html = jinja_template.render(css = css)
+        st.components.v1.html(rendered_html, height = height, width = width, scrolling=True)
     except FileNotFoundError:
         st.error(f"Error: HTML file not found at {html_file_path}")
     except Exception as e:
         st.error(f"An error occurred: {e}")
+
 
 def query_error(query: list, ing: list, rec: list): 
     """Handles query error by returning an error message when no recipe or ingredient are found, 
