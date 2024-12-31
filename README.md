@@ -22,4 +22,4 @@ Our application is composed of 3 pages:
 
 ## Recipe Page
 
-*    Finallyn this printable recipe page provides all the information you need to prepare your best meal: preparation time, cooking time, ingredients, directions, ratings, nutrition facts, and a link to the original recipe page.
+*    Finally this printable recipe page provides all the information you need to prepare your best meal: preparation time, cooking time, ingredients, directions, ratings, nutrition facts, and a link to the original recipe page.
