@@ -23,9 +23,10 @@ Our application is composed of 3 pages:
 
   If you're unsure about the spelling of an ingredient, worry not as we've integrated a spell checker ! Even if you type "letuce," a suggestion appears below the search bar showing "Did you mean lettuce?". Finally, if you don't have a specific recipe or ingredients in mind and are actually here to get ideas, you can just look for ideas with the filters.
 
-  A list of results ordered by descending ratings, once you've clicked on the "Find Recipe" button, with the main characteristics of recipes corresponding to your search (title, rating, cook time, etc):
-    *  You can go to the next page to see more results if there are a lot and also adjust the number of recipes per page.
-    *  Want to get a better grasp on a recipe but still indesicive ? You can navigate between the recipe page and your current search page.
+  Once you've clicked on the "Find Recipe" button, a list of results ordered by descending ratings appears with :
+    *  The main characteristics of recipes corresponding to your search (title, rating, cook time, etc).
+    *  The possibility to go the next page to see more results if there are a lot and also adjust the number of recipes per page.
+    *  The possibility to navigate between the recipe page and your current search page in case you want to get a better grasp on a recipe but are still indesicive.
 - **Recipe Page**: Finally this printable recipe page provides all the information you need to prepare your best meal: preparation time, cooking time, ingredients, directions, ratings, nutrition facts, and a link to the original recipe page.
 
 
