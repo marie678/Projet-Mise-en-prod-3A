@@ -1,4 +1,4 @@
-# Streamlit_app know how
+# Structure and dependencies of Streamlit_app
 
 ## `.streamlit` Directory
 
@@ -6,7 +6,7 @@
 
 ## `app` Directory
 
-*   Load the application's database, which includes 10,000 recipes.
+*   Links to the application's database, which includes 10,000 recipes.
 
 ## `images` Directory
 
@@ -18,7 +18,7 @@
 
 ## `src` Directory
 
-*   Contains the `.css` file used to style the recipe page.
+*   Contains the `.css` files used to style the recipe and welcome pages.
 
 ## `tests` Directory
 
