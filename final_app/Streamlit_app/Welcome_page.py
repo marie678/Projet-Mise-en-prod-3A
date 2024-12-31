@@ -10,7 +10,7 @@ import os
 st.set_page_config(layout="wide", page_title ='FRIDGE & COOK', initial_sidebar_state='collapsed')
 
 # Load Welcome page.html with the corresponding styling of the page 
-html_file_path = "Welcome Page.html"
+html_file_path = "Welcome_Page.html"
 css_file_path = "src/style_welcome.css"
 
 # Check if the file exists before attempting to display it
