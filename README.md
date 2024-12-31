@@ -41,26 +41,27 @@ Our application is composed of 3 pages:
 
 This project uses two datasets sourced from Kaggle. We combined them to create a 10,000 clean and operational recipe data set for our application. Detailed information about the cleaning and preprocessing steps can be found in the [Preprocessing](https://github.com/nguibe/Projet-Infra-3A/tree/main/final_app/Preprocessing) folder.
 
-## Installation and usage 
+## Installation 
 
 ### With python 
 The web app is built with streamlit. You can run it with the following steps :
-1. Cloning this repo
-``
+
+1. Clone this repository
+```
 git clone https://github.com/nguibe/Projet-Infra-3A.git
-``
-2. Installing the necessary dependencies from the requirements.lock.txt file
-``
+```
+2. Install the necessary dependencies from the requirements.lock.txt file
+```
 pip install -r requirements.lock.txt
-``
-3. Navigating to the  `final_app/Streamlit_app ` folder
-``
+```
+3. Navigate to the  `final_app/Streamlit_app` folder
+```
 cd final_app/Streamlit_app
-``
-4. Running the main page of the app 
-``
+```
+4. Run the main page of the app 
+```
 streamlit run Welcome_page.py
-``
+```
 You can then navigate through the different pages within the app.
 
 ### With Docker
