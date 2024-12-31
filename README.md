@@ -43,7 +43,7 @@ This project uses two datasets sourced from Kaggle. We combined them to create a
 
 ## Installation 
 
-### With python 
+#### With python 
 The web app is built with streamlit. You can run it with the following steps :
 
 1. Clone this repository
@@ -64,7 +64,7 @@ streamlit run Welcome_page.py
 ```
 You can then navigate through the different pages within the app.
 
-### With Docker
+#### With Docker
 You can also run our app using the provided **Docker image** (*marie678/streamlit-final-app*) with the following steps :
 
 **Prerequisites :**
@@ -78,7 +78,7 @@ docker pull marie678/streamlit-final-app:latest
 ```
 docker run -p 8501:8501 marie678/streamlit-final-app:latest
 ```
-3. Access the Application
+3. Access the Application \
 Once the container is running, open your web browser and go to
 ``
 http://localhost:8501
