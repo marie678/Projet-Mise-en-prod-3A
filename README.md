@@ -36,9 +36,25 @@ This project uses two datasets sourced from Kaggle. We combined them to create a
 
 ## Installation 
 
-The web app is built with streamlit. You can run it by cloning this repo, installing the necessary dependencues from the requirements.lock.txt file, navigating to the final_app/Streamlit_app folder and running streamlit run Welcome_page.py
-You can also pull the docker image of the app by running 
 
 ## Usage 
 
+The web app is built with streamlit. You can run it with the following steps :
+1. Cloning this repo
+```
+git clone 
+```
+2. Installing the necessary dependencies from the requirements.lock.txt file: 
+```
+pip install -r requirements.lock.txt
+```
+3. Navigating to the  `final_app/Streamlit_app ` folder
+```
+cd final_app/Streamlit_app
+```
+4. Running the main page of the app 
+```
+streamlit run Welcome_page.py
+```
+You can also pull the docker image of the app by running 
 ## Contributors
