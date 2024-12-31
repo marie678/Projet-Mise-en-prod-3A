@@ -18,10 +18,13 @@ def display_html_in_streamlit(html_file_path):
         st.error(f"An error occurred: {e}")
 
 # Example usage (adjust the path as needed):
-html_file_path = "Welcome page.html"
+html_file_path = "Welcome_Page.html"
+# # html_file_path = os.path.join(os.path.dirname(__file__), "Welcome page.html")
 
-# Check if the file exists before attempting to display it
-if os.path.exists(html_file_path):
-    display_html_in_streamlit(html_file_path)
-else:
-    st.error(f"The HTML file '{html_file_path}' does not exist. Please check the path.")
+display_html_in_streamlit(html_file_path)
+
+# # Check if the file exists before attempting to display it
+# if os.path.exists(html_file_path):
+#     display_html_in_streamlit(html_file_path)
+# else:
+#     st.error(f"The HTML file '{html_file_path}' does not exist. Please check the path.")

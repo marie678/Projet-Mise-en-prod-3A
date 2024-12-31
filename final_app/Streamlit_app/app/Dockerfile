@@ -1,16 +1,15 @@
 # app/Dockerfile
-#https://github.com/streamlit/streamlit-example.git .
 
 FROM python:3.11-slim
-WORKDIR /app/App/streamlit_app
+WORKDIR /app/Streamlit_app
 RUN apt-get update && apt-get install -y \
     build-essential \
     curl \
     software-properties-common \
-    git \
+    # git \
     && rm -rf /var/lib/apt/lists/*
 # RUN git clone https://github.com/nguibe/Projet-Infra-3A.git .
-COPY requirements.lock.txt /app/App/streamlit_app/requirements.lock.txt
+COPY requirements.lock.txt /app/Streamlit_app/requirements.lock.txt
 RUN pip install -r requirements.lock.txt
 COPY . /app
 # RUN pip install -r requirements.txt
