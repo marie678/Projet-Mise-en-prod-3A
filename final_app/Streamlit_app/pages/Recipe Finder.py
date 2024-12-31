@@ -4,7 +4,7 @@
 import streamlit as st
 import pandas as pd
 from app.config import SAMPLE_RECIPE_PATH
-from utils.functions import split_frame, search_recipes, handle_recipe_click, initialize_session_state, query_error
+from utils.functions import split_frame, search_recipes, handle_recipe_click, initialize_session_state, query_error, clean_query
 from streamlit_extras.add_vertical_space import add_vertical_space
 from collections import Counter
 from typing import Any
@@ -65,10 +65,11 @@ st.markdown(
 title_search_query = st.text_input("Search a recipe (by title or ingredient(s))", key="title_search_query")
 
 # clean query
+cleaned_query = clean_query(title_search_query)
+
 # error handling
-# ing = np.unique(np.concatenate(df['NER'].values))
 rec: list = list(df['title'].apply(lambda x : x.lower()).values)
-query_error(title_search_query.split(' '), ingredient_list, rec)
+query_error(cleaned_query.split(), ingredient_list, rec)
 
 with st.form("filter_form", clear_on_submit=False):
     st.write("Filters")
@@ -132,8 +133,8 @@ if st.session_state.search_df is not None:
     if title_search_query:
         research_summary += f', Title search : **{title_search_query}**'
         st.session_state.search_df = st.session_state.search_df[
-            st.session_state.search_df['title'].str.contains(title_search_query, case=False, na=False) |
-            st.session_state.search_df['NER'].apply(lambda x: all(word.lower().rstrip(string.punctuation) in [str(item).lower() for item in x] for word in title_search_query.split()))
+            st.session_state.search_df['title'].str.contains(cleaned_query, case=False, na=False) |
+            st.session_state.search_df['NER'].apply(lambda x: all(word.lower() in [str(item).lower() for item in x] for word in cleaned_query.split()))
             ]
         
     df_search = st.session_state.search_df

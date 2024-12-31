@@ -2,6 +2,8 @@ import pandas as pd
 import streamlit as st
 from jinja2 import Template
 from typing import Tuple, Any
+import inflect
+import string
 import numpy as np
 from spellchecker import SpellChecker
 
@@ -216,6 +218,21 @@ def display_html_in_streamlit(html_file_path, css_file_path, height, width):
     except Exception as e:
         st.error(f"An error occurred: {e}")
 
+def clean_query(query:str)-> str:
+    """Cleans the query passed by the user by removing ponctuation between ingredients 
+    and singularizing them.
+
+    Args:
+       query (str): The raw search query of the user.
+
+    Returns: string (query wwithout ponctuation and in singular)
+    """
+    inflect_engine = inflect.engine()
+    # Remove punctuation
+    rm_ponct = ''.join([char for char in query if char not in string.punctuation])
+    # Singularize words
+    cleaned_query = [inflect_engine.singular_noun(ingredient) or ingredient for ingredient in rm_ponct.split()]
+    return ' '.join(cleaned_query)
 
 def query_error(query: list, ing: list, rec: list): 
     """Handles query error by returning an error message when no recipe or ingredient are found, 
