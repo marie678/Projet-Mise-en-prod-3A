@@ -22,7 +22,7 @@
 
 ## `tests` Directory
 
-*   Contains the `.py` test file for the Streamlit application's functionality.
+*   Includes the test file (.py) for the Streamlit application.
 
 ## `utils` Directory
 
