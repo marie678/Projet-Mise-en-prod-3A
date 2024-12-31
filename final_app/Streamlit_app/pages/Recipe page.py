@@ -80,4 +80,4 @@ else :
                                         carbo = carbo, fiber = fiber)
 
     # Display the HTML in Streamlit app
-    components.html(rendered_html + js_script, height=2000, width = 1100, scrolling=True)
+    components.html(rendered_html + js_script, height=2300, width = 1100, scrolling=True)
