@@ -31,6 +31,7 @@ Our application is composed of 3 pages:
 
 
 ## Data sources
+This project uses two datasets sourced from Kaggle. Detailed information about the cleaning and preprocessing steps can be found in the [Preprocessing](https://github.com/nguibe/Projet-Infra-3A/tree/main/final_app/Preprocessing) folder.
 
 ## Installation 
 
