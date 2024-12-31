@@ -173,7 +173,7 @@ if st.session_state.search_df is not None:
             box-shadow: 2px 2px 5px rgba(0,0,0,0.1);">
             <h3 style="margin: 0; color: #333;">{recipe['title']}</h3>
             <p style="margin: 5px 0; color: #777;">
-                <b>Cook Time:</b> {recipe['TotalTime']} | 
+                <b>Total Time:</b> {recipe['TotalTime']} | 
                 <b>Rating:</b> {recipe['AggregatedRating']}
             </p>
             <p style="margin: 5px 0; color: #555;">
