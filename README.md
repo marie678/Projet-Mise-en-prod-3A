@@ -39,22 +39,45 @@ This project uses two datasets sourced from Kaggle. We combined them to create a
 
 ## Usage 
 
+### With python 
 The web app is built with streamlit. You can run it with the following steps :
 1. Cloning this repo
-```
-git clone 
-```
-2. Installing the necessary dependencies from the requirements.lock.txt file: 
-```
+``
+git clone https://github.com/nguibe/Projet-Infra-3A.git
+``
+2. Installing the necessary dependencies from the requirements.lock.txt file
+``
 pip install -r requirements.lock.txt
-```
+``
 3. Navigating to the  `final_app/Streamlit_app ` folder
-```
+``
 cd final_app/Streamlit_app
-```
+``
 4. Running the main page of the app 
-```
+``
 streamlit run Welcome_page.py
-```
-You can also pull the docker image of the app by running 
+``
+You can then navigate through the different pages within the app.
+
+### With Docker
+You can also run our app using the provided **Docker image** (*marie678/streamlit-final-app*) with the following steps :
+*Prerequisites*
+Ensure that Docker is downloaded and installed on your system, and that you have an active internet connection to pull the image.
+
+1. Pull the Docker Image
+``
+docker pull marie678/streamlit-final-app:latest
+``
+2. Run the Docker Container
+``
+docker run -p 8501:8501 marie678/streamlit-app:latest
+``
+3. Access the Application
+Once the container is running, open your web browser and go to
+``
+http://localhost:8501
+``
+
+
+
 ## Contributors
