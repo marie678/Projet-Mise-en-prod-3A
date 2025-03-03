@@ -4,14 +4,16 @@ Data cleaning functions and creation of the final dataset
 import re
 import ast
 from typing import List
+from loguru import logger
 from pathlib import Path
 import numpy as np
 import pandas as pd
 import inflect
 
-
 # Global instance of inflect.engine()
 inflect_engine = inflect.engine()
+# Configure Loguru logging
+logger.add("data_cleaning.log", rotation="10 MB", level="INFO", format="{time} - {level} - {message}")
 
 
 ## Utility functions
@@ -354,30 +356,51 @@ def main(data_path_nutrition: str, data_path_measurements: str, output_path: str
     Returns:
         pd.DataFrame: The final dataset after merging, preprocessing, and optional sampling.
     """
-    # Check if datasets exist
-    if not Path(data_path_nutrition).exists():
-        raise FileNotFoundError(f"Recipe nutrition dataset not found at {data_path_nutrition}")
-    if not Path(data_path_measurements).exists():
-        raise FileNotFoundError(f"Recipe measurements dataset not found at {data_path_measurements}")
+    try:
+        # Check if datasets exist
+        if not Path(data_path_nutrition).exists():
+            logger.error(f"Recipe nutrition dataset not found: {data_path_nutrition}")
+            raise FileNotFoundError(f"Recipe nutrition dataset not found: {data_path_nutrition}")
+        
+        if not Path(data_path_measurements).exists():
+            logger.error(f"Recipe measurements dataset not found: {data_path_measurements}")
+            raise FileNotFoundError(f"Recipe measurements dataset not found: {data_path_measurements}")
 
-    df_nutrition = load_nutrition_data(data_path_nutrition)
-    df_measurements = load_measurements_data(data_path_measurements)
-    df = merge_datasets(df_nutrition, df_measurements)
-    df = data_preprocessing(df)
-    if len(df) > 10000:
-        df = sample_df_10k(df)
-    if output_path:
-        df.to_parquet(output_path, index=False)
-        print(f"Processed dataset saved to {output_path}")
-    return df
+        logger.info("Loading datasets...")
+        df_nutrition = load_nutrition_data(data_path_nutrition)
+        df_measurements = load_measurements_data(data_path_measurements)
+        logger.info("Merging datasets...")
+        df = merge_datasets(df_nutrition, df_measurements)
+        if df is None or df.empty:
+            logger.error("Merged dataset is empty.")
+            raise ValueError("Merged dataset is empty.")
+        logger.info("Preprocessing data...")
+        df = data_preprocessing(df)
+        if len(df) > 10000:
+            logger.info("Sampling down to 10,000 rows...")
+            df = sample_df_10k(df)
+        if output_path:
+            df.to_parquet(output_path, index=False)
+            logger.success(f"Processed dataset saved to {output_path}")
+        return df
+
+    except Exception as e:
+        logger.exception("An error occurred while processing the dataset.")
+        raise
 
 
 
 if __name__ == "__main__":
+    try :
+        data_dir = Path(__file__).resolve().parent.parent / 'Data'
+        recipe_nutrition_path = data_dir / 'recipes.parquet'
+        recipe_measurements_path = data_dir / 'recipes_data.csv'
+        output_path = data_dir / 'sample_recipes_10k.parquet'
 
-    data_dir = Path(__file__).resolve().parent.parent / 'Data'
-    recipe_nutrition_path = data_dir / 'recipes.parquet'
-    recipe_measurements_path = data_dir / 'recipes_data.csv'
-    output_path = data_dir / 'sample_recipes_10k.parquet'
+        logger.info("Starting data processing pipeline...")
+        main(recipe_nutrition_path, recipe_measurements_path, output_path)
+        logger.success("Pipeline execution completed successfully.")
 
-    main(recipe_nutrition_path, recipe_measurements_path, output_path)
+    except Exception as e:
+        logger.error(f"Script execution failed: {e}")
+
