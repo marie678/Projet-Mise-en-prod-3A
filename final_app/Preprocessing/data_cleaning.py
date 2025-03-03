@@ -1,10 +1,13 @@
-import numpy as np
-import pandas as pd
+"""
+Data cleaning functions and creation of the final dataset
+"""
 import re
 import ast
-from typing import List, Union
-import inflect
+from typing import List
 from pathlib import Path
+import numpy as np
+import pandas as pd
+import inflect
 
 
 # Global instance of inflect.engine()
@@ -24,7 +27,7 @@ def iso_to_minutes(iso_duration: str) -> float:
     """
     hours = int(re.search(r'(\d+)H', iso_duration).group(1)) if 'H' in iso_duration else 0
     minutes = int(re.search(r'(\d+)M', iso_duration).group(1)) if 'M' in iso_duration else 0
-    return hours * 60 + minutes 
+    return hours * 60 + minutes
 
 def categorize_duration(total_minutes: float) -> str:
     """
@@ -40,7 +43,7 @@ def categorize_duration(total_minutes: float) -> str:
         str: the category string
     """
     return '< 30min' if total_minutes <= 30 else '< 1h' if total_minutes <= 60 else '> 1h'
-    
+
 def format_duration(duration: str) -> str:
     """
     Function to convert ISO 8601 durations to a more readable format
@@ -62,16 +65,19 @@ def format_duration(duration: str) -> str:
 
 def assign_category(row: pd.Series) -> str:
     """
-    Assigns a recipe category based on the values in the RecipeCategory, Keywords and title columns using predefined patterns
+    Assigns a recipe category based on the values in the RecipeCategory, Keywords and title columns
+    using predefined patterns
 
     Args:
         row (pd.Series): A row of the DataFrame containing the following columns:
             - RecipeCategory: A string representing the recipe category 
-            - Keywords: A list of keywords related to the recipe (e.g., ['Dessert', 'Oven', '< 4 Hours', 'Easy'])
+            - Keywords: A list of keywords related to the recipe 
+                        (e.g., ['Dessert', 'Oven', '< 4 Hours', 'Easy'])
             - title: A string representing the title of the recipe
 
     Returns:
-        str: The assigned category for the recipe, between 4 possibilities: 'Main Course', 'Breakfast', 'Dessert', 'Beverages'
+        str: The assigned category for the recipe, between 4 possibilities:
+                    'Main Course', 'Breakfast', 'Dessert', 'Beverages'
              If no match is found, returns 'Other'
     """
     patterns = {
@@ -84,7 +90,11 @@ def assign_category(row: pd.Series) -> str:
     for source in ['RecipeCategory', 'Keywords', 'title']:
         value = row[source]
         if value is not None and isinstance(value, (str, list)):
-            text = ' '.join([str(v) for v in value if v is not None]) if isinstance(value, list) else value
+            text = (
+                " ".join([str(v) for v in value if v is not None])
+                if isinstance(value, list)
+                else value
+            )
             for category, pattern in patterns.items():
                 if re.search(pattern, text.lower()):
                     return category
@@ -98,10 +108,14 @@ def to_singular(ingredients_list: List[str]) -> List[str]:
         ingredient_list (List[str]): A list of ingredient names
 
     Returns:
-        List[str]: A list of ingredient names where all plural words are converted to singular. Words that are already singular or unrecognized remain unchanged.
+        List[str]: A list of ingredient names where all plural words are converted to singular.
+                   Words that are already singular or unrecognized remain unchanged.
     """
     if isinstance(ingredients_list, list):
-        return [inflect_engine.singular_noun(ingredient) or ingredient for ingredient in ingredients_list]
+        return [
+            inflect_engine.singular_noun(ingredient) or ingredient
+            for ingredient in ingredients_list
+            ]
     return ingredients_list
 
 def is_non_vegetarian(ingredient_list: List[str]) -> bool:
@@ -120,13 +134,13 @@ def is_non_vegetarian(ingredient_list: List[str]) -> bool:
         'squid', 'octopus', 'calamari', 'oyster', 'mussel', 'clam', 'snail', 'seafood',
         'prosciutto', 'salami', 'pepperoni', 'pancetta', 'chorizo', 'andouille', 'pate', 
         'veal', 'venison', 'game', 'poultry', 'turkey', 'bison', 'boar', 
-        'fish', 'tuna', 'salmon', 'cod', 'haddock', 'halibut', 'tilapia', 'anchovy', 'anchovies',
+        'tuna', 'salmon', 'cod', 'haddock', 'halibut', 'tilapia', 'anchovy', 'anchovies',
     }
     for ingredient in ingredient_list:
         if any(keyword in str(ingredient).lower() for keyword in non_veg_keywords):
             return True
     return False
-    
+
 def find_world_cuisine(keywords: List[str]) -> str:
     """
     Identifies and returns the first matching world cuisine keyword from a given list of keywords.
@@ -138,10 +152,15 @@ def find_world_cuisine(keywords: List[str]) -> str:
         str: The name of the matched cuisine from a predefined list, or 'Unknown' if no match is found.
     """
     world_cuisines = [
-        'Asian', 'Indian', 'Chinese', 'Thai', 'Japanese', 'Hawaiian', 'Russian', 'Korean', 'Vietnamese', 'Indonesian', 'Malaysian', 'Pakistani', 'Cantonese', 'Nepalese', 'Cambodian', 'Mongolian', 'Filipino', 'Asia', 'New Zeland', 'Australian',
-        'Lebanese', 'Turkish', 'Palestinian', 'African', 'Egyptian', 'Nigerian', 'Sudanese', 'Ecuadorean', 'Moroccan', 'Ethiopian', 'Somalian',
-        'Mexican', 'U.S.', 'Caribbean', 'American', 'Hawaiian', 'Cuban', 'Venezuelan', 'Peruvian', 'Puerto Rican', 'Colombian', 'Chilean', 'Costa Rican', 'Guatemalan', 'Honduran', 'Brazilian', 
-        'European', 'Greek', 'German', 'Spanish', 'Portuguese', 'French', 'Scottish', 'Polish', 'Austrian', 'Hungarian', 'Danish', 'Turkish', 'Finnish', 'Dutch', 'Belgian', 'Norwegian', 'Welsh', 'Czech', 'Scandinavian', 'Icelandic'
+        'Asian', 'Indian', 'Chinese', 'Thai', 'Japanese', 'Hawaiian', 'Russian', 'Korean',
+        'Vietnamese', 'Indonesian', 'Malaysian', 'Pakistani', 'Cantonese', 'Nepalese', 'Cambodian',
+        'Mongolian', 'Filipino', 'Asia', 'New Zeland', 'Australian', 'Lebanese', 'Turkish',
+        'Palestinian', 'African', 'Egyptian', 'Nigerian', 'Sudanese', 'Ecuadorean', 'Moroccan',
+        'Ethiopian', 'Somalian', 'Mexican', 'U.S.', 'Caribbean', 'American', 'Hawaiian', 'Cuban',
+        'Venezuelan', 'Peruvian', 'Puerto Rican', 'Colombian', 'Chilean', 'Costa Rican',
+        'Guatemalan', 'Honduran', 'Brazilian', 'European', 'Greek', 'German', 'Spanish',
+        'Portuguese', 'French', 'Scottish', 'Polish', 'Austrian', 'Hungarian', 'Danish', 'Turkish',
+        'Finnish', 'Dutch', 'Belgian', 'Norwegian', 'Welsh', 'Czech', 'Scandinavian', 'Icelandic'
     ]
     keywords_lower = [str(k).lower() for k in keywords]
     for cuisine in world_cuisines:
@@ -151,9 +170,10 @@ def find_world_cuisine(keywords: List[str]) -> str:
 
 
 ## Dataset loading functions
-def load_nutrition_data(data_path: str) -> pd.DataFrame: 
+def load_nutrition_data(data_path: str) -> pd.DataFrame:
     """
-    Load and clean the recipe dataset with nutrition information. The dataset should be in the parquet format.
+    Load and clean the recipe dataset with nutrition information.
+    The dataset should be in the parquet format.
 
     Args:
         data_path (str): path to the recipe nutrition dataset in parquet format
@@ -170,13 +190,24 @@ def load_nutrition_data(data_path: str) -> pd.DataFrame:
     # Process array-like columns
     for col in ['Images', 'Keywords', 'RecipeInstructions']:
         df[col] = df[col].apply(
-            lambda x: list(x) if isinstance(x, (list, np.ndarray)) and not all(item is None for item in x) else np.nan
-        )   
-    # Extract the first link in the 'Images' column 
-    df['Images'] = df['Images'].apply(lambda x: x[0] if isinstance(x, list) and len(x) > 0 else np.nan)
+            lambda x: (
+                list(x)
+                if isinstance(x, (list, np.ndarray))
+                and not all(item is None for item in x)
+                else np.nan
+            )
+        )
+    # Extract the first link in the 'Images' column
+    df['Images'] = df['Images'].apply(
+        lambda x: x[0] if isinstance(x, list) and len(x) > 0 else np.nan
+        )
     # Clean recipe instructions
     df['RecipeInstructions'] = df['RecipeInstructions'].apply(
-        lambda x: [instr.strip() + '.' for instr in ' '.join(x).split('.') if instr.strip()] if isinstance(x, list) else np.nan
+        lambda x: (
+            [instr.strip() + '.' for instr in ' '.join(x).split('.') if instr.strip()]
+            if isinstance(x, list)
+            else np.nan
+        )
     )
 
     df['CookTime'] = df['CookTime'].fillna('PT0M')
@@ -184,7 +215,7 @@ def load_nutrition_data(data_path: str) -> pd.DataFrame:
     df[['ReviewCount', 'RecipeServings']] = df[['ReviewCount', 'RecipeServings']].astype(int)
     return df
 
-def load_measurements_data(data_path: str) -> pd.DataFrame: 
+def load_measurements_data(data_path: str) -> pd.DataFrame:
     """
     Load and clean the recipe measurements dataset
 
@@ -200,7 +231,7 @@ def load_measurements_data(data_path: str) -> pd.DataFrame:
     for col in ['ingredients', 'directions', 'NER']:
         df[col] = df[col].apply(
             lambda x: ast.literal_eval(x) if isinstance(x, str) else np.nan
-        )  
+        )
     df = df.dropna().reset_index(drop=True)
     return df
 
@@ -219,11 +250,17 @@ def merge_datasets(df_nutrition: pd.DataFrame, df_measurements: pd.DataFrame) ->
 
     # Keep the identical recipes in the two datasets based on the instructions
     filtered_df = df_merged[
-        df_merged['RecipeInstructions'].apply(lambda x: x[0] if isinstance(x, list) and len(x) > 0 else None) ==
-        df_merged['directions'].apply(lambda x: x[0] if isinstance(x, list) and len(x) > 0 else None)
+        df_merged['RecipeInstructions'].apply(
+            lambda x: x[0] if isinstance(x, list) and len(x) > 0 else None
+            )
+            == df_merged['directions'].apply(
+                lambda x: x[0] if isinstance(x, list) and len(x) > 0 else None
+                )
     ].reset_index(drop=True)
 
-    df = filtered_df.drop(columns=['Name', 'RecipeIngredientQuantities', 'RecipeIngredientParts', 'RecipeInstructions'])
+    df = filtered_df.drop(
+        columns=['Name', 'RecipeIngredientQuantities', 'RecipeIngredientParts', 'RecipeInstructions']
+        )
     return df
 
 def data_preprocessing(df: pd.DataFrame) -> pd.DataFrame:
@@ -231,7 +268,7 @@ def data_preprocessing(df: pd.DataFrame) -> pd.DataFrame:
     Process the merged dataset
 
     Args:
-        df (pd.DataFrame): the merged Dataframe 
+        df (pd.DataFrame): the merged Dataframe
 
     Returns:
         pd.DataFrame: cleaned and processed DataFrame
@@ -246,8 +283,8 @@ def data_preprocessing(df: pd.DataFrame) -> pd.DataFrame:
     df['TotalTime_cat'] = df['TotalTime_minutes'].apply(categorize_duration)
     df['RecipeType'] = df.apply(assign_category, axis=1)
     df = df[df['RecipeType'] != 'Other'].reset_index(drop=True)
-    df['Beginner_Friendly'] = df['Keywords'].apply(lambda x: 'Easy' in x) 
-    df['Vegetarian_Friendly'] = ~df['ingredients'].apply(is_non_vegetarian) 
+    df['Beginner_Friendly'] = df['Keywords'].apply(lambda x: 'Easy' in x)
+    df['Vegetarian_Friendly'] = ~df['ingredients'].apply(is_non_vegetarian)
     df['World_Cuisine'] = df['Keywords'].apply(find_world_cuisine)
 
     # Convert durations to a more readable format
@@ -262,7 +299,9 @@ def data_preprocessing(df: pd.DataFrame) -> pd.DataFrame:
 
 def sample_df_10k(df: pd.DataFrame) -> pd.DataFrame:
     """
-    Samples 10,000 rows from the given DataFrame while following a predefined distribution of `RecipeType` and prioritizing rows where the `World_Cuisine` column has values other than 'Unknown'.
+    Samples 10,000 rows from the given DataFrame while following a predefined distribution of
+    `RecipeType` and prioritizing rows where the `World_Cuisine` column has values other than
+    'Unknown'.
 
     Args:
         df (pd.Dataframe): Input DataFrame containing at least the following columns:
@@ -282,9 +321,8 @@ def sample_df_10k(df: pd.DataFrame) -> pd.DataFrame:
 
     for recipe_type, sample_size in sample_distribution.items():
         # Filter rows by RecipeType
-        df_recipe_type = df[df['RecipeType'] == recipe_type]    
-        if len(df_recipe_type) < sample_size:
-            sample_size = len(df_recipe_type) 
+        df_recipe_type = df[df['RecipeType'] == recipe_type]
+        sample_size = min(sample_size, len(df_recipe_type))
         # Prioritize rows where 'Cuisine' is not 'Unknown'
         df_cuisine = df_recipe_type[df_recipe_type['World_Cuisine'] != 'Unknown']
         cuisine_sample_size = min(len(df_cuisine), sample_size)
@@ -292,7 +330,9 @@ def sample_df_10k(df: pd.DataFrame) -> pd.DataFrame:
         # Sample remaining rows if needed
         remaining_sample_size = sample_size - cuisine_sample_size
         df_non_cuisine = df_recipe_type.drop(df_cuisine.index)
-        sampled_remaining = df_non_cuisine.sample(n=min(len(df_non_cuisine), remaining_sample_size), random_state=42)
+        sampled_remaining = df_non_cuisine.sample(
+            n=min(len(df_non_cuisine), remaining_sample_size), random_state=42
+            )
         # Combine prioritized and remaining samples for this category
         sampled_dataframes.append(pd.concat([sampled_cuisine, sampled_remaining]))
 
@@ -308,7 +348,8 @@ def main(data_path_nutrition: str, data_path_measurements: str, output_path: str
     Args:
         data_path_nutrition (str): Path to the recipe nutrition dataset file (parquet format).
         data_path_measurements (str): Path to the recipe measurements dataset file (csv format).
-        output_path (str, optional): Path where to save the processed dataset. If not provided, the dataset will not be saved.
+        output_path (str, optional): Path where to save the processed dataset. If not provided,
+                                     the dataset will not be saved.
 
     Returns:
         pd.DataFrame: The final dataset after merging, preprocessing, and optional sampling.
@@ -318,7 +359,7 @@ def main(data_path_nutrition: str, data_path_measurements: str, output_path: str
         raise FileNotFoundError(f"Recipe nutrition dataset not found at {data_path_nutrition}")
     if not Path(data_path_measurements).exists():
         raise FileNotFoundError(f"Recipe measurements dataset not found at {data_path_measurements}")
-    
+
     df_nutrition = load_nutrition_data(data_path_nutrition)
     df_measurements = load_measurements_data(data_path_measurements)
     df = merge_datasets(df_nutrition, df_measurements)
