@@ -4,8 +4,8 @@ Data cleaning functions and creation of the final dataset
 import re
 import ast
 from typing import List
-from loguru import logger
 from pathlib import Path
+from loguru import logger
 import numpy as np
 import pandas as pd
 import inflect
@@ -361,7 +361,7 @@ def main(data_path_nutrition: str, data_path_measurements: str, output_path: str
         if not Path(data_path_nutrition).exists():
             logger.error(f"Recipe nutrition dataset not found: {data_path_nutrition}")
             raise FileNotFoundError(f"Recipe nutrition dataset not found: {data_path_nutrition}")
-        
+
         if not Path(data_path_measurements).exists():
             logger.error(f"Recipe measurements dataset not found: {data_path_measurements}")
             raise FileNotFoundError(f"Recipe measurements dataset not found: {data_path_measurements}")
@@ -385,7 +385,7 @@ def main(data_path_nutrition: str, data_path_measurements: str, output_path: str
         return df
 
     except Exception as e:
-        logger.exception("An error occurred while processing the dataset.")
+        logger.exception(f"An error occurred while processing the dataset: {e}")
         raise
 
 
@@ -403,4 +403,3 @@ if __name__ == "__main__":
 
     except Exception as e:
         logger.error(f"Script execution failed: {e}")
-
