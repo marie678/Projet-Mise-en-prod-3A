@@ -2,7 +2,7 @@
 
 ## Project overview 
 
-This project is part of the "Infrastructure and software systems" course. The goal of this project is to develop a Streamlit application that helps users find recipes based on the ingredients they have in their fridge. By entering available ingredients and specifying preferences like preparation time, or recipe type, users can receive several recipe suggestions. 
+This project is part of the "Mise en production des projets de Data Science" course. Based on an existing project, the goal is to develop an interactive application that addresses a business problem, and then deploy it on a production infrastructure. We decided to use a previous project we worked on for our "Infrastructures and software systems" class, in which the goal was to develop a Streamlit application that helps users find recipes based on the ingredients they have in their fridge, and to deploy this streamlit application into production. 
 
 ## Features
 
