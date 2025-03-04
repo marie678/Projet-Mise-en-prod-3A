@@ -1,10 +1,10 @@
-############################################ final results page ###########################################
-# display of the recipe content with an html file
+"""
+code for the final results page. Displays the recipe contents with an html file.
+"""
 
 import streamlit as st
-from streamlit_extras.add_vertical_space import add_vertical_space
-from jinja2 import Template
 import streamlit.components.v1 as components
+from jinja2 import Template
 
 st.set_page_config(layout="wide", page_title ='Recipe page', initial_sidebar_state='collapsed')
 # Display header
@@ -54,23 +54,23 @@ else :
     fiber = st.session_state.fiber
     sugar = st.session_state.sugar
 
-    
     with open("pages/templatev1.4.1.html", "r", encoding='utf-8') as template_file:
         template_content = template_file.read()
         jinja_template = Template(template_content)
-    
+
     # Upload the CSS file
     with open("src/style_resv3.css") as f:
         css = f.read()
-    
+
     # Upload the javascript file
     with open("pages/scripts.js", encoding="utf-8") as js_file:
         js_content = js_file.read()
 
-    js_script = f"<script>{js_content}</script>"
-            
+    JS_SCRIPT = f"<script>{js_content}</script>"
+
     # Render the template with dynamic data
-    rendered_html = jinja_template.render(css = css, title=recipe_title, author = author, servings = servings,
+    rendered_html = jinja_template.render(css = css, title=recipe_title, author = author,
+                                        servings = servings,
                                         rating = rating, vote = vote,
                                         prep_time = prep_time, c_time = c_time, tot_time = tot_time,
                                         items=ingredients, dir = directions, keywords = keywords,
@@ -80,4 +80,4 @@ else :
                                         carbo = carbo, fiber = fiber)
 
     # Display the HTML in Streamlit app
-    components.html(rendered_html + js_script, height=2300, width = 1100, scrolling=True)
+    components.html(rendered_html + JS_SCRIPT, height=2300, width=1100, scrolling=True)

@@ -1,10 +1,13 @@
+"""
+module that holds all streamlit helper functions for the final app
+"""
+
+from typing import Tuple, Any
+import string
 import pandas as pd
 import streamlit as st
 from jinja2 import Template
-from typing import Tuple, Any
 import inflect
-import string
-import numpy as np
 from spellchecker import SpellChecker
 
 def split_frame(input_df: pd.DataFrame, rows: int) -> list[pd.DataFrame]:
@@ -24,8 +27,8 @@ def split_frame(input_df: pd.DataFrame, rows: int) -> list[pd.DataFrame]:
 
 def handle_recipe_click(page: pd.DataFrame, index: int) -> None:
     """
-    Updates Streamlit session state variables with recipe details -for use across pages- from the given DataFrame
-    row and navigates to the recipe page.
+    Updates Streamlit session state variables with recipe details -for use across pages- from the 
+    given DataFrame row and navigates to the recipe page.
 
     Parameters:
     ----------
@@ -94,7 +97,9 @@ def handle_recipe_click(page: pd.DataFrame, index: int) -> None:
         st.switch_page("./pages/Recipe page.py")
 
 @st.cache_data(show_spinner=True)
-def search_recipes(original_df: pd.DataFrame, filters:dict[str, Any], dict_columns: dict[str, str]) -> Tuple[pd.DataFrame, int]:
+def search_recipes(
+    original_df: pd.DataFrame, filters:dict[str, Any], dict_columns: dict[str, str]
+    ) -> Tuple[pd.DataFrame, int]:
     """
     Filters a DataFrame of recipes based on specific criterias and returns the filtered results.
 
@@ -103,8 +108,8 @@ def search_recipes(original_df: pd.DataFrame, filters:dict[str, Any], dict_colum
     original_df : pd.DataFrame
         The original df containing all the recipes + their info
     filters : dict
-        Dictionary of filter criterias, where keys are filter types ('ingredients', 'recipe_durations_cat', ...) 
-        and values are the corresponding filter values
+        Dictionary of filter criterias, where keys are filter types ('ingredients',
+        'recipe_durations_cat', ...) and values are the corresponding filter values
     dict_columns : dict
         Mapping of filter keys to the corresponding columns in the original df
 
@@ -145,11 +150,11 @@ def search_recipes(original_df: pd.DataFrame, filters:dict[str, Any], dict_colum
         filtered_df = filtered_df[filtered_df[col] == (value)]
     if 'beginner' in filters.keys():
         col, value = dict_columns['beginner'], filters['beginner']
-        filtered_df = filtered_df[filtered_df[col] == (value)]      
+        filtered_df = filtered_df[filtered_df[col] == (value)]
     if 'provenance' in filters.keys():
         col, value = dict_columns['provenance'], filters['provenance']
         filtered_df = filtered_df[filtered_df[col].apply(lambda x: all(element in x for element in value))]
-    
+
     total_nr_recipes : int = len(filtered_df)
 
     return filtered_df, total_nr_recipes
@@ -234,7 +239,7 @@ def clean_query(query:str)-> str:
     cleaned_query = [inflect_engine.singular_noun(ingredient) or ingredient for ingredient in rm_ponct.split()]
     return ' '.join(cleaned_query)
 
-def query_error(query: list, ing: list, rec: list): 
+def query_error(query: list, ing: list, rec: list):
     """Handles query error by returning an error message when no recipe or ingredient are found, 
     either the word might be missplelled and, when corrected, recognized or the word is unknown.
     If the query is correct, returns a message to inform that recipes were found.
@@ -249,7 +254,8 @@ def query_error(query: list, ing: list, rec: list):
 
     # Check if all words in the query already match valid ingredients or recipes
     if all(word in ing or any(word in r for r in rec) for word in query):
-        return st.markdown("Matching recipes or ingredients found! Fill out desired filters and press *find a recipe*")
+        return st.markdown("Matching recipes or ingredients found! Fill out desired filters and \
+                           press *find a recipe*")
 
     # else attempt a correction
     for word in query:
@@ -261,5 +267,5 @@ def query_error(query: list, ing: list, rec: list):
     # Respond to the user
     if not response:
         return st.write('No recipes or ingredients found. Try changing your query.')
-    else:
-        return st.write(f'Did you mean {", ".join(response)} ?')
+
+    return st.write(f'Did you mean {", ".join(response)} ?')
