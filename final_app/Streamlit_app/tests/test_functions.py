@@ -1,13 +1,17 @@
 ''' Test functions.py'''
 
-import pytest
 import os
 import sys
+
+import pytest
+
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "utils")))
-from functions import *
-import pandas as pd
 import time
+
+import pandas as pd
+from functions import *
 from streamlit.testing.v1 import AppTest
+
 # from unittest.mock import patch, MagicMock
 
 

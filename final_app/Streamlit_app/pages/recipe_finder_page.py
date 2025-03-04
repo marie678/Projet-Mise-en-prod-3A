@@ -5,17 +5,15 @@ as well as the search results.
 
 from collections import Counter
 from typing import Any, List
-import streamlit as st
+
 import pandas as pd
-from app.config import SAMPLE_RECIPE_PATH
-from utils.functions import (split_frame,
-                             search_recipes,
-                             handle_recipe_click,
-                             initialize_session_state,
-                             query_error,
-                             clean_query
-                            )
+import streamlit as st
 from streamlit_extras.add_vertical_space import add_vertical_space
+
+from app.config import SAMPLE_RECIPE_PATH
+from utils.functions import (clean_query, handle_recipe_click,
+                             initialize_session_state, query_error,
+                             search_recipes, split_frame)
 
 # configuration parameters
 st.set_page_config(layout="wide", page_title ='Recipe Finder', initial_sidebar_state='collapsed')

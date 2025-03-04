@@ -2,13 +2,15 @@
 module that holds all streamlit helper functions for the final app
 """
 
-from typing import Tuple, Any
 import string
+from typing import Any, Tuple
+
+import inflect
 import pandas as pd
 import streamlit as st
 from jinja2 import Template
-import inflect
 from spellchecker import SpellChecker
+
 
 def split_frame(input_df: pd.DataFrame, rows: int) -> list[pd.DataFrame]:
     """

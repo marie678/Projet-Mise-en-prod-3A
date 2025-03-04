@@ -1,14 +1,15 @@
 """
 Data cleaning functions and creation of the final dataset
 """
-import re
 import ast
-from typing import List
+import re
 from pathlib import Path
-from loguru import logger
+from typing import List
+
+import inflect
 import numpy as np
 import pandas as pd
-import inflect
+from loguru import logger
 
 # Global instance of inflect.engine()
 inflect_engine = inflect.engine()
