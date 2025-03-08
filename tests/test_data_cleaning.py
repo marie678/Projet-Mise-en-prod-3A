@@ -1,5 +1,5 @@
 import pytest
-from data_cleaning import *
+from src.data_cleaning import *
 
 ### Tests for utility functions ###
 def test_iso_to_minutes():

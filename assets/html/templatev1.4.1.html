@@ -12,7 +12,7 @@
     as dynamic data from python file in the <style> part due to streamlit restrictions).
     - This file is linked to a and 'scripts.js' for functionality.
     Note that the link is done in the python file due to streamlit restrictions.
-    - It is called by the appv1.4.py python file.
+    - It is called by the main.py python file.
     - The recipe data is dynamically updated through the python script calling it.
     (We use double curly brackets to call those parameters as we use Jinja2 in streamlit)
     
@@ -62,7 +62,7 @@
             <button id="printButton">&#128424;&#65039;</button>
         </div>
 
-     
+
         <!-- Description -->
         <div class="description">
             <p>{{ desc }}</p>
@@ -99,7 +99,7 @@
 
         <!-- Additional facts about nutritions-->
         <button id="showTableButton">Nutrition Facts</button>
-    
+
         <table id="myTable">
             <thead>
                 <tr>
@@ -128,7 +128,6 @@
                 </tr>
             </tbody>
         </table>
-        
 
 </body>
 </html>

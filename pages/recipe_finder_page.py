@@ -10,8 +10,8 @@ import pandas as pd
 import streamlit as st
 from streamlit_extras.add_vertical_space import add_vertical_space
 
-from app.config import SAMPLE_RECIPE_PATH
-from utils.functions import (clean_query, handle_recipe_click,
+from utils.config import SAMPLE_RECIPE_PATH
+from src.functions import (clean_query, handle_recipe_click,
                              initialize_session_state, query_error,
                              search_recipes, split_frame)
 

@@ -54,16 +54,16 @@ else :
     fiber = st.session_state.fiber
     sugar = st.session_state.sugar
 
-    with open("pages/templatev1.4.1.html", "r", encoding='utf-8') as template_file:
+    with open("assets/html/templatev1.4.1.html", "r", encoding='utf-8') as template_file:
         template_content = template_file.read()
         jinja_template = Template(template_content)
 
     # Upload the CSS file
-    with open("src/style_resv3.css") as f:
+    with open("assets/css/style_resv3.css") as f:
         css = f.read()
 
     # Upload the javascript file
-    with open("pages/scripts.js", encoding="utf-8") as js_file:
+    with open("assets/js/scripts.js", encoding="utf-8") as js_file:
         js_content = js_file.read()
 
     JS_SCRIPT = f"<script>{js_content}</script>"

@@ -1,6 +1,6 @@
 // ----------------------------------------------------
 // File: scripts.js
-// Description: JavaScript file creating functions to be used in the final result html page (templatev1.4.0.html).
+// Description: JavaScript file creating functions to be used in the final result html page (templatev1.4.1.html).
 // They enable interactional display of table or print to pdf functionality 
 // (ensuring the pdf is rendered correctly with hidden table and without interactive butons).
 
