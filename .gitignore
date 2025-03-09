@@ -163,3 +163,8 @@ cython_debug/
 
 # macOS system files
 .DS_Store
+
+# data
+.parquet
+.csv
+data/*
