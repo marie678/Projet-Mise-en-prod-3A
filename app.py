@@ -6,7 +6,7 @@ It consits in an image tutorial and a usage example to guide our users, embeded 
 
 import os
 import streamlit as st
-from src.functions import display_html_in_streamlit
+from src.recipe_finder_functions import display_html_in_streamlit
 
 # Add a title to the page_title
 st.set_page_config(layout="wide", page_title ='FRIDGE & COOK', initial_sidebar_state='collapsed')

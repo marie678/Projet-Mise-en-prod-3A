@@ -11,9 +11,11 @@ import streamlit as st
 from streamlit_extras.add_vertical_space import add_vertical_space
 
 from utils.config import SAMPLE_RECIPE_PATH
-from src.functions import (clean_query, handle_recipe_click,
-                             initialize_session_state, query_error,
-                             search_recipes, split_frame)
+from src.recipe_finder_functions import (handle_recipe_click,
+                           initialize_session_state,
+                           search_recipes,
+                           split_frame)
+from src.query_helpers import clean_query, query_error
 
 # configuration parameters
 st.set_page_config(layout="wide", page_title ='Recipe Finder', initial_sidebar_state='collapsed')
