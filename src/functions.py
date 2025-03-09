@@ -96,7 +96,7 @@ def handle_recipe_click(page: pd.DataFrame, index: int) -> None:
     st.session_state.fiber = page.iloc[index]['FiberContent']
     st.session_state.sugar = page.iloc[index]['SugarContent']
     with st.spinner() :
-        st.switch_page("./pages/Recipe page.py")
+        st.switch_page("./pages/recipe_page.py")
 
 @st.cache_data(show_spinner=True)
 def search_recipes(
@@ -221,7 +221,7 @@ def display_html_in_streamlit(html_file_path, css_file_path, height, width):
         rendered_html = jinja_template.render(css = css)
         st.components.v1.html(rendered_html, height = height, width = width, scrolling=True)
     except FileNotFoundError:
-        st.error(f"Error: HTML file not found at {html_file_path}")
+        st.error(f"Error: HTML or CSS file not found at {html_file_path}")
     except Exception as e:
         st.error(f"An error occurred: {e}")
 

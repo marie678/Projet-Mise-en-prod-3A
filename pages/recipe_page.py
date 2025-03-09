@@ -54,6 +54,9 @@ else :
     fiber = st.session_state.fiber
     sugar = st.session_state.sugar
 
+    if st.button("🔎 Back to Recipe Finder"):
+        st.switch_page("pages/recipe_finder_page.py")
+
     with open("assets/html/templatev1.4.1.html", "r", encoding='utf-8') as template_file:
         template_content = template_file.read()
         jinja_template = Template(template_content)

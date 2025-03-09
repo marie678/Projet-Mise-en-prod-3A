@@ -13,7 +13,7 @@ st.set_page_config(layout="wide", page_title ='FRIDGE & COOK', initial_sidebar_s
 
 # Load Welcome page.html with the corresponding styling of the page
 HTML_FILE_PATH = "assets/html/Welcome_Page.html"
-CSS_FILE_PATH = "assets.css/style_welcome.css"
+CSS_FILE_PATH = "assets/css/style_welcome.css"
 
 # Check if the file exists before attempting to display it
 if os.path.exists(HTML_FILE_PATH):
