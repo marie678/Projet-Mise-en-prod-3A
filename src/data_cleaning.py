@@ -406,7 +406,6 @@ if __name__ == "__main__":
             client_kwargs={"endpoint_url": "https://minio.lab.sspcloud.fr"}
             )
         DATA_DIR = 's3://mmeyer/projet-mise-en-prod/data/raw'
-        # data_dir = Path(__file__).resolve().parent.parent / 'Data'
 
         recipe_nutrition_path = os.path.join(DATA_DIR, 'recipes.parquet').replace("\\", "/")
         recipe_measurements_path = os.path.join(DATA_DIR, 'recipes_data.csv').replace("\\", "/")

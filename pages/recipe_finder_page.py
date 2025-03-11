@@ -11,16 +11,20 @@ import streamlit as st
 from streamlit_extras.add_vertical_space import add_vertical_space
 
 from utils.config import SAMPLE_RECIPE_PATH
-from src.recipe_finder_functions import (handle_recipe_click,
-                           initialize_session_state,
-                           search_recipes,
-                           split_frame)
+from src.st_session_functions import handle_recipe_click, initialize_session_state
+from src.recipe_finder_functions import search_recipes, split_frame
 from src.query_helpers import clean_query, query_error
 
 # configuration parameters
 st.set_page_config(layout="wide", page_title ='Recipe Finder', initial_sidebar_state='collapsed')
 # import of the cleaned and formated dataset of 10k recipes :
 df: pd.DataFrame = pd.read_parquet(SAMPLE_RECIPE_PATH)
+
+# idee : mettre ici if data directory vide / non existant : lancer data_cleaning module depuis ici
+# avec les loggers pour le suivi et afficher un message / loading dans st pour dire que ça prend du
+# temps mais que c'est qu'une fois.
+# mais est-ce que ça va marcher après en docker / ihm ? à voir
+
 
 ####################################### FILTERS INITIALIZATION #####################################
 
@@ -214,3 +218,6 @@ if st.session_state.search_df is not None:
             help=f"View details for {recipe['title']}"
         ):
             handle_recipe_click(page, i)
+
+if st.button("🏠 Home page"):
+    st.switch_page("app.py")

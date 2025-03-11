@@ -54,8 +54,11 @@ else :
     fiber = st.session_state.fiber
     sugar = st.session_state.sugar
 
-    if st.button("🔎 Back to Recipe Finder"):
+    col1, col2, _ = st.columns([1, 1, 3])
+    if col1.button("🔎 Back to Recipe Finder"):
         st.switch_page("pages/recipe_finder_page.py")
+    if col2.button("🏠 Home page"):
+        st.switch_page("app.py")
 
     with open("assets/html/templatev1.4.1.html", "r", encoding='utf-8') as template_file:
         template_content = template_file.read()
