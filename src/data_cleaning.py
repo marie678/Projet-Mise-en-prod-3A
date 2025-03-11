@@ -5,7 +5,8 @@ import ast
 import re
 from pathlib import Path
 from typing import List
-
+import os
+import s3fs
 import inflect
 import numpy as np
 import pandas as pd
@@ -84,7 +85,9 @@ def assign_category(row: pd.Series) -> str:
              If no match is found, returns 'Other'
     """
     patterns = {
-        'Main Course': r'lunch|meal|meat|chicken|beef|pork|steak|turkey|duck|fish|salmon|lamb|crab|shrimp|lobster|tuna|vegetable|potato|rice|noodle|pasta|penne|spaghetti|macaroni|linguine|pizza|quiche|lentil|tofu|onion|soup|stew|dressing',
+        'Main Course': r'lunch|meal|meat|chicken|beef|pork|steak|turkey|duck|fish|salmon|lamb|crab\
+            |shrimp|lobster|tuna|vegetable|potato|rice|noodle|pasta|penne|spaghetti|macaroni|\
+                linguine|pizza|quiche|lentil|tofu|onion|soup|stew|dressing',
         'Breakfast': r'breakfast',
         'Dessert': r'dessert|cake|cookie|brownie|muffin|biscuit|babka|sweet|candy|sugar|banana',
         'Beverages': r'beverage|cocktail|smoothie|lemonade|coffee',
@@ -173,18 +176,19 @@ def find_world_cuisine(keywords: List[str]) -> str:
 
 
 ## Dataset loading functions
-def load_nutrition_data(data_path: str) -> pd.DataFrame:
+def load_nutrition_data(data_path: str, fs: s3fs.S3FileSystem) -> pd.DataFrame:
     """
     Load and clean the recipe dataset with nutrition information.
     The dataset should be in the parquet format.
 
     Args:
         data_path (str): path to the recipe nutrition dataset in parquet format
+        fs (s3fs.S3FileSystem): File system object for remote access (S3/MinIO)
 
     Returns:
         pd.DataFrame: cleaned dataset
     """
-    df = pd.read_parquet(data_path)
+    df = pd.read_parquet(data_path, filesystem=fs)
     df = df.drop(columns=['RecipeId', 'AuthorId', 'DatePublished', 'RecipeYield'])
     df = df.drop_duplicates(subset=['Name','AuthorName'])
     # Filter out outliers
@@ -218,17 +222,19 @@ def load_nutrition_data(data_path: str) -> pd.DataFrame:
     df[['ReviewCount', 'RecipeServings']] = df[['ReviewCount', 'RecipeServings']].astype(int)
     return df
 
-def load_measurements_data(data_path: str) -> pd.DataFrame:
+def load_measurements_data(data_path: str, fs: s3fs.S3FileSystem) -> pd.DataFrame:
     """
     Load and clean the recipe measurements dataset
 
     Args:
         data_path (str): path to the recipe dataset in csv format
+        fs (s3fs.S3FileSystem): File system object for remote access (S3/MinIO)
 
     Returns:
         pd.DataFrame: cleaned dataset
     """
-    df = pd.read_csv(data_path)
+    with fs.open(data_path) as f:
+        df = pd.read_csv(f)
     df = df[['title', 'ingredients', 'directions', 'link', 'NER']]
     df = df.drop_duplicates(subset=['title', 'directions'])
     for col in ['ingredients', 'directions', 'NER']:
@@ -344,11 +350,15 @@ def sample_df_10k(df: pd.DataFrame) -> pd.DataFrame:
     sampled_df = sampled_df.sample(frac=1, random_state=42).reset_index(drop=True)
     return sampled_df
 
-def main(data_path_nutrition: str, data_path_measurements: str, output_path: str = None) -> None:
+def main(fs: s3fs.S3FileSystem,
+         data_path_nutrition: str,
+         data_path_measurements: str,
+         output_path: str = None) -> None:
     """
     Main function to process and return the final dataset.
     
     Args:
+        fs (s3fs.S3FileSystem): File system object for remote access (S3/MinIO)
         data_path_nutrition (str): Path to the recipe nutrition dataset file (parquet format).
         data_path_measurements (str): Path to the recipe measurements dataset file (csv format).
         output_path (str, optional): Path where to save the processed dataset. If not provided,
@@ -358,18 +368,17 @@ def main(data_path_nutrition: str, data_path_measurements: str, output_path: str
         pd.DataFrame: The final dataset after merging, preprocessing, and optional sampling.
     """
     try:
-        # Check if datasets exist
-        if not Path(data_path_nutrition).exists():
-            logger.error(f"Recipe nutrition dataset not found: {data_path_nutrition}")
-            raise FileNotFoundError(f"Recipe nutrition dataset not found: {data_path_nutrition}")
-
-        if not Path(data_path_measurements).exists():
-            logger.error(f"Recipe measurements dataset not found: {data_path_measurements}")
-            raise FileNotFoundError(f"Recipe measurements dataset not found: {data_path_measurements}")
+# # Check if datasets exist
+# if not Path(data_path_nutrition).exists():
+#     logger.error(f"Recipe nutrition dataset not found: {data_path_nutrition}")
+#     raise FileNotFoundError(f"Recipe nutrition dataset not found: {data_path_nutrition}")
+# if not Path(data_path_measurements).exists():
+#     logger.error(f"Recipe measurements dataset not found: {data_path_measurements}")
+#     raise FileNotFoundError(f"Recipe measurements dataset not found: {data_path_measurements}")
 
         logger.info("Loading datasets...")
-        df_nutrition = load_nutrition_data(data_path_nutrition)
-        df_measurements = load_measurements_data(data_path_measurements)
+        df_nutrition = load_nutrition_data(data_path_nutrition, fs)
+        df_measurements = load_measurements_data(data_path_measurements, fs)
         logger.info("Merging datasets...")
         df = merge_datasets(df_nutrition, df_measurements)
         if df is None or df.empty:
@@ -390,16 +399,22 @@ def main(data_path_nutrition: str, data_path_measurements: str, output_path: str
         raise
 
 
-
 if __name__ == "__main__":
     try :
-        data_dir = Path(__file__).resolve().parent.parent / 'Data'
-        recipe_nutrition_path = data_dir / 'recipes.parquet'
-        recipe_measurements_path = data_dir / 'recipes_data.csv'
-        output_path = data_dir / 'sample_recipes_10k.parquet'
+        # Initialize the s3fs filesystem with the appropriate endpoint for MinIO
+        filesystem = s3fs.S3FileSystem(
+            client_kwargs={"endpoint_url": "https://minio.lab.sspcloud.fr"}
+            )
+        DATA_DIR = 's3://mmeyer/projet-mise-en-prod/data/raw'
+        # data_dir = Path(__file__).resolve().parent.parent / 'Data'
+
+        recipe_nutrition_path = os.path.join(DATA_DIR, 'recipes.parquet').replace("\\", "/")
+        recipe_measurements_path = os.path.join(DATA_DIR, 'recipes_data.csv').replace("\\", "/")
+
+        output_path = Path(__file__).resolve().parent.parent / 'Data/sample_recipes_10k2.parquet'
 
         logger.info("Starting data processing pipeline...")
-        main(recipe_nutrition_path, recipe_measurements_path, output_path)
+        main(filesystem, recipe_nutrition_path, recipe_measurements_path, output_path)
         logger.success("Pipeline execution completed successfully.")
 
     except Exception as e:
