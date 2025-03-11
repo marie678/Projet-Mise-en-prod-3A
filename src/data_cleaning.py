@@ -1,16 +1,16 @@
-"""
-Data cleaning functions and creation of the final dataset
-"""
+"""Data cleaning functions and creation of the final dataset."""
 import ast
+import os
 import re
 from pathlib import Path
 from typing import List
-import os
-import s3fs
+
 import inflect
 import numpy as np
 import pandas as pd
+import s3fs
 from loguru import logger
+
 
 # Global instance of inflect.engine()
 inflect_engine = inflect.engine()
@@ -33,6 +33,7 @@ def iso_to_minutes(iso_duration: str) -> float:
     minutes = int(re.search(r'(\d+)M', iso_duration).group(1)) if 'M' in iso_duration else 0
     return hours * 60 + minutes
 
+
 def categorize_duration(total_minutes: float) -> str:
     """
     Categorizes durations into three categories:
@@ -48,14 +49,15 @@ def categorize_duration(total_minutes: float) -> str:
     """
     return '< 30min' if total_minutes <= 30 else '< 1h' if total_minutes <= 60 else '> 1h'
 
+
 def format_duration(duration: str) -> str:
     """
-    Function to convert ISO 8601 durations to a more readable format
-    
+    Function to convert ISO 8601 durations to a more readable format.
+
     Args:
         duration (str): duration in ISO 8601 format (example: 'PT1H30M')
-    
-    Returns: 
+
+    Returns:
         str: duration (example output: '1 h 30 min')
     """
     hours = re.search(r'(\d+)H', duration)
@@ -67,15 +69,16 @@ def format_duration(duration: str) -> str:
         result.append(f"{int(minutes.group(1))} min")
     return ' '.join(result)
 
+
 def assign_category(row: pd.Series) -> str:
     """
-    Assigns a recipe category based on the values in the RecipeCategory, Keywords and title columns
-    using predefined patterns
+    Assign a recipe category based on the values in the RecipeCategory, Keywords and title columns
+    using predefined patterns.
 
     Args:
         row (pd.Series): A row of the DataFrame containing the following columns:
-            - RecipeCategory: A string representing the recipe category 
-            - Keywords: A list of keywords related to the recipe 
+            - RecipeCategory: A string representing the recipe category
+            - Keywords: A list of keywords related to the recipe
                         (e.g., ['Dessert', 'Oven', '< 4 Hours', 'Easy'])
             - title: A string representing the title of the recipe
 
@@ -106,6 +109,7 @@ def assign_category(row: pd.Series) -> str:
                     return category
     return 'Other'
 
+
 def to_singular(ingredients_list: List[str]) -> List[str]:
     """
     Convert a list of ingredient names from plural to singular.
@@ -124,9 +128,10 @@ def to_singular(ingredients_list: List[str]) -> List[str]:
             ]
     return ingredients_list
 
+
 def is_non_vegetarian(ingredient_list: List[str]) -> bool:
     """
-    Checks if any non-vegetarian keyword is present in the list of ingredients
+    Check if any non-vegetarian keyword is present in the list of ingredients.
 
     Args:
         ingredient_list (List[str]): A list of ingredients
@@ -138,8 +143,8 @@ def is_non_vegetarian(ingredient_list: List[str]) -> bool:
         'meat', 'chicken', 'beef', 'pork', 'fish', 'bacon', 'ham', 'steak', 'scallop',
         'sausage', 'lamb', 'duck', 'goose', 'lobster', 'shrimp', 'prawn', 'crab',
         'squid', 'octopus', 'calamari', 'oyster', 'mussel', 'clam', 'snail', 'seafood',
-        'prosciutto', 'salami', 'pepperoni', 'pancetta', 'chorizo', 'andouille', 'pate', 
-        'veal', 'venison', 'game', 'poultry', 'turkey', 'bison', 'boar', 
+        'prosciutto', 'salami', 'pepperoni', 'pancetta', 'chorizo', 'andouille', 'pate',
+        'veal', 'venison', 'game', 'poultry', 'turkey', 'bison', 'boar',
         'tuna', 'salmon', 'cod', 'haddock', 'halibut', 'tilapia', 'anchovy', 'anchovies',
     }
     for ingredient in ingredient_list:
@@ -147,13 +152,14 @@ def is_non_vegetarian(ingredient_list: List[str]) -> bool:
             return True
     return False
 
+
 def find_world_cuisine(keywords: List[str]) -> str:
     """
-    Identifies and returns the first matching world cuisine keyword from a given list of keywords.
+    Identify and return the first matching world cuisine keyword from a given list of keywords.
 
     Args:
         keywords (List[str]): A list of keywords related to the recipe.
-    
+
     Returns:
         str: The name of the matched cuisine from a predefined list, or 'Unknown' if no match is found.
     """
@@ -190,7 +196,7 @@ def load_nutrition_data(data_path: str, fs: s3fs.S3FileSystem) -> pd.DataFrame:
     """
     df = pd.read_parquet(data_path, filesystem=fs)
     df = df.drop(columns=['RecipeId', 'AuthorId', 'DatePublished', 'RecipeYield'])
-    df = df.drop_duplicates(subset=['Name','AuthorName'])
+    df = df.drop_duplicates(subset=['Name', 'AuthorName'])
     # Filter out outliers
     df = df[(df['Calories'] > 0) & (df['Calories'] <= 1500) & (df['RecipeServings'] <= 72)]
 
@@ -222,9 +228,10 @@ def load_nutrition_data(data_path: str, fs: s3fs.S3FileSystem) -> pd.DataFrame:
     df[['ReviewCount', 'RecipeServings']] = df[['ReviewCount', 'RecipeServings']].astype(int)
     return df
 
+
 def load_measurements_data(data_path: str, fs: s3fs.S3FileSystem) -> pd.DataFrame:
     """
-    Load and clean the recipe measurements dataset
+    Load and clean the recipe measurements dataset.
 
     Args:
         data_path (str): path to the recipe dataset in csv format
@@ -243,6 +250,7 @@ def load_measurements_data(data_path: str, fs: s3fs.S3FileSystem) -> pd.DataFram
         )
     df = df.dropna().reset_index(drop=True)
     return df
+
 
 def merge_datasets(df_nutrition: pd.DataFrame, df_measurements: pd.DataFrame) -> pd.DataFrame:
     """
@@ -265,16 +273,17 @@ def merge_datasets(df_nutrition: pd.DataFrame, df_measurements: pd.DataFrame) ->
             == df_merged['directions'].apply(
                 lambda x: x[0] if isinstance(x, list) and len(x) > 0 else None
                 )
-    ].reset_index(drop=True)
+        ].reset_index(drop=True)
 
     df = filtered_df.drop(
         columns=['Name', 'RecipeIngredientQuantities', 'RecipeIngredientParts', 'RecipeInstructions']
         )
     return df
 
+
 def data_preprocessing(df: pd.DataFrame) -> pd.DataFrame:
     """
-    Process the merged dataset
+    Process the merged dataset.
 
     Args:
         df (pd.DataFrame): the merged Dataframe
@@ -288,7 +297,7 @@ def data_preprocessing(df: pd.DataFrame) -> pd.DataFrame:
     # Create new variables
     for col in ['CookTime', 'PrepTime', 'TotalTime']:
         df[f'{col}_minutes'] = df[col].apply(iso_to_minutes)
-    df = df[df['TotalTime_minutes']>0]
+    df = df[df['TotalTime_minutes'] > 0]
     df['TotalTime_cat'] = df['TotalTime_minutes'].apply(categorize_duration)
     df['RecipeType'] = df.apply(assign_category, axis=1)
     df = df[df['RecipeType'] != 'Other'].reset_index(drop=True)
@@ -306,9 +315,10 @@ def data_preprocessing(df: pd.DataFrame) -> pd.DataFrame:
 
     return df
 
+
 def sample_df_10k(df: pd.DataFrame) -> pd.DataFrame:
     """
-    Samples 10,000 rows from the given DataFrame while following a predefined distribution of
+    Sample 10,000 rows from the given DataFrame while following a predefined distribution of
     `RecipeType` and prioritizing rows where the `World_Cuisine` column has values other than
     'Unknown'.
 
@@ -321,9 +331,9 @@ def sample_df_10k(df: pd.DataFrame) -> pd.DataFrame:
         pd.Dataframe: A DataFrame with 10,000 sampled rows distributed according to `RecipeType`.
     """
     sample_distribution = {
-        'Beverages': 1500, 
-        'Breakfast': 1300,  
-        'Dessert': 3200,   
+        'Beverages': 1500,
+        'Breakfast': 1300,
+        'Dessert': 3200,
         'Main Course': 4000
     }
     sampled_dataframes = []
@@ -350,13 +360,14 @@ def sample_df_10k(df: pd.DataFrame) -> pd.DataFrame:
     sampled_df = sampled_df.sample(frac=1, random_state=42).reset_index(drop=True)
     return sampled_df
 
+
 def main(fs: s3fs.S3FileSystem,
          data_path_nutrition: str,
          data_path_measurements: str,
-         output_path: str = None) -> None:
+         output_path: Path | None = None) -> None:
     """
     Main function to process and return the final dataset.
-    
+
     Args:
         fs (s3fs.S3FileSystem): File system object for remote access (S3/MinIO)
         data_path_nutrition (str): Path to the recipe nutrition dataset file (parquet format).
@@ -392,7 +403,6 @@ def main(fs: s3fs.S3FileSystem,
         if output_path:
             df.to_parquet(output_path, index=False)
             logger.success(f"Processed dataset saved to {output_path}")
-        return df
 
     except Exception as e:
         logger.exception(f"An error occurred while processing the dataset: {e}")
@@ -400,7 +410,7 @@ def main(fs: s3fs.S3FileSystem,
 
 
 if __name__ == "__main__":
-    try :
+    try:
         # Initialize the s3fs filesystem with the appropriate endpoint for MinIO
         filesystem = s3fs.S3FileSystem(
             client_kwargs={"endpoint_url": "https://minio.lab.sspcloud.fr"}

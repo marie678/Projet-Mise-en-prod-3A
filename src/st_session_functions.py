@@ -1,5 +1,5 @@
 """
-module that holds all helper functions related to the streamlit session state
+Module that holds all helper functions related to the streamlit session state
 includes :
     - initialization of session state
     - variable storing in session state before switching pages + page switching
@@ -8,9 +8,10 @@ includes :
 import pandas as pd
 import streamlit as st
 
+
 def initialize_session_state() -> None:
     """
-    Initializes all necessary keys in the Streamlit session state if they are not already present
+    Initialize all necessary keys in the Streamlit session state if they are not already present.
     Allows for better readability in the app file
     """
     default_values = {
@@ -52,7 +53,7 @@ def initialize_session_state() -> None:
 
 def handle_recipe_click(page: pd.DataFrame, index: int) -> None:
     """
-    Updates Streamlit session state variables with recipe details -for use across pages- from the 
+    Update Streamlit session state variables with recipe details -for use across pages- from the
     given DataFrame row and navigates to the recipe page.
 
     Parameters:
@@ -118,5 +119,5 @@ def handle_recipe_click(page: pd.DataFrame, index: int) -> None:
     st.session_state.carbo = page.iloc[index]['CarbohydrateContent']
     st.session_state.fiber = page.iloc[index]['FiberContent']
     st.session_state.sugar = page.iloc[index]['SugarContent']
-    with st.spinner() :
+    with st.spinner():
         st.switch_page("./pages/recipe_page.py")

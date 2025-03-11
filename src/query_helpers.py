@@ -1,17 +1,19 @@
 """
-module that holds streamlit helper functions for query manipulation in the recipe finder
+Module that holds streamlit helper functions for query manipulation in the recipe finder
 includes :
     - query cleaning
     - query correction suggestion
 """
 
 import string
+
 import inflect
 import streamlit as st
 from spellchecker import SpellChecker
 
-def clean_query(query:str)-> str:
-    """Cleans the query passed by the user by removing ponctuation between ingredients 
+
+def clean_query(query: str) -> str:
+    """Clean the query passed by the user by removing ponctuation between ingredients
     and singularizing them.
 
     Args:
@@ -26,8 +28,9 @@ def clean_query(query:str)-> str:
     cleaned_query = [inflect_engine.singular_noun(ingredient) or ingredient for ingredient in rm_ponct.split()]
     return ' '.join(cleaned_query)
 
-def query_error(query: list, ing: list, rec: list):
-    """Handles query error by returning an error message when no recipe or ingredient are found, 
+
+def query_error(query: list, ing: set, rec: list):
+    """Handle query error by returning an error message when no recipe or ingredient are found,
     either the word might be missplelled and, when corrected, recognized or the word is unknown.
     If the query is correct, returns a message to inform that recipes were found.
 

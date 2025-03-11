@@ -1,5 +1,5 @@
 """
-module that holds streamlit helper functions for the recipe finder page of the final app
+Module that holds streamlit helper functions for the recipe finder page of the final app
 includes :
     - dataframe splitting for multiple pages
     - searching the dataframe according to recipe criterions
@@ -7,6 +7,7 @@ includes :
 """
 
 from typing import Any, Tuple
+
 import pandas as pd
 import streamlit as st
 from jinja2 import Template
@@ -14,7 +15,7 @@ from jinja2 import Template
 
 def split_frame(input_df: pd.DataFrame, rows: int) -> list[pd.DataFrame]:
     """
-    Splits the input DataFrame into chunks of a specified number of rows
+    Split the input DataFrame into chunks of a specified number of rows.
 
     Args:
         input_df (DataFrame): the dataset that will be split
@@ -23,16 +24,16 @@ def split_frame(input_df: pd.DataFrame, rows: int) -> list[pd.DataFrame]:
     Returns:
         list[DataFrame]: A list of DataFrame chunks
     """
-    df = [input_df.iloc[i:i+rows,:] for i in range(0, len(input_df), rows)]
+    df = [input_df.iloc[i:i+rows, :] for i in range(0, len(input_df), rows)]
     return df
 
 
 @st.cache_data(show_spinner=True)
 def search_recipes(
-    original_df: pd.DataFrame, filters:dict[str, Any], dict_columns: dict[str, str]
-    ) -> Tuple[pd.DataFrame, int]:
+    original_df: pd.DataFrame, filters: dict[str, Any], dict_columns: dict[str, str]
+        ) -> Tuple[pd.DataFrame, int]:
     """
-    Filters a DataFrame of recipes based on specific criterias and returns the filtered results.
+    Filter a DataFrame of recipes based on specific criterias and returns the filtered results.
 
     Parameters:
     ----------
@@ -61,7 +62,6 @@ def search_recipes(
     - `provenance`: Filters recipes according to specified world region
 
     """
-
     filtered_df = original_df.copy()
 
     if 'ingredients' in filters.keys():
@@ -86,13 +86,13 @@ def search_recipes(
         col, value = dict_columns['provenance'], filters['provenance']
         filtered_df = filtered_df[filtered_df[col].apply(lambda x: all(element in x for element in value))]
 
-    total_nr_recipes : int = len(filtered_df)
+    total_nr_recipes: int = len(filtered_df)
 
     return filtered_df, total_nr_recipes
 
 
 def display_html_in_streamlit(html_file_path, css_file_path, height, width):
-    """Displays HTML content from a file in a Streamlit app with its styling in seperate css file.
+    """Display HTML content from a file in a Streamlit app with its styling in seperate css file.
 
     Args:
         html_file_path (str): The path to the HTML file.
@@ -106,8 +106,8 @@ def display_html_in_streamlit(html_file_path, css_file_path, height, width):
             jinja_template = Template(html_content)
         with open(css_file_path, "r", encoding="utf-8") as css_file:
             css = css_file.read()
-        rendered_html = jinja_template.render(css = css)
-        st.components.v1.html(rendered_html, height = height, width = width, scrolling=True)
+        rendered_html = jinja_template.render(css=css)
+        st.components.v1.html(rendered_html, height=height, width=width, scrolling=True)
     except FileNotFoundError:
         st.error(f"Error: HTML or CSS file not found at {html_file_path}")
     except Exception as e:

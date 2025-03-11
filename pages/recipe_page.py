@@ -1,12 +1,10 @@
-"""
-code for the final results page. Displays the recipe contents with an html file.
-"""
+"""code for the final results page. Displays the recipe contents with an html file."""
 
 import streamlit as st
 import streamlit.components.v1 as components
 from jinja2 import Template
 
-st.set_page_config(layout="wide", page_title ='Recipe page', initial_sidebar_state='collapsed')
+st.set_page_config(layout="wide", page_title='Recipe page', initial_sidebar_state='collapsed')
 # Display header
 st.markdown(
     """
@@ -23,10 +21,10 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-if 'title' not in st.session_state :
+if 'title' not in st.session_state:
     st.markdown("Please go to the **Recipe Finder** page and enter filters to find a recipe.")
 
-else :
+else:
     # Get all the recipe elements from the session state
     recipe_title = st.session_state['title']
     ingredients = st.session_state['ingredients']
@@ -75,15 +73,15 @@ else :
     JS_SCRIPT = f"<script>{js_content}</script>"
 
     # Render the template with dynamic data
-    rendered_html = jinja_template.render(css = css, title=recipe_title, author = author,
-                                        servings = servings,
-                                        rating = rating, vote = vote,
-                                        prep_time = prep_time, c_time = c_time, tot_time = tot_time,
-                                        items=ingredients, dir = directions, keywords = keywords,
-                                        link = rec_link, desc = description, img = img_link,
-                                        calories = calories, protein = protein, fat = fat,
-                                        sat_fat=sat_fat, sugar=sugar, chol = chol, sodium=sodium,
-                                        carbo = carbo, fiber = fiber)
+    rendered_html = jinja_template.render(css=css, title=recipe_title, author=author,
+                                          servings=servings,
+                                          rating=rating, vote=vote,
+                                          prep_time=prep_time, c_time=c_time, tot_time=tot_time,
+                                          items=ingredients, dir=directions, keywords=keywords,
+                                          link=rec_link, desc=description, img=img_link,
+                                          calories=calories, protein=protein, fat=fat,
+                                          sat_fat=sat_fat, sugar=sugar, chol=chol, sodium=sodium,
+                                          carbo=carbo, fiber=fiber)
 
     # Display the HTML in Streamlit app
     components.html(rendered_html + JS_SCRIPT, height=2300, width=1100, scrolling=True)

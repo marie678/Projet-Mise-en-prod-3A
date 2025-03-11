@@ -8,15 +8,16 @@ from typing import Any, List
 
 import pandas as pd
 import streamlit as st
-from streamlit_extras.add_vertical_space import add_vertical_space
-
-from utils.config import SAMPLE_RECIPE_PATH
-from src.st_session_functions import handle_recipe_click, initialize_session_state
-from src.recipe_finder_functions import search_recipes, split_frame
 from src.query_helpers import clean_query, query_error
+from src.recipe_finder_functions import search_recipes, split_frame
+from src.st_session_functions import (handle_recipe_click,
+                                      initialize_session_state)
+from streamlit_extras.add_vertical_space import add_vertical_space
+from utils.config import SAMPLE_RECIPE_PATH
+
 
 # configuration parameters
-st.set_page_config(layout="wide", page_title ='Recipe Finder', initial_sidebar_state='collapsed')
+st.set_page_config(layout="wide", page_title='Recipe Finder', initial_sidebar_state='collapsed')
 # import of the cleaned and formated dataset of 10k recipes :
 df: pd.DataFrame = pd.read_parquet(SAMPLE_RECIPE_PATH)
 
@@ -29,7 +30,7 @@ df: pd.DataFrame = pd.read_parquet(SAMPLE_RECIPE_PATH)
 ####################################### FILTERS INITIALIZATION #####################################
 
 counter_ingredients: Counter[str] = Counter(x for row in df['NER'] for x in row)
-ingredient_list: set[str] = {item[0] for item in counter_ingredients.most_common()} # ingredients sorted by frequency
+ingredient_list: set[str] = {item[0] for item in counter_ingredients.most_common()}  # ingredients sorted by frequency
 recipe_durations_cat: List[str] = ['< 30min', '< 1h', '> 1h']
 recipe_durations_min: set[float] = {x for x in sorted(set(df['TotalTime_minutes'])) if pd.notna(x)}
 recipe_types: set[str] = {x for x in sorted(set(df['RecipeType'])) if pd.notna(x)}
@@ -42,7 +43,7 @@ filter_columns: dict[str, str] = {
     'recipe_types': 'RecipeType',
     'vegetarian': 'Vegetarian_Friendly',
     'beginner': 'Beginner_Friendly',
-    'provenance' : 'World_Cuisine'
+    'provenance': 'World_Cuisine'
 }
 filters: dict[str, Any] = {}
 research_summary: str = ''
@@ -79,7 +80,7 @@ title_search_query: str = st.text_input(
 cleaned_query: str = clean_query(title_search_query)
 
 # error handling
-rec: list = list(df['title'].apply(lambda x : x.lower()).values)
+rec: list = list(df['title'].apply(lambda x: x.lower()).values)
 query_error(cleaned_query.split(), ingredient_list, rec)
 
 with st.form("filter_form", clear_on_submit=False):
@@ -134,7 +135,7 @@ with st.form("filter_form", clear_on_submit=False):
 # Research recipes in the original dataframe according to the filters
 if submitted:
     df_search, total_nr_recipes = search_recipes(df, st.session_state.filters, filter_columns)
-    df_search = df_search.sort_values(by=['AggregatedRating'], ascending=False) #sorted by higher rated
+    df_search = df_search.sort_values(by=['AggregatedRating'], ascending=False)  # sorted by higher rated
     st.session_state.search_df, st.session_state.total_recipes = df_search, total_nr_recipes
     if len(df_search) == 0:
         st.write("No recipes found. Try adjusting your filters or your research.")
@@ -168,17 +169,17 @@ if st.session_state.search_df is not None:
     st.session_state.total_recipes = len(df_search)
 
     # Display the results
-    if st.session_state.total_recipes != 0 :
+    if st.session_state.total_recipes != 0:
         NUMBER_RECIPES = f"There are **{st.session_state.total_recipes} recipes** matching your search :"
         st.write(research_summary)
         st.write(NUMBER_RECIPES)
         add_vertical_space(2)
 
     recipe_placeholder = st.container()
-    bottom_menu = st.columns((4,1,1))
+    bottom_menu = st.columns((4, 1, 1))
     with bottom_menu[2]:
-        batch_size = st.selectbox('Recipes per page', options=[10,25,50,100])
-        total_pages = int(len(df_search)/batch_size) if len(df_search)>batch_size else 1
+        batch_size = st.selectbox('Recipes per page', options=[10, 25, 50, 100])
+        total_pages = int(len(df_search)/batch_size) if len(df_search) > batch_size else 1
     with bottom_menu[1]:
         current_page = st.number_input('Page', min_value=1, max_value=total_pages, step=1, key='page_input')
     with bottom_menu[0]:
@@ -194,15 +195,15 @@ if st.session_state.search_df is not None:
         recipe_placeholder.markdown(
             f"""
         <div style="
-            border: 1px solid #ddd; 
-            border-radius: 10px; 
-            padding: 15px; 
-            margin-bottom: 10px; 
-            background-color: #f9f9f9; 
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 10px;
+            background-color: #f9f9f9;
             box-shadow: 2px 2px 5px rgba(0,0,0,0.1);">
             <h3 style="margin: 0; color: #333;">{recipe['title']}</h3>
             <p style="margin: 5px 0; color: #777;">
-                <b>Total Time:</b> {recipe['TotalTime']} | 
+                <b>Total Time:</b> {recipe['TotalTime']} |
                 <b>Rating:</b> {recipe['AggregatedRating']}
             </p>
             <p style="margin: 5px 0; color: #555;">
