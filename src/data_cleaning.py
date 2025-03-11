@@ -411,7 +411,7 @@ if __name__ == "__main__":
         recipe_nutrition_path = os.path.join(DATA_DIR, 'recipes.parquet').replace("\\", "/")
         recipe_measurements_path = os.path.join(DATA_DIR, 'recipes_data.csv').replace("\\", "/")
 
-        output_path = Path(__file__).resolve().parent.parent / 'Data/sample_recipes_10k2.parquet'
+        output_path = Path(__file__).resolve().parent.parent / 'Data/sample_recipes_10k.parquet'
 
         logger.info("Starting data processing pipeline...")
         main(filesystem, recipe_nutrition_path, recipe_measurements_path, output_path)
