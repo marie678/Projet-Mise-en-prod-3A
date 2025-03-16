@@ -109,11 +109,11 @@ def data_filter(df: pd.DataFrame) -> pd.DataFrame:
     Returns:
         pd.DataFrame: DataFrame with new columns
     """
-    df['TotalTime_cat'] = df['TotalTime_minutes'].apply(categorize_duration)
-    df['RecipeType'] = df.apply(assign_category, axis=1)
+    df.loc[:, 'TotalTime_cat'] = df['TotalTime_minutes'].apply(categorize_duration)
+    df.loc[:,'RecipeType'] = df.apply(assign_category, axis=1)
     df = df[df['RecipeType'] != 'Other'].reset_index(drop=True)
-    df['Beginner_Friendly'] = df['Keywords'].apply(lambda x: 'Easy' in x) 
-    df['Vegetarian_Friendly'] = ~df['ingredients'].apply(is_non_vegetarian) 
-    df['World_Cuisine'] = df['Keywords'].apply(find_world_cuisine)
+    df.loc[:,'Beginner_Friendly'] = df['Keywords'].apply(lambda x: 'Easy' in x) 
+    df.loc[:,'Vegetarian_Friendly'] = ~df['ingredients'].apply(is_non_vegetarian) 
+    df.loc[:,'World_Cuisine'] = df['Keywords'].apply(find_world_cuisine)
 
     return df
