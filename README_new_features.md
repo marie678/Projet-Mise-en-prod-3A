@@ -10,6 +10,12 @@ no dev / fianl_app, no separation between data preprocessing and application, un
 
 ## Data externalized
 
+Instead of doing the preprocessing locally on our computers using the data sets downloaded from kaggle and then saving the pre processed dataset in Github, we now do the preprocessing as part of the application code using the original data frames in an s3 folder.
+
+We also directly use parquet files to do load and process the data wich saves time and memory.
+
+Preprocessing code 
+
 ## Code
 
 - tested quality of code (imports in order)
