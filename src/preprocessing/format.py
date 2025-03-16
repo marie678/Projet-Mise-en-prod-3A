@@ -9,7 +9,7 @@ import ast
 # Global instance of inflect.engine()
 inflect_engine = inflect.engine()
 
-def handle_type(df: pd.DataFrame, numeric_float_var: List[str] = [], numeric_int_var: List[str] = [], string_var: List[str] = []):
+def handle_type(df: pd.DataFrame, numeric_float_var: List[str] = [], numeric_int_var: List[str] = []) -> pd.DataFrame:
     """
     This function handles type conversions for the provided columns of a DataFrame.
     
@@ -17,7 +17,6 @@ def handle_type(df: pd.DataFrame, numeric_float_var: List[str] = [], numeric_int
     df (pd.DataFrame): The input DataFrame.
     numeric_float_var (List[str]): List of columns to convert to float. Defaults to empty list.
     numeric_int_var (List[str]): List of columns to convert to Int64 (nullable integers). Defaults to empty list.
-    string_var (List[str]): List of columns to convert to string. Defaults to empty list.
     
     Returns:
     pd.DataFrame: The DataFrame with type conversions applied.
@@ -33,9 +32,19 @@ def handle_type(df: pd.DataFrame, numeric_float_var: List[str] = [], numeric_int
     return df
 
 ## Missing values handling
-def handle_na(df : pd.DataFrame,numeric_float_var : List[str] = [], numeric_int_var : List[str] = [], string_var: List[str] = [], list_var: List[str] = []):
+def handle_na(df : pd.DataFrame,numeric_float_var : List[str] = [], numeric_int_var : List[str] = [], string_var: List[str] = [], list_var: List[str] = []) -> pd.DataFrame:
     """
-    
+    This function handles missing values in the DataFrame by performing type conversions and removing rows with missing data.
+
+    Parameters:
+    df (pd.DataFrame): The input DataFrame to handle missing values for.
+    numeric_float_var (List[str]): List of columns to convert to float type. Defaults to an empty list.
+    numeric_int_var (List[str]): List of columns to convert to Int64 (nullable integers). Defaults to an empty list.
+    string_var (List[str]): List of columns to convert to string type. Defaults to an empty list.
+    list_var (List[str]): List of columns that contain lists. Rows with empty or `None` values in these columns will be removed. Defaults to an empty list.
+
+    Returns:
+    pd.DataFrame: The DataFrame with missing values handled and type conversions applied.
     """
     df = handle_type(df, numeric_float_var, numeric_int_var, string_var)
     # we remove na values
@@ -49,10 +58,18 @@ def handle_na(df : pd.DataFrame,numeric_float_var : List[str] = [], numeric_int_
 
 
 ## Text formating
-def text_formatting(df : pd.DataFrame, cols : List):
+def text_formatting(df : pd.DataFrame, cols : List) -> pd.DataFrame:
     """
-    Some textual variables have improper format such as string of list of string ('['','']')
-    or list of unbroken strings (['_ . _ . _'])
+    This function ensures that textual variables in the specified columns are properly formatted.
+    It handles cases where textual data is improperly represented, such as strings that look like lists of strings
+    or lists of unbroken strings, and formats them consistently.
+
+    Parameters:
+    df (pd.DataFrame): The input DataFrame containing textual columns to format.
+    cols (List): A list of column names (strings) in the DataFrame that need text formatting.
+
+    Returns:
+    pd.DataFrame: The DataFrame with the specified columns properly formatted.
     """
     for col in cols:
         # First, ensure that any non-list or non-array type values are converted into a list
@@ -77,9 +94,15 @@ def text_formatting(df : pd.DataFrame, cols : List):
 
 ## Handle outliers
 
-def rm_outliers(df : pd.DataFrame):
+def rm_outliers(df : pd.DataFrame) -> pd.DataFrame:
     """
-    Remove outliers of some numeric variables to keep recipes that make sense
+    Remove outliers of some numeric variables to keep recipes that make sense.
+
+    Parameters:
+    df (pd.DataFrame): The input DataFrame containing the recipes to be filtered.
+
+    Returns:
+    pd.DataFrame: The DataFrame with rows containing outliers removed based on predefined rules.
     """
     df = df[(df['Calories'] > 0) & (df['Calories'] <= 1500) & (df['RecipeServings'] <= 72)]
     return df
@@ -137,13 +160,13 @@ def to_singular(ingredients_list: List[str]) -> List[str]:
 
 def data_preprocessing(df: pd.DataFrame) -> pd.DataFrame:
     """
-    Process the merged dataset
+    Process the merged dataset by cleaning, formatting, and transforming various columns.
 
     Args:
         df (pd.DataFrame): the merged Dataframe 
 
     Returns:
-        pd.DataFrame: cleaned and processed DataFrame
+        pd.DataFrame: The cleaned and processed DataFrame.
     """
     df['CookTime'] = df['CookTime'].fillna('PT0M')
     df = df.dropna()
