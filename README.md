@@ -65,6 +65,10 @@ The final dataset includes new categorical and binary filters to enable users to
 
 ## Installation and Usage
 
+#### As pure application users
+
+Use the application link: 
+
 #### With python 
 The web app is built with streamlit. You can run it with the following steps :
 
