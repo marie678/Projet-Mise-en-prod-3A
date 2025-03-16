@@ -109,7 +109,7 @@ http://localhost:8501
 ``
 
 ## Contributors
-- Pauline BIAN
-- Noémie GUIBE
-- Julia LU
-- Marie MEYER
+
+Noémie GUIBE & Marie MEYER
+
+Pauline BIAN and Julia LU also worked on the original project.
