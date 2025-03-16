@@ -42,13 +42,16 @@ Our application is composed of 3 pages:
 ## Data 
 
 The goal of the preprocessing stage is to create a 10,000-recipe dataframe for our *frigo_vide* application. We combined two public Kaggle datasets and created new variables to provide filtering options for users. 
+
 **Data sources**
+
 1. [Food.com Recipes and Reviews](https://www.kaggle.com/datasets/irkaal/foodcom-recipes-and-reviews/data): This dataset provides a wide variety of recipes along with their nutritional information, cooking times, servings, ratings, and more.
 2. [Recipe Dataset (2M+ recipes)](https://www.kaggle.com/datasets/wilmerarltstrmberg/recipe-dataset-over-2m/data): This dataset adds information about ingredient quantities and measurements for each recipe. It contains over 2 million recipes, many of which are also included in the first dataset.
 
 Due to size limitations, these files are not included in this repository.
 
 **Data aggregation**
+
 The scripts in `src/preprocessing` loads, merges the two datasets and outputs a cleaned and processed dataframe in parquet format. The final dataset can be found at `Data/sample_recipes_10k.parquet`. 
 
 The final dataset includes new categorical and binary filters to enable users to refine their recipe searches within the app:
