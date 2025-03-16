@@ -63,6 +63,11 @@ The final dataset includes new categorical and binary filters to enable users to
 * `Vegetarian_Friendly` (True/False)
 * `World_Cuisine` ("Asian", "Mexican", "European", etc.)
 
+## Repository architecture
+
+![image](https://github.com/user-attachments/assets/940f6c41-ed9d-4e73-a337-bccbbe970df7)
+
+
 ## Installation and Usage
 
 #### As pure application users
