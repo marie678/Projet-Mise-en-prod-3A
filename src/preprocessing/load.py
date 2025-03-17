@@ -1,12 +1,7 @@
 # loading functions
-import numpy as np
 import pandas as pd
-import re
-import ast
-from typing import List, Tuple
+from typing import List
 import inflect
-from pathlib import Path
-import os
 import time
 from format import rm_outliers, text_formatting, handle_na
 
@@ -23,8 +18,8 @@ keep_col_nutrition = ['Name',
  'Images',
  'RecipeCategory',
  'Keywords',
- 'RecipeIngredientQuantities', #
- 'RecipeIngredientParts', #
+ 'RecipeIngredientQuantities',
+ 'RecipeIngredientParts',
  'AggregatedRating',
  'ReviewCount',
  'Calories',
@@ -41,7 +36,7 @@ keep_col_nutrition = ['Name',
 
 keep_col_measurements = ['title','directions','ingredients','link','NER']
 
-#
+
 def load_nutrition_data(nutrition_data_path:str) -> tuple[pd.DataFrame, list]:
     """
     This function loads a nutrition dataset, processes it, and returns the cleaned DataFrame and a list of unique recipe names.
@@ -82,6 +77,7 @@ def load_nutrition_data(nutrition_data_path:str) -> tuple[pd.DataFrame, list]:
     recipe_name = df['Name'].drop_duplicates().to_list()
     return df, recipe_name
 
+
 def load_measurements_data(measurements_data_path : str,recipe_merge : List) -> pd.DataFrame:
     """
     This function loads a measurements dataset, filters it based on a provided list of recipe titles 
@@ -116,6 +112,7 @@ def load_measurements_data(measurements_data_path : str,recipe_merge : List) -> 
     df = handle_na(df, string_var = string_var, list_var = list_var)
     print("Cleaned in --- %s seconds ---" % (time.time() - end_time))
     return df
+
 
 def merge(nutrition_data_path:str, measurements_data_path:str) -> pd.DataFrame:
     """
