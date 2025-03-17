@@ -1,10 +1,10 @@
 # Changes with the 'Mise en production' course
 
-2 garphics 
+2 graphics 
 
 
 ## Repository organisation / architecture
-no dev / fianl_app, no separation between data preprocessing and application, unique read me
+no dev / final_app, no separation between data preprocessing and application, unique read me
 
 
 
@@ -18,11 +18,11 @@ Preprocessing code
 
 ## Code
 
-- tested quality of code (imports in order)
+- tested quality of code (imports in order, pep8 coding conventions, typing, ...)
 
 - created more functions and put them in a unique folder, 
 
-- structured the functions folder more (unique script -> 2 folders and 6 scripts with different functionality for more visibility)
+- structured the functions folder better (unique script -> 2 folders and 6 scripts with different functionality for more visibility)
 
 - more parametrizaion with YAML file
 
