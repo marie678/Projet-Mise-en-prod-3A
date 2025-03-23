@@ -1,12 +1,17 @@
-# filter
-import numpy as np
-import pandas as pd
+"""
+Module that creates columns used for streamlit filters.
+includes :
+    - categorize_duration
+    - assign_category
+    - is_non_vegetarian
+    - find_world_cuisine
+    - data_filter
+"""
 import re
-from typing import List, Union
-import inflect
+from typing import List
 
-# Global instance of inflect.engine()
-inflect_engine = inflect.engine()
+import pandas as pd
+
 
 def categorize_duration(total_minutes: float) -> str:
     """

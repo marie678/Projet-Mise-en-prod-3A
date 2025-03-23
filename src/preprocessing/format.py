@@ -1,9 +1,22 @@
+"""
+Module that processes the data.
+includes :
+    - handle_type
+    - handle_na
+    - text_formating
+    - rm_outliers
+    - iso_to_minutes
+    - format_duration
+    - to_singular
+    - data_preprocessing
+"""
+import ast
+import re
+from typing import List
+
+import inflect
 import numpy as np
 import pandas as pd
-import re
-from typing import List, Union
-import inflect
-import ast
 
 
 # Global instance of inflect.engine()
@@ -57,7 +70,7 @@ def handle_na(df : pd.DataFrame,numeric_float_var : List[str] = [], numeric_int_
 
 
 ## Text formating
-def text_formatting(df : pd.DataFrame, cols : List) -> pd.DataFrame:
+def text_formating(df : pd.DataFrame, cols : List) -> pd.DataFrame:
     """
     This function ensures that textual variables in the specified columns are properly formatted.
     It handles cases where textual data is improperly represented, such as strings that look like lists of strings
@@ -104,8 +117,6 @@ def rm_outliers(df : pd.DataFrame) -> pd.DataFrame:
     df = df[(df['Calories'] > 0) & (df['Calories'] <= 1500) & (df['RecipeServings'] <= 72)]
     return df
 
-
-## Formatting functions
 def iso_to_minutes(iso_duration: str) -> float:
     """
     Convert ISO 8601 durations to total minutes.

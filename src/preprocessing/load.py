@@ -1,14 +1,19 @@
-# loading functions
-import pandas as pd
-from typing import List
-import inflect
-import time
+"""
+Module that loads, partially clean and merges the 2 kaggle data sets used in the most eficient way.
+includes :
+    - load_nutrition_data
+    - load_measurements_data
+    - merge
+"""
 from pathlib import Path
-import yaml
-from format import rm_outliers, text_formatting, handle_na
+import time
+from typing import List
 
-# Global instance of inflect.engine()
-inflect_engine = inflect.engine()
+import pandas as pd
+import yaml
+
+from format import rm_outliers, text_formating, handle_na
+
 
 # Get the absolute path to the project root
 PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
@@ -61,7 +66,7 @@ def load_nutrition_data(nutrition_data_path:str) -> tuple[pd.DataFrame, list]:
     # remove outliers
     df = rm_outliers(df)
     # Process array-like columns
-    text_formatting(df, to_format_nutrition)
+    text_formating(df, to_format_nutrition)
     df = handle_na(df, numeric_float_var_nutrition, numeric_int_var_nutrition, list_var_nutrition)
     print("Cleaned in --- %s seconds ---" % (time.time() - end_time))
     recipe_name = df['Name'].drop_duplicates().to_list()
@@ -95,7 +100,7 @@ def load_measurements_data(measurements_data_path : str,recipe_merge : List) -> 
     print("Measurements data set loaded in --- %s seconds ---" % (end_time - start_time))
     df= df[df['title'].isin(recipe_merge)]
     df = df.drop_duplicates(subset=['title', 'directions'])
-    text_formatting(df,to_format_measurements)
+    text_formating(df,to_format_measurements)
     df = handle_na(df, list_var = list_var_measurements)
     print("Cleaned in --- %s seconds ---" % (time.time() - end_time))
     return df
