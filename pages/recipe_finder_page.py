@@ -26,17 +26,17 @@ df: pd.DataFrame = pd.read_parquet(SAMPLE_RECIPE_PATH)
 # temps mais que c'est qu'une fois.
 # mais est-ce que ça va marcher après en docker / ihm ? à voir
 
-"""
-from src.preprocessing.load import merge
-from src.preprocessing.format import data_preprocessing
-from src.preprocessing.filter import data_filter
-path1 = 'https://minio.lab.sspcloud.fr/nguibe/mise-en-prod/recipes.parquet'
-path2 = 'https://minio.lab.sspcloud.fr/nguibe/mise-en-prod/recipes_data.parquet'
-merged = merge(path1, path2)
-df_prepro = data_preprocessing(merged)
-df_filtered = data_filter(df_prepro)
-df_filtered.to_parquet('app_dataset.parquet')
-"""
+# """
+# from src.preprocessing.load import merge
+# from src.preprocessing.format import data_preprocessing
+# from src.preprocessing.filter import data_filter
+# path1 = 'https://minio.lab.sspcloud.fr/nguibe/mise-en-prod/recipes.parquet'
+# path2 = 'https://minio.lab.sspcloud.fr/nguibe/mise-en-prod/recipes_data.parquet'
+# merged = merge(path1, path2)
+# df_prepro = data_preprocessing(merged)
+# df_filtered = data_filter(df_prepro)
+# df_filtered.to_parquet('app_dataset.parquet')
+# """
 
 
 ####################################### FILTERS INITIALIZATION #####################################
