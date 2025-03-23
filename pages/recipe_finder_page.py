@@ -30,12 +30,31 @@ df: pd.DataFrame = pd.read_parquet(SAMPLE_RECIPE_PATH)
 from src.preprocessing.load import merge
 from src.preprocessing.format import data_preprocessing
 from src.preprocessing.filter import data_filter
-path1 = 'https://minio.lab.sspcloud.fr/nguibe/mise-en-prod/recipes.parquet'
-path2 = 'https://minio.lab.sspcloud.fr/nguibe/mise-en-prod/recipes_data.parquet'
-merged = merge(path1, path2)
+
+# Get the absolute path to the project root
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
+config_path = PROJECT_ROOT / "utils" / "config.yaml"
+
+with open(config_path, "r") as file:
+    config = yaml.safe_load(file)
+DATA_DIR = config['DATA_DIR']
+S3_ENDPOINT_URL = config["s3"]["endpoint_url"]
+nutrition_file = config["nutrition_data"]["file"]
+measurements_file = config["measurements_data"]["file"]
+
+# Initialize the s3fs filesystem with the appropriate endpoint for MinIO
+filesystem = s3fs.S3FileSystem(
+            client_kwargs={"endpoint_url": S3_ENDPOINT_URL}
+            )
+
+recipe_nutrition_path = os.path.join(DATA_DIR, nutrition_file).replace("\\", "/")
+recipe_measurements_path = os.path.join(DATA_DIR, measurements_file).replace("\\", "/")
+output_path = PROJECT_ROOT / 'Data/app_dataset.parquet'
+
+merged = merge(recipe_nutrition_path, recipe_measurements_path)
 df_prepro = data_preprocessing(merged)
 df_filtered = data_filter(df_prepro)
-df_filtered.to_parquet('app_dataset.parquet')
+df_filtered.to_parquet(output_path)
 """
 
 
