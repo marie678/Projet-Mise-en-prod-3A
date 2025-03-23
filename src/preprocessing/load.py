@@ -23,8 +23,6 @@ keep_col_nutrition = ['Name',
  'Images',
  'RecipeCategory',
  'Keywords',
- 'RecipeIngredientQuantities', #
- 'RecipeIngredientParts', #
  'AggregatedRating',
  'ReviewCount',
  'Calories',
@@ -75,9 +73,8 @@ def load_nutrition_data(nutrition_data_path:str) -> tuple[pd.DataFrame, list]:
     numeric_float_var = ['AggregatedRating', 'Calories','FatContent','SaturatedFatContent','CholesterolContent'
                ,'SodiumContent','CarbohydrateContent','FiberContent','SugarContent','ProteinContent']
     numeric_int_var= ['ReviewCount','RecipeServings']
-    string_var= ['Name','AuthorName','CookTime','PrepTime','TotalTime','Description','RecipeCategory']
     list_var = ['Images','Keywords','RecipeInstructions']
-    df = handle_na(df, numeric_float_var, numeric_int_var, string_var, list_var)
+    df = handle_na(df, numeric_float_var, numeric_int_var, list_var)
     print("Cleaned in --- %s seconds ---" % (time.time() - end_time))
     recipe_name = df['Name'].drop_duplicates().to_list()
     return df, recipe_name
@@ -111,9 +108,8 @@ def load_measurements_data(measurements_data_path : str,recipe_merge : List) -> 
     df = df.drop_duplicates(subset=['title', 'directions'])
     to_format = ['ingredients', 'directions', 'NER']
     text_formatting(df,to_format)
-    string_var= ['title']
     list_var = ['ingredients', 'directions','NER']
-    df = handle_na(df, string_var = string_var, list_var = list_var)
+    df = handle_na(df, list_var = list_var)
     print("Cleaned in --- %s seconds ---" % (time.time() - end_time))
     return df
 
@@ -142,4 +138,6 @@ def merge(nutrition_data_path:str, measurements_data_path:str) -> pd.DataFrame:
     df_measurements['to_merge']=df_measurements['directions'].apply(lambda x: x[0] if isinstance(x, list) and len(x) > 0 else None)
     # mege on recipe name and first instruction
     df_merged = pd.merge(df_nutrition, df_measurements, left_on=['Name','to_merge'], right_on=['title','to_merge'], how='inner')
+    df_merged = df_merged.drop_duplicates(subset=['Name','AuthorName'])
+    df_merged = df_merged.drop(columns=['to_merge','RecipeInstructions','Name'])
     return df_merged

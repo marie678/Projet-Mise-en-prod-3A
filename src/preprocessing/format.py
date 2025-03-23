@@ -32,7 +32,7 @@ def handle_type(df: pd.DataFrame, numeric_float_var: List[str] = [], numeric_int
     return df
 
 ## Missing values handling
-def handle_na(df : pd.DataFrame,numeric_float_var : List[str] = [], numeric_int_var : List[str] = [], string_var: List[str] = [], list_var: List[str] = []) -> pd.DataFrame:
+def handle_na(df : pd.DataFrame,numeric_float_var : List[str] = [], numeric_int_var : List[str] = [], list_var: List[str] = []) -> pd.DataFrame:
     """
     This function handles missing values in the DataFrame by performing type conversions and removing rows with missing data.
 
@@ -40,13 +40,12 @@ def handle_na(df : pd.DataFrame,numeric_float_var : List[str] = [], numeric_int_
     df (pd.DataFrame): The input DataFrame to handle missing values for.
     numeric_float_var (List[str]): List of columns to convert to float type. Defaults to an empty list.
     numeric_int_var (List[str]): List of columns to convert to Int64 (nullable integers). Defaults to an empty list.
-    string_var (List[str]): List of columns to convert to string type. Defaults to an empty list.
     list_var (List[str]): List of columns that contain lists. Rows with empty or `None` values in these columns will be removed. Defaults to an empty list.
 
     Returns:
     pd.DataFrame: The DataFrame with missing values handled and type conversions applied.
     """
-    df = handle_type(df, numeric_float_var, numeric_int_var, string_var)
+    df = handle_type(df, numeric_float_var, numeric_int_var)
     # we remove na values
     len_before = len(df)
     for var in list_var: 
