@@ -92,7 +92,7 @@ def find_world_cuisine(keywords: List[str]) -> str:
         'Mexican', 'U.S.', 'Caribbean', 'American', 'Hawaiian', 'Cuban', 'Venezuelan', 'Peruvian', 'Puerto Rican', 'Colombian', 'Chilean', 'Costa Rican', 'Guatemalan', 'Honduran', 'Brazilian', 
         'European', 'Greek', 'German', 'Spanish', 'Portuguese', 'French', 'Scottish', 'Polish', 'Austrian', 'Hungarian', 'Danish', 'Turkish', 'Finnish', 'Dutch', 'Belgian', 'Norwegian', 'Welsh', 'Czech', 'Scandinavian', 'Icelandic'
     ]
-    keywords_lower = [str(k).lower() for k in keywords]
+    keywords_lower = [str(k.strip('#')).lower() for k in keywords]
     for cuisine in world_cuisines:
         if cuisine.lower() in keywords_lower:
             return cuisine
@@ -112,7 +112,7 @@ def data_filter(df: pd.DataFrame) -> pd.DataFrame:
     df.loc[:, 'TotalTime_cat'] = df['TotalTime_minutes'].apply(categorize_duration)
     df.loc[:,'RecipeType'] = df.apply(assign_category, axis=1)
     df = df[df['RecipeType'] != 'Other'].reset_index(drop=True)
-    df.loc[:,'Beginner_Friendly'] = df['Keywords'].apply(lambda x: 'Easy' in x) 
+    df.loc[:,'Beginner_Friendly'] = df['Keywords'].apply(lambda x: '#Easy' in x) 
     df.loc[:,'Vegetarian_Friendly'] = ~df['ingredients'].apply(is_non_vegetarian) 
     df.loc[:,'World_Cuisine'] = df['Keywords'].apply(find_world_cuisine)
 
