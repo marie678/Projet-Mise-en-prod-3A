@@ -4,9 +4,12 @@ on:
   push:
     branches:
       - main
+    paths-ignore:
+      - README.md
   pull_request:
     branches:
       - main
+
 
 jobs:
   test:
@@ -19,11 +22,20 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.10'
+          python-version: '3.x'
 
-      - name: Install dependencies
+      # - name: Install dependencies
+      #   run: |
+      #     pip install -r requirements.lock.txt
+      #     pip install pylint
+      
+      - name: Install dependencies using uv
         run: |
-          pip install -r requirements.lock.txt
+          curl -LsSf https://astral.sh/uv/install.sh | sh
+          uv venv .venv
+          source .venv/bin/activate
+          uv pip install -r uv_requirements.txt
+
 
       # - name: Run tests
       #   run: |
