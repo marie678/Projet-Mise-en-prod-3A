@@ -63,6 +63,11 @@ The final dataset includes new categorical and binary filters to enable users to
 * `Vegetarian_Friendly` (True/False)
 * `World_Cuisine` ("Asian", "Mexican", "European", etc.)
 
+## Repository architecture
+
+![image](https://github.com/user-attachments/assets/940f6c41-ed9d-4e73-a337-bccbbe970df7)
+
+
 ## Installation and Usage
 
 #### As pure application users
@@ -74,19 +79,15 @@ The web app is built with streamlit. You can run it with the following steps :
 
 1. Clone this repository
 ```
-git clone https://github.com/nguibe/Projet-Infra-3A.git
+git clone https://github.com/marie678/Projet-Mise-en-prod-3A.git
 ```
 2. Install the necessary dependencies from the requirements.lock.txt file
 ```
 pip install -r requirements.lock.txt
 ```
-3. Navigate to the  `final_app/Streamlit_app` folder
+3. Run the main page of the app 
 ```
-cd final_app/Streamlit_app
-```
-4. Run the main page of the app 
-```
-streamlit run Welcome_page.py
+streamlit run app.py
 ```
 You can then navigate through the different pages within the app.
 

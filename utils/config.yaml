@@ -1,0 +1,3 @@
+DATA_DIR: 's3://mmeyer/projet-mise-en-prod/data/raw'
+s3:
+  endpoint_url: "https://minio.lab.sspcloud.fr"

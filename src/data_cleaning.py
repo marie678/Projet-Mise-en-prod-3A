@@ -6,6 +6,7 @@ from pathlib import Path
 from typing import List
 
 import inflect
+import yaml
 import numpy as np
 import pandas as pd
 import s3fs
@@ -17,6 +18,15 @@ inflect_engine = inflect.engine()
 # Configure Loguru logging
 logger.add("data_cleaning.log", rotation="10 MB", level="INFO", format="{time} - {level} - {message}")
 
+
+# Get the absolute path to the project root
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
+config_path = PROJECT_ROOT / "utils" / "config.yaml"
+
+with open(config_path, "r") as file:
+    config = yaml.safe_load(file)
+DATA_DIR = config['DATA_DIR']
+S3_ENDPOINT_URL = config["s3"]["endpoint_url"]
 
 ## Utility functions
 def iso_to_minutes(iso_duration: str) -> float:
@@ -413,14 +423,13 @@ if __name__ == "__main__":
     try:
         # Initialize the s3fs filesystem with the appropriate endpoint for MinIO
         filesystem = s3fs.S3FileSystem(
-            client_kwargs={"endpoint_url": "https://minio.lab.sspcloud.fr"}
+            client_kwargs={"endpoint_url": S3_ENDPOINT_URL}
             )
-        DATA_DIR = 's3://mmeyer/projet-mise-en-prod/data/raw'
 
         recipe_nutrition_path = os.path.join(DATA_DIR, 'recipes.parquet').replace("\\", "/")
         recipe_measurements_path = os.path.join(DATA_DIR, 'recipes_data.csv').replace("\\", "/")
 
-        output_path = Path(__file__).resolve().parent.parent / 'Data/sample_recipes_10k.parquet'
+        output_path = PROJECT_ROOT / 'Data/sample_recipes_10k.parquet'
 
         logger.info("Starting data processing pipeline...")
         main(filesystem, recipe_nutrition_path, recipe_measurements_path, output_path)

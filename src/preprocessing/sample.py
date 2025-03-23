@@ -1,7 +1,6 @@
-# smapling
+# sampling
 
 import pandas as pd
-
 
 
 def sample_df_10k(df: pd.DataFrame) -> pd.DataFrame:

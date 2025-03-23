@@ -1,0 +1,12 @@
+[project]
+name = "projet-mise-en-prod-3a"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "inflect>=7.5.0",
+    "pandas>=2.2.3",
+    "s3fs>=2025.3.0",
+    "streamlit>=1.40.2",
+]

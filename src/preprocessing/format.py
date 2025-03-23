@@ -90,9 +90,7 @@ def text_formatting(df : pd.DataFrame, cols : List) -> pd.DataFrame:
     return df
 
 
-
 ## Handle outliers
-
 def rm_outliers(df : pd.DataFrame) -> pd.DataFrame:
     """
     Remove outliers of some numeric variables to keep recipes that make sense.
@@ -106,7 +104,8 @@ def rm_outliers(df : pd.DataFrame) -> pd.DataFrame:
     df = df[(df['Calories'] > 0) & (df['Calories'] <= 1500) & (df['RecipeServings'] <= 72)]
     return df
 
-## Formating functions
+
+## Formatting functions
 def iso_to_minutes(iso_duration: str) -> float:
     """
     Convert ISO 8601 durations to total minutes.
@@ -120,7 +119,8 @@ def iso_to_minutes(iso_duration: str) -> float:
     hours = int(re.search(r'(\d+)H', iso_duration).group(1)) if 'H' in iso_duration else 0
     minutes = int(re.search(r'(\d+)M', iso_duration).group(1)) if 'M' in iso_duration else 0
     return hours * 60 + minutes 
-    
+
+
 def format_duration(duration: str) -> str:
     """
     Function to convert ISO 8601 durations to a more readable format
@@ -156,7 +156,6 @@ def to_singular(ingredients_list: List[str]) -> List[str]:
     return ingredients_list
 
 
-
 def data_preprocessing(df: pd.DataFrame) -> pd.DataFrame:
     """
     Process the merged dataset by cleaning, formatting, and transforming various columns.
@@ -190,5 +189,3 @@ def data_preprocessing(df: pd.DataFrame) -> pd.DataFrame:
     df.loc[:,'Images'] = df['Images'].apply(lambda x:x[0])
 
     return df
-
-
