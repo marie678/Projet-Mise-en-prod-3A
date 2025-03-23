@@ -69,6 +69,8 @@ The final dataset includes new categorical and binary filters to enable users to
 
 ![image](https://github.com/user-attachments/assets/35e499ec-f64c-413c-a745-431b8ec12786)
 
+<img src="(https://github.com/user-attachments/assets/35e499ec-f64c-413c-a745-431b8ec12786" width="500" />
+
 
 ## Installation and Usage
 
