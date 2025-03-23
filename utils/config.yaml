@@ -1,3 +1,18 @@
 DATA_DIR: 's3://mmeyer/projet-mise-en-prod/data/raw'
 s3:
   endpoint_url: "https://minio.lab.sspcloud.fr"
+
+nutrition_data:
+  file: 'recipes.parquet'
+  keep_col: ['Name', 'AuthorName', 'CookTime', 'PrepTime', 'TotalTime', 'Description', 'Images', 'RecipeCategory', 'Keywords', 'AggregatedRating', 'ReviewCount', 'Calories', 'FatContent', 'SaturatedFatContent','CholesterolContent', 'SodiumContent', 'CarbohydrateContent', 'FiberContent', 'SugarContent','ProteinContent', 'RecipeServings', 'RecipeInstructions']
+  to_format:  ['RecipeInstructions', 'Keywords']
+  numeric_float_var: ['AggregatedRating', 'Calories','FatContent','SaturatedFatContent','CholesterolContent'
+               ,'SodiumContent','CarbohydrateContent','FiberContent','SugarContent','ProteinContent']
+  numeric_int_var: ['ReviewCount','RecipeServings']
+  list_var: ['Images','Keywords','RecipeInstructions']
+
+measurements_data:
+  file: 'recipes_data.parquet'
+  keep_col: ['title','directions','ingredients','link','NER']
+  to_format: ['ingredients', 'directions', 'NER']
+  list_var: ['ingredients', 'directions','NER']

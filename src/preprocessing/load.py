@@ -3,36 +3,34 @@ import pandas as pd
 from typing import List
 import inflect
 import time
+from pathlib import Path
+import yaml
 from format import rm_outliers, text_formatting, handle_na
 
 # Global instance of inflect.engine()
 inflect_engine = inflect.engine()
 
-# hyper para
-keep_col_nutrition = ['Name',
- 'AuthorName',
- 'CookTime',
- 'PrepTime',
- 'TotalTime',
- 'Description',
- 'Images',
- 'RecipeCategory',
- 'Keywords',
- 'AggregatedRating',
- 'ReviewCount',
- 'Calories',
- 'FatContent',
- 'SaturatedFatContent',
- 'CholesterolContent',
- 'SodiumContent',
- 'CarbohydrateContent',
- 'FiberContent',
- 'SugarContent',
- 'ProteinContent',
- 'RecipeServings',
- 'RecipeInstructions']
+# Get the absolute path to the project root
+PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
+config_path = PROJECT_ROOT / "utils" / "config.yaml"
 
-keep_col_measurements = ['title','directions','ingredients','link','NER']
+with open(config_path, "r") as file:
+    config = yaml.safe_load(file)
+DATA_DIR = config['DATA_DIR']
+S3_ENDPOINT_URL = config["s3"]["endpoint_url"]
+
+# initialize hyper parameters
+keep_col_nutrition = config['nutrition_data']['keep_col']
+to_format_nutrition = config['nutrition_data']['to_format']
+numeric_float_var_nutrition = config['nutrition_data']['numeric_float_var']
+numeric_int_var_nutrition = config['nutrition_data']['numeric_int_var']
+list_var_nutrition = config['nutrition_data']['list_var']
+
+keep_col_measurements = config['measurements_data']['keep_col']
+to_format_measurements = config['measurements_data']['to_format']
+list_var_measurements = config['measurements_data']['list_var']
+
+
 
 
 def load_nutrition_data(nutrition_data_path:str) -> tuple[pd.DataFrame, list]:
@@ -63,13 +61,8 @@ def load_nutrition_data(nutrition_data_path:str) -> tuple[pd.DataFrame, list]:
     # remove outliers
     df = rm_outliers(df)
     # Process array-like columns
-    to_format =  ['RecipeInstructions', 'Keywords']
-    text_formatting(df, to_format)
-    numeric_float_var = ['AggregatedRating', 'Calories','FatContent','SaturatedFatContent','CholesterolContent'
-               ,'SodiumContent','CarbohydrateContent','FiberContent','SugarContent','ProteinContent']
-    numeric_int_var= ['ReviewCount','RecipeServings']
-    list_var = ['Images','Keywords','RecipeInstructions']
-    df = handle_na(df, numeric_float_var, numeric_int_var, list_var)
+    text_formatting(df, to_format_nutrition)
+    df = handle_na(df, numeric_float_var_nutrition, numeric_int_var_nutrition, list_var_nutrition)
     print("Cleaned in --- %s seconds ---" % (time.time() - end_time))
     recipe_name = df['Name'].drop_duplicates().to_list()
     return df, recipe_name
@@ -102,10 +95,8 @@ def load_measurements_data(measurements_data_path : str,recipe_merge : List) -> 
     print("Measurements data set loaded in --- %s seconds ---" % (end_time - start_time))
     df= df[df['title'].isin(recipe_merge)]
     df = df.drop_duplicates(subset=['title', 'directions'])
-    to_format = ['ingredients', 'directions', 'NER']
-    text_formatting(df,to_format)
-    list_var = ['ingredients', 'directions','NER']
-    df = handle_na(df, list_var = list_var)
+    text_formatting(df,to_format_measurements)
+    df = handle_na(df, list_var = list_var_measurements)
     print("Cleaned in --- %s seconds ---" % (time.time() - end_time))
     return df
 
