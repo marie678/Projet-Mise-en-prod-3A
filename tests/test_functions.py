@@ -4,7 +4,7 @@
 import time
 
 import pandas as pd
-from src.functions import *
+from src.recipe_finder_functions import split_frame, search_recipes
 
 
 def test_split_frame():
