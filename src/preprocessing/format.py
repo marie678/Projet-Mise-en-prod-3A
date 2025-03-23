@@ -1,10 +1,27 @@
+"""
+Module that processes the data.
+includes :
+    - handle_type
+    - handle_na
+    - text_formating
+    - rm_outliers
+    - iso_to_minutes
+    - format_duration
+    - to_singular
+    - data_preprocessing
+"""
+import ast
+import logging
+import re
+import time
+from typing import List
+
+import inflect
 import numpy as np
 import pandas as pd
-import re
-from typing import List, Union
-import inflect
-import ast
 
+# Set up basic logging configuration
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 # Global instance of inflect.engine()
 inflect_engine = inflect.engine()
@@ -21,18 +38,15 @@ def handle_type(df: pd.DataFrame, numeric_float_var: List[str] = [], numeric_int
     Returns:
     pd.DataFrame: The DataFrame with type conversions applied.
     """
-    # Convert to float for numeric_float_var if provided
     if numeric_float_var:
         df[numeric_float_var] = df[numeric_float_var].astype(float)
-    
-    # Convert to Int64 (nullable integer) for numeric_int_var if provided
     if numeric_int_var:
         df[numeric_int_var] = df[numeric_int_var].where(pd.notna(df[numeric_int_var]), np.nan).astype('Int64')
     
     return df
 
-## Missing values handling
-def handle_na(df : pd.DataFrame,numeric_float_var : List[str] = [], numeric_int_var : List[str] = [], string_var: List[str] = [], list_var: List[str] = []) -> pd.DataFrame:
+
+def handle_na(df : pd.DataFrame,numeric_float_var : List[str] = [], numeric_int_var : List[str] = [], list_var: List[str] = []) -> pd.DataFrame:
     """
     This function handles missing values in the DataFrame by performing type conversions and removing rows with missing data.
 
@@ -40,25 +54,22 @@ def handle_na(df : pd.DataFrame,numeric_float_var : List[str] = [], numeric_int_
     df (pd.DataFrame): The input DataFrame to handle missing values for.
     numeric_float_var (List[str]): List of columns to convert to float type. Defaults to an empty list.
     numeric_int_var (List[str]): List of columns to convert to Int64 (nullable integers). Defaults to an empty list.
-    string_var (List[str]): List of columns to convert to string type. Defaults to an empty list.
     list_var (List[str]): List of columns that contain lists. Rows with empty or `None` values in these columns will be removed. Defaults to an empty list.
 
     Returns:
     pd.DataFrame: The DataFrame with missing values handled and type conversions applied.
     """
-    df = handle_type(df, numeric_float_var, numeric_int_var, string_var)
-    # we remove na values
+    df = handle_type(df, numeric_float_var, numeric_int_var)
     len_before = len(df)
     for var in list_var: 
         df = df[df[var].apply(lambda x: x is not None and len(x) > 0)]
     df = df.dropna()
     len_after=len(df)
-    print(f'From {len_before} to {len_after}')
+    logging.info((f'{len_before-len_after} NA were removed. The data frame has now {len_after} rows'))
     return df
 
 
-## Text formating
-def text_formatting(df : pd.DataFrame, cols : List) -> pd.DataFrame:
+def text_formating(df : pd.DataFrame, cols : List) -> pd.DataFrame:
     """
     This function ensures that textual variables in the specified columns are properly formatted.
     It handles cases where textual data is improperly represented, such as strings that look like lists of strings
@@ -91,7 +102,6 @@ def text_formatting(df : pd.DataFrame, cols : List) -> pd.DataFrame:
     return df
 
 
-## Handle outliers
 def rm_outliers(df : pd.DataFrame) -> pd.DataFrame:
     """
     Remove outliers of some numeric variables to keep recipes that make sense.
@@ -106,7 +116,6 @@ def rm_outliers(df : pd.DataFrame) -> pd.DataFrame:
     return df
 
 
-## Formatting functions
 def iso_to_minutes(iso_duration: str) -> float:
     """
     Convert ISO 8601 durations to total minutes.
@@ -167,6 +176,7 @@ def data_preprocessing(df: pd.DataFrame) -> pd.DataFrame:
     Returns:
         pd.DataFrame: The cleaned and processed DataFrame.
     """
+    start_time = time.time()
     df['CookTime'] = df['CookTime'].fillna('PT0M')
     df = df.dropna()
 
@@ -189,4 +199,5 @@ def data_preprocessing(df: pd.DataFrame) -> pd.DataFrame:
     # keep only one image link per recipe
     df.loc[:,'Images'] = df['Images'].apply(lambda x:x[0])
 
+    logging.info("Nutrition data set cleaned in --- %s seconds ---", (time.time() - start_time))
     return df

@@ -1,12 +1,22 @@
-# filter
-import numpy as np
-import pandas as pd
+"""
+Module that creates columns used for streamlit filters.
+includes :
+    - categorize_duration
+    - assign_category
+    - is_non_vegetarian
+    - find_world_cuisine
+    - data_filter
+"""
+import logging
 import re
-from typing import List, Union
-import inflect
+import time
+from typing import List
 
-# Global instance of inflect.engine()
-inflect_engine = inflect.engine()
+import pandas as pd
+
+# Set up basic logging configuration
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+
 
 def categorize_duration(total_minutes: float) -> str:
     """
@@ -92,7 +102,7 @@ def find_world_cuisine(keywords: List[str]) -> str:
         'Mexican', 'U.S.', 'Caribbean', 'American', 'Hawaiian', 'Cuban', 'Venezuelan', 'Peruvian', 'Puerto Rican', 'Colombian', 'Chilean', 'Costa Rican', 'Guatemalan', 'Honduran', 'Brazilian', 
         'European', 'Greek', 'German', 'Spanish', 'Portuguese', 'French', 'Scottish', 'Polish', 'Austrian', 'Hungarian', 'Danish', 'Turkish', 'Finnish', 'Dutch', 'Belgian', 'Norwegian', 'Welsh', 'Czech', 'Scandinavian', 'Icelandic'
     ]
-    keywords_lower = [str(k).lower() for k in keywords]
+    keywords_lower = [str(k.strip('#')).lower() for k in keywords]
     for cuisine in world_cuisines:
         if cuisine.lower() in keywords_lower:
             return cuisine
@@ -109,11 +119,13 @@ def data_filter(df: pd.DataFrame) -> pd.DataFrame:
     Returns:
         pd.DataFrame: DataFrame with new columns
     """
+    start_time = time.time()
     df.loc[:, 'TotalTime_cat'] = df['TotalTime_minutes'].apply(categorize_duration)
     df.loc[:,'RecipeType'] = df.apply(assign_category, axis=1)
     df = df[df['RecipeType'] != 'Other'].reset_index(drop=True)
-    df.loc[:,'Beginner_Friendly'] = df['Keywords'].apply(lambda x: 'Easy' in x) 
+    df.loc[:,'Beginner_Friendly'] = df['Keywords'].apply(lambda x: '#Easy' in x) 
     df.loc[:,'Vegetarian_Friendly'] = ~df['ingredients'].apply(is_non_vegetarian) 
     df.loc[:,'World_Cuisine'] = df['Keywords'].apply(find_world_cuisine)
+    logging.info("Nutrition data set loaded in --- %s seconds ---", (time.time() - start_time))
 
     return df

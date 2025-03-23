@@ -50,7 +50,7 @@ The goal of the preprocessing stage is to create a 10,000-recipe dataframe for o
 1. [Food.com Recipes and Reviews](https://www.kaggle.com/datasets/irkaal/foodcom-recipes-and-reviews/data): This dataset provides a wide variety of recipes along with their nutritional information, cooking times, servings, ratings, and more.
 2. [Recipe Dataset (2M+ recipes)](https://www.kaggle.com/datasets/wilmerarltstrmberg/recipe-dataset-over-2m/data): This dataset adds information about ingredient quantities and measurements for each recipe. It contains over 2 million recipes, many of which are also included in the first dataset.
 
-Due to size limitations, these files are not included in this repository.
+These files are stored in SSP Cloud's S3 storage.
 
 **Data aggregation**
 
@@ -65,7 +65,9 @@ The final dataset includes new categorical and binary filters to enable users to
 
 ## Repository architecture
 
-![image](https://github.com/user-attachments/assets/940f6c41-ed9d-4e73-a337-bccbbe970df7)
+<img src="https://github.com/user-attachments/assets/174222c2-6639-492a-a75b-780b495a7946" width="700" />
+
+<img src="https://github.com/user-attachments/assets/35e499ec-f64c-413c-a745-431b8ec12786" width="800" />
 
 
 ## Installation and Usage
