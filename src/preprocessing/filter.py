@@ -7,10 +7,15 @@ includes :
     - find_world_cuisine
     - data_filter
 """
+import logging
 import re
+import time
 from typing import List
 
 import pandas as pd
+
+# Set up basic logging configuration
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 
 def categorize_duration(total_minutes: float) -> str:
@@ -114,11 +119,13 @@ def data_filter(df: pd.DataFrame) -> pd.DataFrame:
     Returns:
         pd.DataFrame: DataFrame with new columns
     """
+    start_time = time.time()
     df.loc[:, 'TotalTime_cat'] = df['TotalTime_minutes'].apply(categorize_duration)
     df.loc[:,'RecipeType'] = df.apply(assign_category, axis=1)
     df = df[df['RecipeType'] != 'Other'].reset_index(drop=True)
     df.loc[:,'Beginner_Friendly'] = df['Keywords'].apply(lambda x: '#Easy' in x) 
     df.loc[:,'Vegetarian_Friendly'] = ~df['ingredients'].apply(is_non_vegetarian) 
     df.loc[:,'World_Cuisine'] = df['Keywords'].apply(find_world_cuisine)
+    logging.info("Nutrition data set loaded in --- %s seconds ---", (time.time() - start_time))
 
     return df

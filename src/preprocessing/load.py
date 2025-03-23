@@ -5,6 +5,7 @@ includes :
     - load_measurements_data
     - merge
 """
+import logging
 from pathlib import Path
 import time
 from typing import List
@@ -14,6 +15,8 @@ import yaml
 
 from format import rm_outliers, text_formating, handle_na
 
+# Set up basic logging configuration
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 # Get the absolute path to the project root
 PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
@@ -34,7 +37,6 @@ list_var_nutrition = config['nutrition_data']['list_var']
 keep_col_measurements = config['measurements_data']['keep_col']
 to_format_measurements = config['measurements_data']['to_format']
 list_var_measurements = config['measurements_data']['list_var']
-
 
 
 
@@ -61,14 +63,14 @@ def load_nutrition_data(nutrition_data_path:str) -> tuple[pd.DataFrame, list]:
     start_time = time.time()
     df = pd.read_parquet(nutrition_data_path, columns=keep_col_nutrition)
     end_time = time.time()
-    print("Nutrition data set loaded in --- %s seconds ---" % (end_time - start_time))
+    logging.info("Nutrition data set loaded in --- %s seconds ---", (end_time - start_time))
     df = df.drop_duplicates(subset=['Name','AuthorName'])
     # remove outliers
     df = rm_outliers(df)
     # Process array-like columns
     text_formating(df, to_format_nutrition)
     df = handle_na(df, numeric_float_var_nutrition, numeric_int_var_nutrition, list_var_nutrition)
-    print("Cleaned in --- %s seconds ---" % (time.time() - end_time))
+    logging.info("Nutrition data set cleaned in --- %s seconds ---", (time.time() - end_time))
     recipe_name = df['Name'].drop_duplicates().to_list()
     return df, recipe_name
 
@@ -97,12 +99,12 @@ def load_measurements_data(measurements_data_path : str,recipe_merge : List) -> 
     start_time = time.time()
     df = pd.read_parquet(measurements_data_path, columns=keep_col_measurements)
     end_time = time.time()
-    print("Measurements data set loaded in --- %s seconds ---" % (end_time - start_time))
+    logging.info("Measurements data set loaded in --- %s seconds ---", (end_time - start_time))
     df= df[df['title'].isin(recipe_merge)]
     df = df.drop_duplicates(subset=['title', 'directions'])
     text_formating(df,to_format_measurements)
     df = handle_na(df, list_var = list_var_measurements)
-    print("Cleaned in --- %s seconds ---" % (time.time() - end_time))
+    logging.info("Measurements data set cleaned in --- %s seconds ---", (time.time() - end_time))
     return df
 
 
@@ -126,11 +128,14 @@ def merge(nutrition_data_path:str, measurements_data_path:str) -> pd.DataFrame:
     """
     df_nutrition, recipe_merge = load_nutrition_data(nutrition_data_path) 
     df_measurements = load_measurements_data(measurements_data_path, recipe_merge)
-    # create col to merge
+    start_time = time.time()
+    # create column to merge
     df_nutrition['to_merge']=df_nutrition['RecipeInstructions'].apply(lambda x: x[0] if isinstance(x, list) and len(x) > 0 else None)
     df_measurements['to_merge']=df_measurements['directions'].apply(lambda x: x[0] if isinstance(x, list) and len(x) > 0 else None)
     # mege on recipe name and first instruction
     df_merged = pd.merge(df_nutrition, df_measurements, left_on=['Name','to_merge'], right_on=['title','to_merge'], how='inner')
+    #keep only usefull columns and non duplicate rows
     df_merged = df_merged.drop_duplicates(subset=['Name','AuthorName'])
     df_merged = df_merged.drop(columns=['to_merge','RecipeInstructions','Name'])
+    logging.info("Data merged in --- %s seconds ---", (time.time() - start_time))
     return df_merged
