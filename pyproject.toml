@@ -6,7 +6,10 @@ readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
     "inflect>=7.5.0",
+    "loguru>=0.7.3",
     "pandas>=2.2.3",
+    "pyspellchecker>=0.8.2",
+    "pyyaml>=6.0.2",
     "s3fs>=2025.3.0",
     "streamlit>=1.40.2",
 ]
