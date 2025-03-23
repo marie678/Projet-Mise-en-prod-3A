@@ -65,8 +65,7 @@ The final dataset includes new categorical and binary filters to enable users to
 
 ## Repository architecture
 
-![image](https://github.com/user-attachments/assets/940f6c41-ed9d-4e73-a337-bccbbe970df7)
-
+![image](https://github.com/user-attachments/assets/174222c2-6639-492a-a75b-780b495a7946)
 
 ## Installation and Usage
 
