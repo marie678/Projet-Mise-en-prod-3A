@@ -9,7 +9,6 @@ config_path = PROJECT_ROOT / "utils" / "config.yaml"
 with open(config_path, "r") as file:
     config = yaml.safe_load(file)
 DATA_DIR = config['DATA_DIR']
-S3_ENDPOINT_URL = config["s3"]["endpoint_url"]
 
 
 ### Tests for utility functions ###
@@ -60,13 +59,10 @@ def test_find_world_cuisine():
 ### Test main function ###
 def test_main():
     # Setup test file paths
-    filesystem = s3fs.S3FileSystem(
-        client_kwargs={"endpoint_url": S3_ENDPOINT_URL}
-        )
     test_recipe_nutrition_path = os.path.join(DATA_DIR, 'recipes.parquet').replace("\\", "/")
     test_recipe_measurements_path = os.path.join(DATA_DIR, 'recipes_data.csv').replace("\\", "/")
     output_path = PROJECT_ROOT / 'Data/sample_recipes_10k.parquet'
-    df = main(filesystem, test_recipe_nutrition_path, test_recipe_measurements_path, output_path)
+    df = main(test_recipe_nutrition_path, test_recipe_measurements_path, output_path)
 
     assert len(df) <= 10000  #Dataframe should have at most 10,000 rows
     assert df['title'].is_unique  #Titles should be unique
