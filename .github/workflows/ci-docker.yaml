@@ -30,4 +30,3 @@ jobs:
           context: .
           push: true
           tags: marie678/mise_en_prod:latest
-
