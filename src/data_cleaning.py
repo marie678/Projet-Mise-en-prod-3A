@@ -407,6 +407,7 @@ def main(data_path_nutrition: str,
     except Exception as e:
         logger.exception(f"An error occurred while processing the dataset: {e}")
         raise
+    return df
 
 
 if __name__ == "__main__":
