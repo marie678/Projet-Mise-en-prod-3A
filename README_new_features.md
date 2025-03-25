@@ -29,4 +29,6 @@ Preprocessing code
 
 ## Application
 
+- Created CI tests to continuously test the code quality and run the unit tests + to continuously deploy a Docker image of the app to Dockerhub
+
 Deployed, new functionalities, Docker
