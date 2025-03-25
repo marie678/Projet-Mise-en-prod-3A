@@ -419,8 +419,10 @@ if __name__ == "__main__":
 
         recipe_nutrition_path = os.path.join(DATA_DIR, 'recipes.parquet').replace("\\", "/")
         recipe_measurements_path = os.path.join(DATA_DIR, 'recipes_data.csv').replace("\\", "/")
-
-        output_path = PROJECT_ROOT / 'Data/sample_recipes_10k.parquet'
+        output_dir = PROJECT_ROOT / 'data'
+        if not os.path.exists(output_dir):
+            os.makedirs(output_dir)
+        output_path = output_dir / 'sample_recipes_10k.parquet'
 
         logger.info("Starting data processing pipeline...")
         main(recipe_nutrition_path, recipe_measurements_path, output_path)
