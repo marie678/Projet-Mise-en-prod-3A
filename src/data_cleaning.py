@@ -401,6 +401,7 @@ def main(data_path_nutrition: str,
             logger.info("Sampling down to 10,000 rows...")
             df = sample_df_10k(df)
         if output_path:
+            
             df.to_parquet(output_path, index=False)
             logger.success(f"Processed dataset saved to {output_path}")
 
