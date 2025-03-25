@@ -1,6 +1,9 @@
 DATA_DIR: 'https://minio.lab.sspcloud.fr/mmeyer/projet-mise-en-prod/data/raw/' #'s3://mmeyer/projet-mise-en-prod/data/raw'
 s3:
   endpoint_url: "https://minio.lab.sspcloud.fr"
+SAMPLE_RECIPE_FILENAME: 'sample_recipes_10k2.parquet'
+BASE_DIR = (os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+SAMPLE_RECIPE_PATH = os.path.join(BASE_DIR, 'Data/sample_recipes_10k2.parquet')
 
 nutrition_data:
   file: 'recipes.parquet'

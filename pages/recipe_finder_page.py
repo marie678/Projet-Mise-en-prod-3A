@@ -6,6 +6,9 @@ as well as the search results.
 from collections import Counter
 from typing import Any, List
 
+import os
+from pathlib import Path
+import yaml
 import pandas as pd
 import streamlit as st
 from src.query_helpers import clean_query, query_error
@@ -13,12 +16,20 @@ from src.recipe_finder_functions import search_recipes, split_frame
 from src.st_session_functions import (handle_recipe_click,
                                       initialize_session_state)
 from streamlit_extras.add_vertical_space import add_vertical_space
-from utils.config import SAMPLE_RECIPE_PATH
+# from utils.config import SAMPLE_RECIPE_PATH
 
 
 # configuration parameters
 st.set_page_config(layout="wide", page_title='Recipe Finder', initial_sidebar_state='collapsed')
+
 # import of the cleaned and formated dataset of 10k recipes :
+# Get the absolute path to the project root
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
+# config_path = PROJECT_ROOT / "utils" / "config.yaml"
+# with open(config_path, "r") as file:
+#     config = yaml.safe_load(file)
+# DATA_DIR = config['DATA_DIR']
+SAMPLE_RECIPE_PATH = os.path.join(PROJECT_ROOT, 'data/sample_recipes_10k2.parquet')
 df: pd.DataFrame = pd.read_parquet(SAMPLE_RECIPE_PATH)
 
 # idee : mettre ici if data directory vide / non existant : lancer data_cleaning module depuis ici

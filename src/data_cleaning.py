@@ -411,11 +411,6 @@ def main(data_path_nutrition: str,
 
 if __name__ == "__main__":
     try:
-        # # Initialize the s3fs filesystem with the appropriate endpoint for MinIO
-        # filesystem = s3fs.S3FileSystem(
-        #     client_kwargs={"endpoint_url": S3_ENDPOINT_URL}
-        #     )
-
         recipe_nutrition_path = os.path.join(DATA_DIR, 'recipes.parquet').replace("\\", "/")
         recipe_measurements_path = os.path.join(DATA_DIR, 'recipes_data.csv').replace("\\", "/")
         output_dir = PROJECT_ROOT / 'data'
