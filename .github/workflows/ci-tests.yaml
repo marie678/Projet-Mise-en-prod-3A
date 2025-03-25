@@ -44,4 +44,4 @@ jobs:
 
       - name: Run unit tests
         run: |
-          pytest -v --tb=long tests/
+          pytest -v tests/

@@ -61,7 +61,10 @@ def test_main():
     # Setup test file paths
     test_recipe_nutrition_path = os.path.join(DATA_DIR, 'recipes.parquet').replace("\\", "/")
     test_recipe_measurements_path = os.path.join(DATA_DIR, 'recipes_data.csv').replace("\\", "/")
-    output_path = PROJECT_ROOT / 'data/sample_recipes_10k.parquet'
+    output_dir = PROJECT_ROOT / 'data'
+    if not os.path.exists(output_dir):
+            os.makedirs(output_dir)
+    output_path = output_dir / 'sample_recipes_10k.parquet'
     df = main(test_recipe_nutrition_path, test_recipe_measurements_path, output_path)
 
     assert len(df) <= 10000  #Dataframe should have at most 10,000 rows
