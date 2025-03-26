@@ -6,11 +6,10 @@ from pathlib import Path
 from typing import List
 
 import inflect
-import yaml
 import numpy as np
 import pandas as pd
+import yaml
 from loguru import logger
-
 
 # Global instance of inflect.engine()
 inflect_engine = inflect.engine()
@@ -25,7 +24,7 @@ config_path = PROJECT_ROOT / "utils" / "config.yaml"
 with open(config_path, "r") as file:
     config = yaml.safe_load(file)
 DATA_DIR = config['DATA_DIR']
-S3_ENDPOINT_URL = config["s3"]["endpoint_url"]
+
 
 ## Utility functions
 def iso_to_minutes(iso_duration: str) -> float:
@@ -371,12 +370,10 @@ def sample_df_10k(df: pd.DataFrame) -> pd.DataFrame:
 def main(data_path_nutrition: str,
          data_path_measurements: str,
          output_path: Path | None = None) -> None:
-    # fs: s3fs.S3FileSystem,
     """
     Main function to process and return the final dataset.
 
     Args:
-        # fs (s3fs.S3FileSystem): File system object for remote access (S3/MinIO)
         data_path_nutrition (str): Path to the recipe nutrition dataset file (parquet format).
         data_path_measurements (str): Path to the recipe measurements dataset file (csv format).
         output_path (str, optional): Path where to save the processed dataset. If not provided,

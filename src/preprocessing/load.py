@@ -5,15 +5,15 @@ includes :
     - load_measurements_data
     - merge
 """
+
 import logging
-from pathlib import Path
 import time
+from pathlib import Path
 from typing import List
 
 import pandas as pd
 import yaml
-
-from format import rm_outliers, text_formating, handle_na
+from format import handle_na, rm_outliers, text_formating
 
 # Set up basic logging configuration
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -25,7 +25,6 @@ config_path = PROJECT_ROOT / "utils" / "config.yaml"
 with open(config_path, "r") as file:
     config = yaml.safe_load(file)
 DATA_DIR = config['DATA_DIR']
-S3_ENDPOINT_URL = config["s3"]["endpoint_url"]
 
 # initialize hyper parameters
 keep_col_nutrition = config['nutrition_data']['keep_col']
@@ -133,9 +132,11 @@ def merge(nutrition_data_path: str, measurements_data_path: str) -> pd.DataFrame
     start_time = time.time()
     # create column to merge
     df_nutrition['to_merge'] = df_nutrition['RecipeInstructions'].apply(
-                            lambda x: x[0] if isinstance(x, list) and len(x) > 0 else None)
+                            lambda x: x[0] if isinstance(x, list) and len(x) > 0 else None
+                            )
     df_measurements['to_merge'] = df_measurements['directions'].apply(
-                            lambda x: x[0] if isinstance(x, list) and len(x) > 0 else None)
+                            lambda x: x[0] if isinstance(x, list) and len(x) > 0 else None
+                            )
     # merge on recipe name and first instruction
     df_merged = pd.merge(
                          df_nutrition,

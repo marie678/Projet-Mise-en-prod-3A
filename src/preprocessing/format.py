@@ -10,6 +10,7 @@ includes :
     - to_singular
     - data_preprocessing
 """
+
 import ast
 import logging
 import re
@@ -27,7 +28,9 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(
 inflect_engine = inflect.engine()
 
 
-def handle_type(df: pd.DataFrame, numeric_float_var: List[str] = [], numeric_int_var: List[str] = []) -> pd.DataFrame:
+def handle_type(
+        df: pd.DataFrame, numeric_float_var: List[str] = [], numeric_int_var: List[str] = []
+        ) -> pd.DataFrame:
     """
     This function handles type conversions for the provided columns of a DataFrame.
 
@@ -50,11 +53,12 @@ def handle_type(df: pd.DataFrame, numeric_float_var: List[str] = [], numeric_int
     return df
 
 
-def handle_na(df: pd.DataFrame,
-              numeric_float_var: List[str] = [],
-              numeric_int_var: List[str] = [],
-              list_var: List[str] = []
-              ) -> pd.DataFrame:
+def handle_na(
+        df: pd.DataFrame,
+        numeric_float_var: List[str] = [],
+        numeric_int_var: List[str] = [],
+        list_var: List[str] = []
+    ) -> pd.DataFrame:
     """
     This function handles missing values in the DataFrame by performing type conversions and
         removing rows with missing data.
@@ -76,7 +80,11 @@ def handle_na(df: pd.DataFrame,
         df = df[df[var].apply(lambda x: x is not None and len(x) > 0)]
     df = df.dropna()
     len_after = len(df)
-    logging.info("%d NA were removed. The data frame has now %d rows", len_before - len_after, len_after)
+    logging.info(
+        "%d NA were removed. The data frame has now %d rows",
+        len_before - len_after,
+        len_after
+        )
     return df
 
 
@@ -96,21 +104,30 @@ def text_formating(df: pd.DataFrame, cols: List) -> pd.DataFrame:
     for col in cols:
         # First, ensure that any non-list or non-array type values are converted into a list
         df[col] = df[col].apply(
-            lambda x: ast.literal_eval(x) if isinstance(x, str) and x.startswith('[') and x.endswith(']') else [x] if isinstance(x, str) else x
+            lambda x: ast.literal_eval(x)
+            if isinstance(x, str) and x.startswith('[') and x.endswith(']')
+            else [x]
+            if isinstance(x, str)
+            else x
         )
 
         # Then ensure that if it's a list (or ndarray), we check for None values and replace with NaN if necessary
         df[col] = df[col].apply(
-            lambda x: [
-                np.nan if item is None
-                else item for item in x
-                ] if isinstance(x, (list, np.ndarray)) else x
+            lambda x: [np.nan if item is None else item for item in x]
+            if isinstance(x, (list, np.ndarray))
+            else x
             )
 
         # Then clean
         if col in ('RecipeInstructions', 'directions'):
             df[col] = df[col].apply(
-                lambda x: [instr.strip() + '.' for instr in ' '.join([str(item) for item in x]).split('.') if instr.strip()] if isinstance(x, list) else np.nan
+                lambda x: [
+                    instr.strip() + '.'
+                    for instr in ' '.join([str(item) for item in x]).split('.')
+                    if instr.strip()
+                ]
+                if isinstance(x, list)
+                else np.nan
             )
 
     return df
@@ -177,7 +194,10 @@ def to_singular(ingredients_list: List[str]) -> List[str]:
         Words that are already singular or unrecognized remain unchanged.
     """
     if isinstance(ingredients_list, list):
-        return [inflect_engine.singular_noun(ingredient) or ingredient for ingredient in ingredients_list]
+        return [
+            inflect_engine.singular_noun(ingredient) or ingredient
+            for ingredient in ingredients_list
+            ]
     return ingredients_list
 
 

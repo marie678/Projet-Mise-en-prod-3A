@@ -7,6 +7,7 @@ includes :
     - find_world_cuisine
     - data_filter
 """
+
 import logging
 import re
 import time
@@ -54,7 +55,7 @@ def assign_category(row: pd.Series) -> str:
     patterns = {
         'Main Course': r'lunch|meal|meat|chicken|beef|pork|steak|turkey|duck|fish|salmon|lamb|crab|\
             shrimp|lobster|tuna|vegetable|potato|rice|noodle|pasta|penne|spaghetti|macaroni\
-                |linguine|pizza|quiche|lentil|tofu|onion|soup|stew|dressing',
+            |linguine|pizza|quiche|lentil|tofu|onion|soup|stew|dressing',
         'Breakfast': r'breakfast',
         'Dessert': r'dessert|cake|cookie|brownie|muffin|biscuit|babka|sweet|candy|sugar|banana',
         'Beverages': r'beverage|cocktail|smoothie|lemonade|coffee',
@@ -63,7 +64,11 @@ def assign_category(row: pd.Series) -> str:
     for source in ['RecipeCategory', 'Keywords', 'title']:
         value = row[source]
         if value is not None and isinstance(value, (str, list)):
-            text = ' '.join([str(v) for v in value if v is not None]) if isinstance(value, list) else value
+            text = (
+                ' '.join([str(v) for v in value if v is not None])
+                if isinstance(value, list)
+                else value
+            )
             for category, pattern in patterns.items():
                 if re.search(pattern, text.lower()):
                     return category
