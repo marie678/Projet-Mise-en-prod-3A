@@ -1,6 +1,8 @@
 # Changes with the 'Mise en production' course
 
-![image](https://github.com/user-attachments/assets/2c4d1c0c-2302-4329-b107-0ab745f07161)
+<img src="https://github.com/user-attachments/assets/174222c2-6639-492a-a75b-780b495a7946" width="500" /> VS <img src="https://github.com/user-attachments/assets/2c4d1c0c-2302-4329-b107-0ab745f07161" width="450" />
+
+<img src="https://github.com/user-attachments/assets/35e499ec-f64c-413c-a745-431b8ec12786" width="600" />
 
 
 
