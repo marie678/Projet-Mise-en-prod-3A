@@ -247,8 +247,8 @@ def load_measurements_data(data_path: str) -> pd.DataFrame:
     Returns:
         pd.DataFrame: cleaned dataset
     """
-    # with fs.open(data_path) as f:
-    df = pd.read_csv(data_path, low_memory=True)
+    # df = pd.read_csv(data_path, low_memory=True)
+    df = pd.read_parquet(data_path)
     df = df[['title', 'ingredients', 'directions', 'link', 'NER']]
     df = df.drop_duplicates(subset=['title', 'directions'])
     for col in ['ingredients', 'directions', 'NER']:
@@ -412,7 +412,8 @@ def main(data_path_nutrition: str,
 if __name__ == "__main__":
     try:
         recipe_nutrition_path = os.path.join(DATA_DIR, 'recipes.parquet').replace("\\", "/")
-        recipe_measurements_path = os.path.join(DATA_DIR, 'recipes_data.csv').replace("\\", "/")
+        # recipe_measurements_path = os.path.join(DATA_DIR, 'recipes_data.csv').replace("\\", "/")
+        recipe_measurements_path = os.path.join(DATA_DIR, 'recipes_data.parquet').replace("\\", "/")
         output_dir = PROJECT_ROOT / 'data'
         if not os.path.exists(output_dir):
             os.makedirs(output_dir)

@@ -60,7 +60,8 @@ def test_find_world_cuisine():
 def test_main():
     # Setup test file paths
     test_recipe_nutrition_path = os.path.join(DATA_DIR, 'recipes.parquet').replace("\\", "/")
-    test_recipe_measurements_path = os.path.join(DATA_DIR, 'recipes_data.csv').replace("\\", "/")
+    # test_recipe_measurements_path = os.path.join(DATA_DIR, 'recipes_data.csv').replace("\\", "/")
+    test_recipe_measurements_path = os.path.join(DATA_DIR, 'recipes_data.parquet').replace("\\", "/")
     output_dir = PROJECT_ROOT / 'data'
     if not os.path.exists(output_dir):
             os.makedirs(output_dir)

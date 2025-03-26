@@ -29,7 +29,7 @@ PROJECT_ROOT = Path(__file__).resolve().parent.parent
 # with open(config_path, "r") as file:
 #     config = yaml.safe_load(file)
 # DATA_DIR = config['DATA_DIR']
-SAMPLE_RECIPE_PATH = os.path.join(PROJECT_ROOT, 'data/sample_recipes_10k2.parquet')
+SAMPLE_RECIPE_PATH = os.path.join(PROJECT_ROOT, 'data/sample_recipes_10k.parquet')
 df: pd.DataFrame = pd.read_parquet(SAMPLE_RECIPE_PATH)
 
 # idee : mettre ici if data directory vide / non existant : lancer data_cleaning module depuis ici
