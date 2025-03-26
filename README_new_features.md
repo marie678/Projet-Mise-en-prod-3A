@@ -1,6 +1,7 @@
 # Changes with the 'Mise en production' course
 
-2 graphics 
+![image](https://github.com/user-attachments/assets/2c4d1c0c-2302-4329-b107-0ab745f07161)
+
 
 
 ## Repository organisation / architecture
