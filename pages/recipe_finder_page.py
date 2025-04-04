@@ -41,7 +41,7 @@ data_folder = os.path.join(PROJECT_ROOT, "data")
 # ADD A MESSAGE ON STREAMLIT TO WARN ABOUT LOADING TIME
 # if no data folder or if it is empty : create the dataset and save it in data folder
 if not os.path.exists(data_folder) or not os.listdir(data_folder):
-    os.makedirs(data_folder)
+    os.makedirs(data_folder, exist_ok=True)
     data_folder = Path(data_folder)
     recipe_nutrition_path = os.path.join(DATA_DIR, NUTRITION_FILE_NAME).replace("\\", "/")
     recipe_measurements_path = os.path.join(DATA_DIR, MEASUREMENTS_FILE_NAME).replace("\\", "/")
@@ -52,7 +52,8 @@ if not os.path.exists(data_folder) or not os.listdir(data_folder):
     df_prepro = data_preprocessing(merged)
     df_filtered = data_filter(df_prepro)
     output_path = data_folder / 'final_df.parquet'
-    df_filtered.to_parquet(output_path, index=False)
+    if not os.path.exists(output_path):
+        df_filtered.to_parquet(output_path, index=False)
 
     logger.success(f"Processed dataset saved to {output_path}")
     logger.success("Pipeline execution completed successfully.")
