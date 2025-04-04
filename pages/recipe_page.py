@@ -23,6 +23,11 @@ st.markdown(
 
 if 'title' not in st.session_state:
     st.markdown("Please go to the **Recipe Finder** page and enter filters to find a recipe.")
+    _, col1, col2, _ = st.columns([2, 1, 1, 2])
+    if col1.button("🔎 Recipe Finder"):
+        st.switch_page("pages/recipe_finder_page.py")
+    if col2.button("🏠 Home page"):
+        st.switch_page("app.py")
 
 else:
     # Get all the recipe elements from the session state
