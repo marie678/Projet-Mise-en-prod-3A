@@ -13,7 +13,7 @@ from typing import List
 
 import pandas as pd
 import yaml
-from format import handle_na, rm_outliers, text_formating
+from src.preprocessing.format import handle_na, rm_outliers, text_formating
 
 # Set up basic logging configuration
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -139,12 +139,12 @@ def merge(nutrition_data_path: str, measurements_data_path: str) -> pd.DataFrame
                             )
     # merge on recipe name and first instruction
     df_merged = pd.merge(
-                         df_nutrition,
-                         df_measurements,
-                         left_on=['Name', 'to_merge'],
-                         right_on=['title', 'to_merge'],
-                         how='inner'
-                         )
+                        df_nutrition,
+                        df_measurements,
+                        left_on=['Name', 'to_merge'],
+                        right_on=['title', 'to_merge'],
+                        how='inner'
+                        )
     # keep only usefull columns and non duplicate rows
     df_merged = df_merged.drop_duplicates(subset=['Name', 'AuthorName'])
     df_merged = df_merged.drop(columns=['to_merge', 'RecipeInstructions', 'Name'])
