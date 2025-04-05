@@ -22,7 +22,7 @@ The new repository architecture was simplified:
 - A unique README now summurises all the application functionnalities and characteristics.
 
 
-## Data externalized
+## Data externalisation 
 
 Instead of doing the preprocessing locally on our computers, using the data sets downloaded from kaggle, and then saving the pre processed dataset in Github, we now do the preprocessing as part of the application code using the original data frames in an s3 folder.
 
@@ -41,29 +41,27 @@ We also directly use parquet files to do load and process the data wich saves ti
   </tr>
   <tr>
     <td> Recipes </td>
-    <td> - 687k Ko16 s </td>
+    <td> 16 s - 687k Ko </td>
     <td> 14 s - 174k Ko</td>
-    <td> 9 s</td>
+    <td> 9 s - 91963124 bites / 11.5k Ko</td>
   </tr>
   <tr>
     <td> recipes_data </td>
     <td> 65 s - 1 256k Ko </td>
     <td> 58 s - 986k Ko </td>
-    <td> 40 s - 89245812 bites / 11155 Ko</td>
+    <td> 40 s - 89245812 bites / 11k Ko</td>
   </tr>
 </table>
 
-Preprocessing code 
+The preprocessing code was adapted to reduce the compute time.
 
 ## Code
 
-- tested quality of code (imports in order, pep8 coding conventions, typing, ...)
+- The quality of the code was improved and tested (imports in order, pep8 coding conventions, typing, ...).
 
-- created more functions and put them in a unique folder, 
+- More functions were created and put in a unique structured folder. Rather than having them in a unique script we created 2 folders and 6 scripts with different functionality for more visibility.
 
-- structured the functions folder better (unique script -> 2 folders and 6 scripts with different functionality for more visibility)
-
-- more parametrizaion with YAML file
+- External parametrizaion with YAML file: the dataframes related parameters (columns to keep or format, file names) and s3 connexion parameters were externalized.
 
 
 ## Application
