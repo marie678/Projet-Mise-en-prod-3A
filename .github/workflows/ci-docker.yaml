@@ -6,6 +6,9 @@ on:
       - main
     tags:
       - 'v*.*.*'
+    paths-ignore:
+      - "**/*.md"
+
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
