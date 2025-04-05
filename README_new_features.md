@@ -61,11 +61,13 @@ The preprocessing code was adapted to reduce the compute time.
 
 - More functions were created and put in a unique structured folder. Rather than having them in a unique script we created 2 folders and 6 scripts with different functionality for more visibility.
 
+- Load/create the preprocessed dataset when the app is opened for the first time.
+
 - External parametrizaion with YAML file: the dataframes related parameters (columns to keep or format, file names) and s3 connexion parameters were externalized.
 
 
 ## Application
 
 - Created CI tests to continuously test the code quality and run the unit tests + to continuously deploy a Docker image of the app to Dockerhub
-
-Deployed, new functionalities, Docker
+- Deployed manually via kubernetes
+- Then created a CD pipeline to deploy automatically via ArgoCD
