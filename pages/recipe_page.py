@@ -26,7 +26,7 @@ if 'title' not in st.session_state:
     _, col1, col2, _ = st.columns([2, 1, 1, 2])
     if col1.button("🔎 Recipe Finder"):
         st.switch_page("pages/recipe_finder_page.py")
-    if col2.button("🏠 Home page"):
+    if col2.button("🏠 Home Page"):
         st.switch_page("app.py")
 
 else:

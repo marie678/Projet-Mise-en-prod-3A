@@ -41,23 +41,25 @@ data_folder = os.path.join(PROJECT_ROOT, "data")
 # ADD A MESSAGE ON STREAMLIT TO WARN ABOUT LOADING TIME
 # if no data folder or if it is empty : create the dataset and save it in data folder
 if not os.path.exists(data_folder) or not os.listdir(data_folder):
-    os.makedirs(data_folder, exist_ok=True)
-    data_folder = Path(data_folder)
-    recipe_nutrition_path = os.path.join(DATA_DIR, NUTRITION_FILE_NAME).replace("\\", "/")
-    recipe_measurements_path = os.path.join(DATA_DIR, MEASUREMENTS_FILE_NAME).replace("\\", "/")
+    with st.spinner("⏳ Initializing the dataset... This may take a few minutes."):
+        os.makedirs(data_folder, exist_ok=True)
+        data_folder = Path(data_folder)
+        recipe_nutrition_path = os.path.join(DATA_DIR, NUTRITION_FILE_NAME).replace("\\", "/")
+        recipe_measurements_path = os.path.join(DATA_DIR, MEASUREMENTS_FILE_NAME).replace("\\", "/")
 
-    logger.info("Starting data processing pipeline...")
+        logger.info("Starting data processing pipeline...")
 
-    merged = merge(recipe_nutrition_path, recipe_measurements_path)
-    df_prepro = data_preprocessing(merged)
-    df_filtered = data_filter(df_prepro)
-    output_path = data_folder / 'final_df.parquet'
-    if not os.path.exists(output_path):
-        df_filtered.to_parquet(output_path, index=False)
+        merged = merge(recipe_nutrition_path, recipe_measurements_path)
+        df_prepro = data_preprocessing(merged)
+        df_filtered = data_filter(df_prepro)
+        output_path = data_folder / 'final_df.parquet'
+        if not os.path.exists(output_path):
+            df_filtered.to_parquet(output_path, index=False)
 
-    logger.success(f"Processed dataset saved to {output_path}")
-    logger.success("Pipeline execution completed successfully.")
-    logger.add("data_cleaning.log", rotation="10 MB", level="INFO", format="{time} - {level} - {message}")
+        logger.success(f"Processed dataset saved to {output_path}")
+        logger.success("Pipeline execution completed successfully.")
+        logger.add("data_cleaning.log", rotation="10 MB", level="INFO", format="{time} - {level} - {message}")
+    st.success("✅ Dataset loaded and ready to go!")
 
 # load the dataset
 DATASET_PATH = os.path.join(data_folder, 'final_df.parquet')
