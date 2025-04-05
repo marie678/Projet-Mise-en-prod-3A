@@ -1,0 +1,16 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: mep-app
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/marie678/Projet-Mise-en-prod-3A.git
+    targetRevision: main
+    path: deployment
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: user-mmeyer
+  syncPolicy:
+    automated:
+      selfHeal: true
