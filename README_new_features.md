@@ -15,19 +15,43 @@
 ## Repository organisation / architecture
 The new repository architecture was simplified: 
 
-- no dev / final_app: the application architecture visible in root
+- Insted of giving acces to older versions of the app via a "dev" folder in the repository, we used tags which allow us to retrace our steps and at the same time make the application architecture visible in root.
 
-- no separation between data, preprocessing and application
+- There are no longer a separation between data, preprocessing and application folders. This also enables better visibility and faster understanding of the project.
 
-- unique read me
-
+- A unique README now summurises all the application functionnalities and characteristics.
 
 
 ## Data externalized
 
-Instead of doing the preprocessing locally on our computers using the data sets downloaded from kaggle and then saving the pre processed dataset in Github, we now do the preprocessing as part of the application code using the original data frames in an s3 folder.
+Instead of doing the preprocessing locally on our computers, using the data sets downloaded from kaggle, and then saving the pre processed dataset in Github, we now do the preprocessing as part of the application code using the original data frames in an s3 folder.
 
-We also directly use parquet files to do load and process the data wich saves time and memory.
+We also directly use parquet files to do load and process the data wich saves time and memory. Indeed, 
+
+<table>
+  <tr>
+    <td>Data set</td>
+    <td colspan="3">Lodaing time - memory</td>
+  </tr>
+  <tr>
+    <td> </td>
+    <td>CSV</td>
+    <td>Parquet</td>
+    <td>Optimized parquet</td>
+  </tr>
+  <tr>
+    <td> Recipes </td>
+    <td> - 687k Ko16 s </td>
+    <td> 14 s - 174k Ko</td>
+    <td> 9 s</td>
+  </tr>
+  <tr>
+    <td> recipes_data </td>
+    <td> 65 s - 1 256k Ko </td>
+    <td> 58 s - 986k Ko </td>
+    <td> 40 s - 89245812 bites / 11155 Ko</td>
+  </tr>
+</table>
 
 Preprocessing code 
 
