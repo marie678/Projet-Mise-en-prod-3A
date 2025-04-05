@@ -1,3 +1,6 @@
+[![Construction image Docker](https://github.com/marie678/Projet-Mise-en-prod-3A/actions/workflows/ci-docker.yaml/badge.svg)](https://github.com/marie678/Projet-Mise-en-prod-3A/actions/workflows/ci-docker.yaml)
+[![CI Tests](https://github.com/marie678/Projet-Mise-en-prod-3A/actions/workflows/ci-tests.yaml/badge.svg)](https://github.com/marie678/Projet-Mise-en-prod-3A/actions/workflows/ci-tests.yaml)
+
 # What to do with the ingredients left in my fridge?
 
 ## Project overview 

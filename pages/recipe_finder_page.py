@@ -6,55 +6,66 @@ as well as the search results.
 from collections import Counter
 from typing import Any, List
 
+import os
+from pathlib import Path
+import yaml
 import pandas as pd
 import streamlit as st
 from src.query_helpers import clean_query, query_error
 from src.recipe_finder_functions import search_recipes, split_frame
 from src.st_session_functions import (handle_recipe_click,
-                                      initialize_session_state)
+                                        initialize_session_state)
+from src.preprocessing.filter import data_filter
+from src.preprocessing.format import data_preprocessing
+from src.preprocessing.load import merge
 from streamlit_extras.add_vertical_space import add_vertical_space
-from utils.config import SAMPLE_RECIPE_PATH
+from loguru import logger
 
 
 # configuration parameters
 st.set_page_config(layout="wide", page_title='Recipe Finder', initial_sidebar_state='collapsed')
+
 # import of the cleaned and formated dataset of 10k recipes :
-df: pd.DataFrame = pd.read_parquet(SAMPLE_RECIPE_PATH)
+
+# Get the absolute path to the project root
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
+config_path = PROJECT_ROOT / "utils" / "config.yaml"
+with open(config_path, "r") as file:
+    config = yaml.safe_load(file)
+DATA_DIR = config['DATA_DIR']
+NUTRITION_FILE_NAME = config['s3']['nutrition_file_name']
+MEASUREMENTS_FILE_NAME = config['s3']['measurements_file_name']
+
+data_folder = os.path.join(PROJECT_ROOT, "data")
+
+# ADD A MESSAGE ON STREAMLIT TO WARN ABOUT LOADING TIME
+# if no data folder or if it is empty : create the dataset and save it in data folder
+if not os.path.exists(data_folder) or not os.listdir(data_folder):
+    os.makedirs(data_folder, exist_ok=True)
+    data_folder = Path(data_folder)
+    recipe_nutrition_path = os.path.join(DATA_DIR, NUTRITION_FILE_NAME).replace("\\", "/")
+    recipe_measurements_path = os.path.join(DATA_DIR, MEASUREMENTS_FILE_NAME).replace("\\", "/")
+
+    logger.info("Starting data processing pipeline...")
+
+    merged = merge(recipe_nutrition_path, recipe_measurements_path)
+    df_prepro = data_preprocessing(merged)
+    df_filtered = data_filter(df_prepro)
+    output_path = data_folder / 'final_df.parquet'
+    if not os.path.exists(output_path):
+        df_filtered.to_parquet(output_path, index=False)
+
+    logger.success(f"Processed dataset saved to {output_path}")
+    logger.success("Pipeline execution completed successfully.")
+    logger.add("data_cleaning.log", rotation="10 MB", level="INFO", format="{time} - {level} - {message}")
+
+# load the dataset
+DATASET_PATH = os.path.join(data_folder, 'final_df.parquet')
+df: pd.DataFrame = pd.read_parquet(DATASET_PATH)
 
 # idee : mettre ici if data directory vide / non existant : lancer data_cleaning module depuis ici
 # avec les loggers pour le suivi et afficher un message / loading dans st pour dire que ça prend du
 # temps mais que c'est qu'une fois.
-# mais est-ce que ça va marcher après en docker / ihm ? à voir
-
-#from src.preprocessing.load import merge
-#from src.preprocessing.format import data_preprocessing
-#from src.preprocessing.filter import data_filter
-
-# Get the absolute path to the project root
-#PROJECT_ROOT = Path(__file__).resolve().parent.parent
-#config_path = PROJECT_ROOT / "utils" / "config.yaml"
-
-#with open(config_path, "r") as file:
-#    config = yaml.safe_load(file)
-#DATA_DIR = config['DATA_DIR']
-#S3_ENDPOINT_URL = config["s3"]["endpoint_url"]
-#nutrition_file = config["nutrition_data"]["file"]
-#measurements_file = config["measurements_data"]["file"]
-
-# Initialize the s3fs filesystem with the appropriate endpoint for MinIO
-#filesystem = s3fs.S3FileSystem(
-#            client_kwargs={"endpoint_url": S3_ENDPOINT_URL}
- #           )
-
-#recipe_nutrition_path = os.path.join(DATA_DIR, nutrition_file).replace("\\", "/")
-#recipe_measurements_path = os.path.join(DATA_DIR, measurements_file).replace("\\", "/")
-#output_path = PROJECT_ROOT / 'Data/app_dataset.parquet'
-
-#merged = merge(recipe_nutrition_path, recipe_measurements_path)
-#df_prepro = data_preprocessing(merged)
-#df_filtered = data_filter(df_prepro)
-#df_filtered.to_parquet(output_path)
-
 
 
 ####################################### FILTERS INITIALIZATION #####################################

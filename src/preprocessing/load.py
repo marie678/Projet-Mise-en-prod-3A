@@ -5,15 +5,15 @@ includes :
     - load_measurements_data
     - merge
 """
+
 import logging
-from pathlib import Path
 import time
+from pathlib import Path
 from typing import List
 
 import pandas as pd
 import yaml
-
-from format import rm_outliers, text_formating, handle_na
+from src.preprocessing.format import handle_na, rm_outliers, text_formating
 
 # Set up basic logging configuration
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -25,7 +25,6 @@ config_path = PROJECT_ROOT / "utils" / "config.yaml"
 with open(config_path, "r") as file:
     config = yaml.safe_load(file)
 DATA_DIR = config['DATA_DIR']
-S3_ENDPOINT_URL = config["s3"]["endpoint_url"]
 
 # initialize hyper parameters
 keep_col_nutrition = config['nutrition_data']['keep_col']
@@ -39,10 +38,10 @@ to_format_measurements = config['measurements_data']['to_format']
 list_var_measurements = config['measurements_data']['list_var']
 
 
-
-def load_nutrition_data(nutrition_data_path:str) -> tuple[pd.DataFrame, list]:
+def load_nutrition_data(nutrition_data_path: str) -> tuple[pd.DataFrame, list]:
     """
-    This function loads a nutrition dataset, processes it, and returns the cleaned DataFrame and a list of unique recipe names.
+    This function loads a nutrition dataset, processes it, and returns the cleaned DataFrame and
+        a list of unique recipe names.
 
     Steps involved:
     1. Loads the dataset from a specified path (`nutrition_data_path`), keeping only the relevant columns.
@@ -64,7 +63,7 @@ def load_nutrition_data(nutrition_data_path:str) -> tuple[pd.DataFrame, list]:
     df = pd.read_parquet(nutrition_data_path, columns=keep_col_nutrition)
     end_time = time.time()
     logging.info("Nutrition data set loaded in --- %s seconds ---", (end_time - start_time))
-    df = df.drop_duplicates(subset=['Name','AuthorName'])
+    df = df.drop_duplicates(subset=['Name', 'AuthorName'])
     # remove outliers
     df = rm_outliers(df)
     # Process array-like columns
@@ -75,10 +74,10 @@ def load_nutrition_data(nutrition_data_path:str) -> tuple[pd.DataFrame, list]:
     return df, recipe_name
 
 
-def load_measurements_data(measurements_data_path : str,recipe_merge : List) -> pd.DataFrame:
+def load_measurements_data(measurements_data_path: str, recipe_merge: List) -> pd.DataFrame:
     """
-    This function loads a measurements dataset, filters it based on a provided list of recipe titles 
-    to reduce cleaning and merging time, removes duplicate rows, processes array-like columns, 
+    This function loads a measurements dataset, filters it based on a provided list of recipe titles
+    to reduce cleaning and merging time, removes duplicate rows, processes array-like columns,
     and handles missing values.
 
     Steps involved:
@@ -100,23 +99,25 @@ def load_measurements_data(measurements_data_path : str,recipe_merge : List) -> 
     df = pd.read_parquet(measurements_data_path, columns=keep_col_measurements)
     end_time = time.time()
     logging.info("Measurements data set loaded in --- %s seconds ---", (end_time - start_time))
-    df= df[df['title'].isin(recipe_merge)]
+    df = df[df['title'].isin(recipe_merge)]
     df = df.drop_duplicates(subset=['title', 'directions'])
-    text_formating(df,to_format_measurements)
-    df = handle_na(df, list_var = list_var_measurements)
+    text_formating(df, to_format_measurements)
+    df = handle_na(df, list_var=list_var_measurements)
     logging.info("Measurements data set cleaned in --- %s seconds ---", (time.time() - end_time))
     return df
 
 
-def merge(nutrition_data_path:str, measurements_data_path:str) -> pd.DataFrame:
+def merge(nutrition_data_path: str, measurements_data_path: str) -> pd.DataFrame:
     """
     This function merges two datasets based on recipe names and the first instruction in each dataset.
 
     Steps involved:
     1. Loads the nutrition data from the given path (`nutrition_data_path`).
     2. Loads the measurements data from the given path (`measurements_data_path`).
-    3. Creates a new column 'to_merge' in both datasets, which contains the first element from the `RecipeInstructions` and `directions` columns (if available).
-    4. Merges the two datasets using the `Name` and `to_merge` columns in the nutrition data and the `title` and `to_merge` columns in the measurements data.
+    3. Creates a new column 'to_merge' in both datasets, which contains the first element from the
+                `RecipeInstructions` and `directions` columns (if available).
+    4. Merges the two datasets using the `Name` and `to_merge` columns in the nutrition data and the
+                `title` and `to_merge` columns in the measurements data.
     5. Returns the merged DataFrame containing data from both datasets.
 
     Parameters:
@@ -126,16 +127,26 @@ def merge(nutrition_data_path:str, measurements_data_path:str) -> pd.DataFrame:
     Returns:
     pd.DataFrame: The merged DataFrame.
     """
-    df_nutrition, recipe_merge = load_nutrition_data(nutrition_data_path) 
+    df_nutrition, recipe_merge = load_nutrition_data(nutrition_data_path)
     df_measurements = load_measurements_data(measurements_data_path, recipe_merge)
     start_time = time.time()
     # create column to merge
-    df_nutrition['to_merge']=df_nutrition['RecipeInstructions'].apply(lambda x: x[0] if isinstance(x, list) and len(x) > 0 else None)
-    df_measurements['to_merge']=df_measurements['directions'].apply(lambda x: x[0] if isinstance(x, list) and len(x) > 0 else None)
-    # mege on recipe name and first instruction
-    df_merged = pd.merge(df_nutrition, df_measurements, left_on=['Name','to_merge'], right_on=['title','to_merge'], how='inner')
-    #keep only usefull columns and non duplicate rows
-    df_merged = df_merged.drop_duplicates(subset=['Name','AuthorName'])
-    df_merged = df_merged.drop(columns=['to_merge','RecipeInstructions','Name'])
+    df_nutrition['to_merge'] = df_nutrition['RecipeInstructions'].apply(
+                            lambda x: x[0] if isinstance(x, list) and len(x) > 0 else None
+                            )
+    df_measurements['to_merge'] = df_measurements['directions'].apply(
+                            lambda x: x[0] if isinstance(x, list) and len(x) > 0 else None
+                            )
+    # merge on recipe name and first instruction
+    df_merged = pd.merge(
+                        df_nutrition,
+                        df_measurements,
+                        left_on=['Name', 'to_merge'],
+                        right_on=['title', 'to_merge'],
+                        how='inner'
+                        )
+    # keep only usefull columns and non duplicate rows
+    df_merged = df_merged.drop_duplicates(subset=['Name', 'AuthorName'])
+    df_merged = df_merged.drop(columns=['to_merge', 'RecipeInstructions', 'Name'])
     logging.info("Data merged in --- %s seconds ---", (time.time() - start_time))
     return df_merged

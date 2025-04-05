@@ -2,6 +2,15 @@ import pandas as pd
 from pathlib import Path
 from src.data_cleaning import *
 
+# Get the absolute path to the project root
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
+config_path = PROJECT_ROOT / "utils" / "config.yaml"
+
+with open(config_path, "r") as file:
+    config = yaml.safe_load(file)
+DATA_DIR = config['DATA_DIR']
+
+
 ### Tests for utility functions ###
 def test_iso_to_minutes():
     assert iso_to_minutes('PT1H30M') == 90
@@ -50,10 +59,14 @@ def test_find_world_cuisine():
 ### Test main function ###
 def test_main():
     # Setup test file paths
-    data_dir = Path(__file__).resolve().parent.parent / 'Data'
-    test_recipe_nutrition_path = data_dir / 'test_recipes.parquet'
-    test_recipe_measurements_path = data_dir / 'test_recipes_data.csv'
-    df = main(test_recipe_nutrition_path, test_recipe_measurements_path)
+    test_recipe_nutrition_path = os.path.join(DATA_DIR, 'recipes.parquet').replace("\\", "/")
+    # test_recipe_measurements_path = os.path.join(DATA_DIR, 'recipes_data.csv').replace("\\", "/")
+    test_recipe_measurements_path = os.path.join(DATA_DIR, 'recipes_data.parquet').replace("\\", "/")
+    output_dir = PROJECT_ROOT / 'data'
+    if not os.path.exists(output_dir):
+            os.makedirs(output_dir)
+    output_path = output_dir / 'sample_recipes_10k.parquet'
+    df = main(test_recipe_nutrition_path, test_recipe_measurements_path, output_path)
 
     assert len(df) <= 10000  #Dataframe should have at most 10,000 rows
     assert df['title'].is_unique  #Titles should be unique

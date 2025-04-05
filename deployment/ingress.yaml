@@ -1,0 +1,21 @@
+#| filename: "deployment/ingress.yaml"
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: mep-ingress
+spec:
+  ingressClassName: nginx
+  tls:
+  - hosts:
+    - frigo-vide-test1.lab.sspcloud.fr
+  rules:
+  - host: frigo-vide-test1.lab.sspcloud.fr
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: mep-service
+            port:
+              number: 80
