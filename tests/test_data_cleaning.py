@@ -1,5 +1,6 @@
 import pandas as pd
 from pathlib import Path
+import yaml
 from src.data_cleaning import *
 
 # Get the absolute path to the project root
@@ -42,7 +43,7 @@ def test_assign_category():
         'title': 'Biryani'
     })
     assert assign_category(row) == 'Main Course'
-    
+
 def test_to_singular():
     assert to_singular(['apples', 'bananas', 'berries']) == ['apple', 'banana', 'berry']
 
