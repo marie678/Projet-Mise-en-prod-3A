@@ -77,7 +77,7 @@ The final dataset includes new categorical and binary filters to enable users to
 
 #### As pure application users
 
-Use the application link: 
+Use the application link: https://frigo-vide-test1.lab.sspcloud.fr/ 
 
 #### With python 
 The web app is built with streamlit. You can run it with the following steps :
