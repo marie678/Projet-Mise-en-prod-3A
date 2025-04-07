@@ -168,3 +168,9 @@ cython_debug/
 .parquet
 .csv
 data/*
+
+# quarto
+/.quarto/
+*.html
+*_files
+_site/
