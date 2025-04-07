@@ -1,7 +1,13 @@
+import os
 import pandas as pd
 from pathlib import Path
 import yaml
-from src.data_cleaning import *
+from src.preprocessing.load import *
+from src.preprocessing.format import *
+from src.preprocessing.filter import *
+
+
+
 
 # Get the absolute path to the project root
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
@@ -10,6 +16,8 @@ config_path = PROJECT_ROOT / "utils" / "config.yaml"
 with open(config_path, "r") as file:
     config = yaml.safe_load(file)
 DATA_DIR = config['DATA_DIR']
+NUTRITION_FILE_NAME = config['s3']['nutrition_file_name']
+MEASUREMENTS_FILE_NAME = config['s3']['measurements_file_name']
 
 
 ### Tests for utility functions ###
@@ -60,21 +68,30 @@ def test_find_world_cuisine():
 ### Test main function ###
 def test_main():
     # Setup test file paths
-    test_recipe_nutrition_path = os.path.join(DATA_DIR, 'recipes.parquet').replace("\\", "/")
-    # test_recipe_measurements_path = os.path.join(DATA_DIR, 'recipes_data.csv').replace("\\", "/")
-    test_recipe_measurements_path = os.path.join(DATA_DIR, 'recipes_data.parquet').replace("\\", "/")
-    output_dir = PROJECT_ROOT / 'data'
-    if not os.path.exists(output_dir):
-            os.makedirs(output_dir)
-    output_path = output_dir / 'sample_recipes_10k.parquet'
-    df = main(test_recipe_nutrition_path, test_recipe_measurements_path, output_path)
+    recipe_nutrition_path = os.path.join(DATA_DIR, NUTRITION_FILE_NAME).replace("\\", "/")
+    recipe_measurements_path = os.path.join(DATA_DIR, MEASUREMENTS_FILE_NAME).replace("\\", "/")
+    merged = merge(recipe_nutrition_path, recipe_measurements_path)
+    df_prepro = data_preprocessing(merged)
+    df = data_filter(df_prepro)
 
-    assert len(df) <= 10000  #Dataframe should have at most 10,000 rows
+    # test data set integrity
+    assert len(df) >= 10000  #Dataframe should have at most 10,000 rows
     assert df['title'].is_unique  #Titles should be unique
     assert (df['TotalTime_minutes'] > 0).all()  #TotalTime_minutes should be strictly positive
     assert set(df['RecipeType']).issubset(['Breakfast', 'Main Course', 'Dessert', 'Beverages'])  #Check for unexpected recipe types
-    assert all(isinstance(keywords, list) and all(k.startswith('#') for k in keywords) for keywords in df['Keywords'])  #Keywords should be lists of strings starting with hashtags
     assert pd.api.types.is_integer_dtype(df['RecipeServings'])  #RecipeServings should be integers
     assert pd.api.types.is_integer_dtype(df['ReviewCount'])  #ReviewCount should be integers
-    assert df['Images'].apply(lambda x: isinstance(x, str)).all()  #Images column should only contain strings
     assert not df.isnull().any().any() #DataFrame should not have missing values
+
+    # test format
+    assert all(isinstance(keywords, list) and all(k.startswith('#') for k in keywords) for keywords in df['Keywords'])  #Keywords should be lists of strings starting with hashtags
+    assert df['Images'].apply(lambda x: isinstance(x, str)).all()  #Images column should only contain strings
+
+    # test minimum proportion of each filters
+    assert (df['TotalTime_cat'].value_counts() > 1000).all() # each of the three time categories should contain at least 1000 recipes
+    assert (df['RecipeType'].value_counts() > 1000).all() # each of the four recipe categories should contain at least 1000 recipes
+    assert df['World_Cuisine'].nunique() > 10 # there should be more than 10 types of origin categories for recipes
+    assert (df['World_Cuisine'].value_counts() > 10).all() # each of the origin categories should contain at least 10 recipes
+    assert df['Beginner_Friendly'].sum() > 1000 # there should be more than 1000 beginner friendly recipes
+    assert df['Vegetarian_Friendly'].sum() > 1000 # there should be more than 1000 vegetarian friendly recipes
+

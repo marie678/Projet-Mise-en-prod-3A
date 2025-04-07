@@ -1,12 +1,13 @@
 # Changes with the 'Mise en production' course
 
-<img src="https://github.com/user-attachments/assets/174222c2-6639-492a-a75b-780b495a7946" width="500" /> VS <img src="https://github.com/user-attachments/assets/2c4d1c0c-2302-4329-b107-0ab745f07161" width="450" />
 
-<img src="https://github.com/user-attachments/assets/35e499ec-f64c-413c-a745-431b8ec12786" width="500" /> 
+Original project structure             |  Current project structure
+:-------------------------:|:-------------------------:
+ ![](https://github.com/user-attachments/assets/2c4d1c0c-2302-4329-b107-0ab745f07161) | ![](https://github.com/user-attachments/assets/174222c2-6639-492a-a75b-780b495a7946)
 
-<img src="https://github.com/user-attachments/assets/2b1a1195-0d0f-4f5d-82a8-c6ecc084dfcd" width="600" />
-
-
+ Original repository architecture             |  Current repository architecture
+:-------------------------:|:-------------------------:
+ ![](https://github.com/user-attachments/assets/2b1a1195-0d0f-4f5d-82a8-c6ecc084dfcd) | ![](https://github.com/user-attachments/assets/50680326-2f31-46aa-98da-269cc9ed12e0)
 
 
 
@@ -31,7 +32,7 @@ We also directly use parquet files to do load and process the data wich saves ti
 <table>
   <tr>
     <td>Data set</td>
-    <td colspan="3">Lodaing time - memory</td>
+    <td colspan="3"> Minimum loading time - memory</td>
   </tr>
   <tr>
     <td> </td>
@@ -42,14 +43,14 @@ We also directly use parquet files to do load and process the data wich saves ti
   <tr>
     <td> Recipes </td>
     <td> 16 s - 687k Ko </td>
-    <td> 14 s - 174k Ko</td>
-    <td> 9 s - 91963124 bites / 11.5k Ko</td>
+    <td> 7 s - 174k Ko</td>
+    <td> 6 s - 91963124 bites / 11.5k Ko</td>
   </tr>
   <tr>
     <td> recipes_data </td>
     <td> 65 s - 1 256k Ko </td>
-    <td> 58 s - 986k Ko </td>
-    <td> 40 s - 89245812 bites / 11k Ko</td>
+    <td> 40 s - 986k Ko </td>
+    <td> 36 s - 89245812 bites / 11k Ko</td>
   </tr>
 </table>
 
