@@ -7,7 +7,7 @@ Original project structure             |  Current project structure
 
  Original repository architecture             |  Current repository architecture
 :-------------------------:|:-------------------------:
- ![](https://github.com/user-attachments/assets/2b1a1195-0d0f-4f5d-82a8-c6ecc084dfcd) | ![]() To come
+ ![](https://github.com/user-attachments/assets/2b1a1195-0d0f-4f5d-82a8-c6ecc084dfcd) | ![](https://github.com/user-attachments/assets/50680326-2f31-46aa-98da-269cc9ed12e0)
 
 
 
