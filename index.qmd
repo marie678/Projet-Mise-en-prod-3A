@@ -8,10 +8,11 @@ format:
         toc-depth: 2
 ---
 
-<!-- <div class="hero"> -->
-    <!-- <h1>🥕 Frigo Vide</h1> -->
-    <!-- <p>Smart Recipe Recommender: Cook with what's left in your fridge 🧠🥘</p> -->
-<!-- </div> -->
+[View on GitHub](https://github.com/marie678/Projet-Mise-en-prod-3A.git){.btn .btn-primary}
+
+::: {.text-center .mb-4}
+<a href="https://frigo-vide-test1.lab.sspcloud.fr" target="_blank" class="btn btn-dark">Go to the website</a>
+:::
 
 # 🎯 Project Objective
 
@@ -42,8 +43,8 @@ The dataset contains nutritional and measurement data for thousands of recipes a
 
 # 🌐 Access the App
 
-You can access the deployed app here: [frigo-vide-test1.lab.sspcloud.fr](https://frigo-vide-test1.lab.sspcloud.fr)
-You can access the github repository here : [https://github.com/marie678/Projet-Mise-en-prod-3A.git](https://github.com/marie678/Projet-Mise-en-prod-3A.git)
+You can access the deployed app here: [frigo-vide-test1.lab.sspcloud.fr](https://frigo-vide-test1.lab.sspcloud.fr) \
+You can access the GitHub repository here: [https://github.com/marie678/Projet-Mise-en-prod-3A.git](https://github.com/marie678/Projet-Mise-en-prod-3A.git)
 
 # 🛠️ Project Structure
 
