@@ -11,13 +11,13 @@ jobs:
 
         steps:
             - name: Checkout repo
-            uses: actions/checkout@v3
+              uses: actions/checkout@v3
 
             - name: Setup Quarto
-            uses: quarto-dev/quarto-actions/setup@v2
+              uses: quarto-dev/quarto-actions/setup@v2
 
             - name: Install Pandoc (required for Quarto)
-            uses: r-lib/actions/setup-pandoc@v2
+              uses: r-lib/actions/setup-pandoc@v2
 
             # - name: 📦 Install dependencies (optional)
             # run: |
@@ -26,10 +26,10 @@ jobs:
             #   pip install -r requirements.txt || true  # Skip if not found
 
             - name: Render Quarto Project
-            run: quarto render
+              run: quarto render
 
             - name: Deploy to GitHub Pages
-            uses: peaceiris/actions-gh-pages@v3
-            with:
+              uses: peaceiris/actions-gh-pages@v3
+              with:
                 github_token: ${{ secrets.GITHUB_TOKEN }}
                 publish_dir: _site

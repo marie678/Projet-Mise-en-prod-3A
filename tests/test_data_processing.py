@@ -7,8 +7,6 @@ from src.preprocessing.format import *
 from src.preprocessing.filter import *
 
 
-
-
 # Get the absolute path to the project root
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 config_path = PROJECT_ROOT / "utils" / "config.yaml"
