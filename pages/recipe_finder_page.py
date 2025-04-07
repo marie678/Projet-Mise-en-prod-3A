@@ -11,9 +11,9 @@ from pathlib import Path
 import yaml
 import pandas as pd
 import streamlit as st
-from src.query_helpers import clean_query, query_error
-from src.recipe_finder_functions import search_recipes, split_frame
-from src.st_session_functions import (handle_recipe_click,
+from src.application.query_helpers import clean_query, query_error
+from src.application.recipe_finder_functions import search_recipes, split_frame
+from src.application.st_session_functions import (handle_recipe_click,
                                         initialize_session_state)
 from src.preprocessing.filter import data_filter
 from src.preprocessing.format import data_preprocessing
