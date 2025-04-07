@@ -1,0 +1,23 @@
+/* css styles */
+.hero {
+    background: linear-gradient(135deg, #ff9966, #ff5e62);
+    color: white;
+    padding: 3rem 2rem;
+    text-align: center;
+    border-radius: 20px;
+    margin-bottom: 2rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+.hero h1 {
+    font-size: 3rem;
+    margin-bottom: 0.5rem;
+    font-weight: bold;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.hero p {
+    font-size: 1.4rem;
+    margin: 0;
+    font-style: italic;
+}
