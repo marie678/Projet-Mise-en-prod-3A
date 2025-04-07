@@ -1,0 +1,76 @@
+---
+title: "Frigo Vide - Recipe Recommender"
+format:
+    html:
+        theme: cosmo
+        css: styles.css
+        toc: true
+        toc-depth: 2
+---
+
+<!-- <div class="hero"> -->
+    <!-- <h1>🥕 Frigo Vide</h1> -->
+    <!-- <p>Smart Recipe Recommender: Cook with what's left in your fridge 🧠🥘</p> -->
+<!-- </div> -->
+
+# 🎯 Project Objective
+
+This project provides a smart recipe recommender system that helps users cook meals with what's left in their fridge. The system analyzes ingredients and suggests recipes using natural language queries and data processing pipelines.
+
+
+# 🔍 Project Features
+
+- **Search Recipes** by ingredients or free-text queries
+- **Data Cleaning & Filtering** to ensure high-quality recipe suggestions
+- **Streamlit App** for an interactive user experience
+- **Kubernetes Deployment** with CI/CD using ArgoCD
+- **Dockerized Pipeline** for reproducibility and scalability
+
+# 🚀 Technologies Used
+
+- Python
+- Streamlit
+- Kubernetes (Minikube)
+- GitHub Actions (CI)
+- ArgoCD (CD)
+- Docker
+- Quarto for documentation
+
+# 📦 Dataset
+
+The dataset contains nutritional and measurement data for thousands of recipes and is preprocessed before being used in the app.
+
+# 🌐 Access the App
+
+You can access the deployed app here: [frigo-vide-test1.lab.sspcloud.fr](https://frigo-vide-test1.lab.sspcloud.fr)
+You can access the github repository here : [https://github.com/marie678/Projet-Mise-en-prod-3A.git](https://github.com/marie678/Projet-Mise-en-prod-3A.git)
+
+# 🛠️ Project Structure
+
+. \
+├── .github/workflows/ \
+├── .streamlit/ \
+├── app/ \
+├── assets \
+│    ├── css/ \
+│    ├── html/ \
+│    ├── images/ \
+│    └── js/ \
+├── data/ \
+├── deployment/ \
+├── pages/ \
+├── src/ \
+│    ├── app \
+│    └── preprocessing \
+├── tests \
+├── utils \
+├── Dockerfile \
+├── requirements.txt \
+└── README.md
+
+# ✍️ Authors
+
+- Marie Meyer – [GitHub](https://github.com/marie678)
+- Noémie Guibé - [GitHub](https://github.com/nguibe)
+
+---
