@@ -31,7 +31,7 @@ We also directly use parquet files to do load and process the data wich saves ti
 <table>
   <tr>
     <td>Data set</td>
-    <td colspan="3">Lodaing time - memory</td>
+    <td colspan="3"> Minimum loading time - memory</td>
   </tr>
   <tr>
     <td> </td>
@@ -42,14 +42,14 @@ We also directly use parquet files to do load and process the data wich saves ti
   <tr>
     <td> Recipes </td>
     <td> 16 s - 687k Ko </td>
-    <td> 14 s - 174k Ko</td>
-    <td> 9 s - 91963124 bites / 11.5k Ko</td>
+    <td> 7 s - 174k Ko</td>
+    <td> 6 s - 91963124 bites / 11.5k Ko</td>
   </tr>
   <tr>
     <td> recipes_data </td>
     <td> 65 s - 1 256k Ko </td>
-    <td> 58 s - 986k Ko </td>
-    <td> 40 s - 89245812 bites / 11k Ko</td>
+    <td> 40 s - 986k Ko </td>
+    <td> 36 s - 89245812 bites / 11k Ko</td>
   </tr>
 </table>
 
