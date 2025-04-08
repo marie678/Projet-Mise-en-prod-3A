@@ -7,11 +7,21 @@ website:
     left:
       - href: index.qmd
         text: Home
+    tools:
+      - icon: github
+        menu:
+          - text: Source Code
+            href:  https://github.com/marie678/Projet-Mise-en-prod-3A.git
+  back-to-top-navigation: true
+  page-footer: "Copyright 2025, ENSAE Paris"
+  repo-url: https://github.com/marie678/Projet-Mise-en-prod-3A.git
+  repo-actions: [edit, source, issue]
+
 
 format:
   html:
     theme:
-      - cosmo
+      - minty
       - brand
     css: styles.css
     toc: true

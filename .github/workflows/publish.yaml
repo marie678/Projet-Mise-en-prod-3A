@@ -1,16 +1,15 @@
-name: Deploy Quarto Website
+name: Publish Quarto Website
 
 on:
     push:
-        branches:
-            - main
+        branches: main
 
 jobs:
     deploy:
         runs-on: ubuntu-latest
 
         steps:
-            - name: Checkout repo
+            - name: Checkout repository
               uses: actions/checkout@v3
 
             - name: Setup Quarto

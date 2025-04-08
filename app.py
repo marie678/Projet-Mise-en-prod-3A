@@ -22,8 +22,8 @@ if os.path.exists(HTML_FILE_PATH):
     _, col1, col2, _ = st.columns([2, 1, 1, 2])
     if col1.button("🔎 Recipe Finder"):
         st.switch_page("pages/recipe_finder_page.py")
-    if col2.button("🥗 Recipe Page"):
-        st.switch_page("pages/recipe_page.py")
+    # if col2.button("🥗 Recipe Page"):
+    #     st.switch_page("pages/recipe_page.py")
     display_html_in_streamlit(HTML_FILE_PATH, CSS_FILE_PATH, height=2700, width=1080)
 else:
     st.error(f"The HTML file '{HTML_FILE_PATH}' does not exist. Please check the path.")

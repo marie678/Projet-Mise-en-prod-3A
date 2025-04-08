@@ -7,9 +7,9 @@ spec:
   ingressClassName: nginx
   tls:
   - hosts:
-    - frigo-vide-test1.lab.sspcloud.fr
+    - frigo-vide.lab.sspcloud.fr
   rules:
-  - host: frigo-vide-test1.lab.sspcloud.fr
+  - host: frigo-vide.lab.sspcloud.fr
     http:
       paths:
       - path: /
