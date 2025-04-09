@@ -53,11 +53,11 @@ The goal of the preprocessing stage is to create a 10,000-recipe dataframe for o
 1. [Food.com Recipes and Reviews](https://www.kaggle.com/datasets/irkaal/foodcom-recipes-and-reviews/data): This dataset provides a wide variety of recipes along with their nutritional information, cooking times, servings, ratings, and more.
 2. [Recipe Dataset (2M+ recipes)](https://www.kaggle.com/datasets/wilmerarltstrmberg/recipe-dataset-over-2m/data): This dataset adds information about ingredient quantities and measurements for each recipe. It contains over 2 million recipes, many of which are also included in the first dataset.
 
-These files are stored in SSP Cloud's S3 storage.
+These files are stored in SSP Cloud's S3 storage bucket.
 
 **Data aggregation**
 
-The scripts in `src/preprocessing` loads, merges the two datasets and outputs a cleaned and processed dataframe in parquet format. The final dataset can be found at `Data/sample_recipes_10k.parquet`. 
+The scripts in `src/preprocessing` loads, merges the two datasets and outputs a cleaned and processed dataframe in parquet format. The final dataset can be found at `data/final_df.parquet`. 
 
 The final dataset includes new categorical and binary filters to enable users to refine their recipe searches within the app:
 * `TotalTime_cat` ("< 30min", "< 1h", "> 1h")
@@ -83,7 +83,7 @@ The final dataset includes new categorical and binary filters to enable users to
 
 #### As pure application users
 
-Use the application link: https://frigo-vide-test1.lab.sspcloud.fr/ 
+Use the application link: https://frigo-vide.lab.sspcloud.fr/ 
 
 #### With python 
 The web app is built with streamlit. You can run it with the following steps :
@@ -103,20 +103,20 @@ streamlit run app.py
 You can then navigate through the different pages within the app.
 
 #### With Docker
-You can also run our app using the provided **Docker image** (*marie678/streamlit-final-app*) with the following steps :
+You can also run our app using the provided **Docker image** (*marie678/mise_en_prod*) with the following steps :
 
 **Prerequisites :**
 Ensure that Docker is downloaded and installed on your system, and that you have an active internet connection to pull the image.
 
 1. Pull the Docker Image
 ```
-docker pull marie678/streamlit-final-app:latest
+docker pull marie678/mise_en_prod:v1.0.0
 ```
 This part can take a few minutes to run.
 
 2. Run the Docker Container
 ```
-docker run -p 8501:8501 marie678/streamlit-final-app:latest
+docker run -p 8501:8501 marie678/mise_en_prod:v1.0.0
 ```
 3. Access the Application \
 Once the container is running, open your web browser and go to
