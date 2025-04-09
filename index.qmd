@@ -11,7 +11,7 @@ format:
 [View on GitHub](https://github.com/marie678/Projet-Mise-en-prod-3A.git){.btn .btn-primary}
 
 ::: {.text-center .mb-4}
-<a href="https://frigo-vide-test1.lab.sspcloud.fr" target="_blank" class="btn btn-dark">Go to the website</a>
+<a href="https://frigo-vide.lab.sspcloud.fr" target="_blank" class="btn btn-dark">Go to the website</a>
 :::
 
 
