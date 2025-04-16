@@ -1,10 +1,10 @@
 <!--
 -------------------------------------------------------------------------
     File: Welcome page.html
-    Description: This page is the website's homepage.  It contains a welcome message and 
-    a tutorial paragraph with images to provide a usage example.    
+    Description: This page is the website's homepage.  It contains a welcome message and
+    a tutorial paragraph with images to provide a usage example.
     Notes:
-    - This file links to the 'style_welcome.css' for styling (it is called 
+    - This file links to the 'style_welcome.css' for styling (it is called
     as dynamic data from python file in the <style> part due to streamlit restrictions).
     - It is called by the Welcome_page.py python file.
 -------------------------------------------------------------------------
@@ -13,11 +13,11 @@
     <!DOCTYPE html>
     <html>
         <head>
-    
+
            <!-- /* css file to style the welcome page  */
             /* Basic body styling */ -->
             <style> {{css | safe}} </style>
-         
+
         </head>
             <body>
      <!-- Header -->
@@ -25,7 +25,7 @@
      <div class="container">
      <!-- Catch phrase -->
         <h1><span id="emoji_welcome">&#129367;</span> Welcome to the Fridge Decoder App <span id="emoji_welcome">&#129367;</span></h1>
-    
+
             <div class="intro-text">
                 <p>Home from a long day of work at 8 pm?</p>
                 <p>Let us take the stress out of dinner. <span id="emoji_oeuf">🍳</span></p>
@@ -34,23 +34,22 @@
      <!-- Tuto part with images -->
         <h2> How to use the app?</h2>
         <p>Finding the perfect recipe is easy! Just follow these simple steps:</p>
-    
+
         <p>1. Click the "Recipe Finder" button. </p>
-        <img src="https://raw.githubusercontent.com/nguibe/Projet-Infra-3A/refs/heads/main/dev/App/streamlit_app/images/go_to_Recipe_Finder_page.png" alt="-" width="900" height="250px">
-        
-        <p>2. Let's say you want a vegeterian dish and you have eggs and an avocado. <br> 
+        <img src="./assets/images/go_to_Recipe_Finder_page.png" alt="-" width="900" height="250px">
+
+        <p>2. Let's say you want a vegeterian dish and you have eggs and an avocado. <br>
         Simply type "avocado egg" in the research bar and select the vegeterian recipes option.</p>
         <p>3. Hit the "Find a Recipe" button.</p>
-        <img src="https://raw.githubusercontent.com/nguibe/Projet-Infra-3A/refs/heads/main/dev/App/streamlit_app/images/hit_find_recipe_button.png" alt="-" width="900" height="250px">
-    
+        <img src="./assets/images/hit_find_recipe_button.png" alt="-" width="900" height="250px">
+
         <p>4. Browse the results and click "Go to Recipe" for full instructions and a printable version. </p>
-        <img src="https://raw.githubusercontent.com/nguibe/Projet-Infra-3A/refs/heads/main/dev/App/streamlit_app/images/results_avocado_search.png" alt="-" width="900" height="250px">
-    
+        <img src="./assets/images/results_avocado_search.png" alt="-" width="900" height="250px">
+
         <p>Find delicious recipes using ingredients you already have, and customize them with our filters! </p>
-        <img src="https://raw.githubusercontent.com/nguibe/Projet-Infra-3A/refs/heads/main/dev/App/streamlit_app/images/printable_recipe.png" alt="-" width="900" height="250px">
-    
+        <img src="./assets/images/printable_recipe.png" alt="-" width="900" height="250px">
+
         <h2> Ready to Cook Something Delicious? &#x1F60B; </h2>
-    
+
             </body>
     </html>
-    

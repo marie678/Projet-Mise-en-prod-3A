@@ -9,6 +9,8 @@ includes :
 from typing import Any, Tuple
 
 import pandas as pd
+import re
+import base64
 import streamlit as st
 from jinja2 import Template
 
@@ -90,6 +92,22 @@ def search_recipes(
 
     return filtered_df, total_nr_recipes
 
+def img_to_base64(path):
+    with open(path, "rb") as f:
+        return base64.b64encode(f.read()).decode()
+
+def replace_img_src_with_base64(html_str, base_path="."):
+    def replacer(match):
+        src = match.group(1).strip()
+        img_path = src.lstrip("./").replace("../", "")  # basic cleanup
+        full_path = f"{base_path}/{img_path}"
+        try:
+            b64 = img_to_base64(full_path)
+            return f'src="data:image/png;base64,{b64}"'
+        except FileNotFoundError:
+            return match.group(0)  # leave it unchanged
+    return re.sub(r'src=["\']([^"\']+)["\']', replacer, html_str)
+
 
 def display_html_in_streamlit(html_file_path, css_file_path, height, width):
     """Display HTML content from a file in a Streamlit app with its styling in seperate css file.
@@ -107,6 +125,7 @@ def display_html_in_streamlit(html_file_path, css_file_path, height, width):
         with open(css_file_path, "r", encoding="utf-8") as css_file:
             css = css_file.read()
         rendered_html = jinja_template.render(css=css)
+        rendered_html = replace_img_src_with_base64(rendered_html, base_path=".")
         st.components.v1.html(rendered_html, height=height, width=width, scrolling=True)
     except FileNotFoundError:
         st.error(f"Error: HTML or CSS file not found at {html_file_path}")
