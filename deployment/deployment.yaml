@@ -17,6 +17,6 @@ spec:
     spec:
       containers:
       - name: mise-en-prod
-        image: marie678/mise_en_prod:v1.0.0
+        image: marie678/mise_en_prod:v1.0.1
         ports:
         - containerPort: 8000
