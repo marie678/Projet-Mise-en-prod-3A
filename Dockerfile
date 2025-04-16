@@ -16,10 +16,10 @@ RUN apt-get update && apt-get install -y \
 # RUN git clone https://github.com/marie678/Projet-Mise-en-prod-3A.git .
 
 # copie des fichiers nécessaires sur l'image
-COPY uv_requirements.txt .
+COPY requirements.lock.txt .
 
 # installation des dépendances
-RUN pip install -r uv_requirements.txt
+RUN pip install -r requirements.lock.txt
 
 COPY . /app
 
