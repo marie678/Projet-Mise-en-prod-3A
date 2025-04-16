@@ -3,9 +3,9 @@
 
 # What to do with the ingredients left in my fridge?
 
-## Project overview 
+## Project overview
 
-This project is part of the "Mise en production des projets de Data Science" course. Based on an existing project, the goal is to develop an interactive application that addresses a business problem, and then deploy it on a production infrastructure. We decided to use a previous project we worked on for our "Infrastructures and software systems" class, in which the goal was to develop a Streamlit application that helps users find recipes based on the ingredients they have in their fridge. 
+This project is part of the "Mise en production des projets de Data Science" course. Based on an existing project, the goal is to develop an interactive application that addresses a business problem, and then deploy it on a production infrastructure. We decided to use a previous project we worked on for our "Infrastructures and software systems" class, in which the goal was to develop a Streamlit application that helps users find recipes based on the ingredients they have in their fridge.
 
 To understand where we began, please refer to the [Projet-Infra-3A repository](https://github.com/nguibe/Projet-Infra-3A). For details on what has been accomplished, including new features and, most importantly, the reorganization of architecture and code for improved productivity, check out the README_new_features.md file.
 
@@ -16,13 +16,13 @@ Our application is composed of 3 pages:
 - **Homepage**
 
   - A homepage with an image tutorial and a usage example to guide users through the application.
-  
+
 - **Search Page**:
-  
+
   - A search page with a search bar, allowing users to search(\*) in two ways:
     *   **Search by title:** (e.g., pizza, burger, quiche, smoothie, cake).
     *   **Search by ingredients:** (e.g., egg, beef, strawberry). You can add multiple ingredients.
- 
+
   (\*) Note that you can search without any format restrictions (such as plural / singular, lower/upper case, poncutation between words).
   If you're unsure about the spelling of an ingredient, don't worry as we've integrated a spell checker !
   Even if you type "letuce," a suggestion appears below the search bar showing "Did you mean lettuce?".
@@ -38,15 +38,15 @@ Our application is composed of 3 pages:
     *  The main characteristics of recipes corresponding to your search (title, rating, cook time, etc).
     *  The possibility to go the next page to see more results if there are a lot and also adjust the number of recipes per page.
     *  The possibility to navigate between the recipe page and your current search page in case you want to get a better grasp on a recipe but are still indesicive.
-      
+
 - **Recipe Page**
 
   - Finally this printable recipe page provides all the information you need to prepare your best meal: preparation time, cooking time, ingredients, directions, ratings, nutrition facts, and a link to the recipe page on the original website it came from.
 
 
-## Data 
+## Data
 
-The goal of the preprocessing stage is to create a 10,000-recipe dataframe for our *frigo_vide* application. We combined two public Kaggle datasets and created new variables to provide filtering options for users. 
+The goal of the preprocessing stage is to create a 10,000-recipe dataframe for our *frigo_vide* application. We combined two public Kaggle datasets and created new variables to provide filtering options for users.
 
 **Data sources**
 
@@ -57,7 +57,7 @@ These files are stored in SSP Cloud's S3 storage bucket.
 
 **Data aggregation**
 
-The scripts in `src/preprocessing` loads, merges the two datasets and outputs a cleaned and processed dataframe in parquet format. The final dataset can be found at `data/final_df.parquet`. 
+The scripts in `src/preprocessing` loads, merges the two datasets and outputs a cleaned and processed dataframe in parquet format. The final dataset can be found at `data/final_df.parquet`.
 
 The final dataset includes new categorical and binary filters to enable users to refine their recipe searches within the app:
 * `TotalTime_cat` ("< 30min", "< 1h", "> 1h")
@@ -83,9 +83,9 @@ The final dataset includes new categorical and binary filters to enable users to
 
 #### As pure application users
 
-Use the application link: https://frigo-vide.lab.sspcloud.fr/ 
+Use the application link: https://frigo-vide.lab.sspcloud.fr/
 
-#### With python 
+#### With python
 The web app is built with streamlit. You can run it with the following steps :
 
 1. Clone this repository
@@ -96,7 +96,7 @@ git clone https://github.com/marie678/Projet-Mise-en-prod-3A.git
 ```
 pip install -r requirements.lock.txt
 ```
-3. Run the main page of the app 
+3. Run the main page of the app
 ```
 streamlit run app.py
 ```
@@ -110,13 +110,13 @@ Ensure that Docker is downloaded and installed on your system, and that you have
 
 1. Pull the Docker Image
 ```
-docker pull marie678/mise_en_prod:v1.0.0
+docker pull marie678/mise_en_prod:v2.0.0
 ```
 This part can take a few minutes to run.
 
 2. Run the Docker Container
 ```
-docker run -p 8501:8501 marie678/mise_en_prod:v1.0.0
+docker run -p 8501:8501 marie678/mise_en_prod:v2.0.0
 ```
 3. Access the Application \
 Once the container is running, open your web browser and go to
