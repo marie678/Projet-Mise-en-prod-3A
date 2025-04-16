@@ -23,7 +23,7 @@ from loguru import logger
 
 
 # configuration parameters
-st.set_page_config(layout="wide", page_title='Recipe Finder', initial_sidebar_state='collapsed')
+st.set_page_config(layout="wide", page_title='Recipe Finder', initial_sidebar_state='collapsed', page_icon="🍴")
 
 # import of the cleaned and formated dataset of 10k recipes :
 
