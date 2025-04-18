@@ -143,6 +143,7 @@ def data_filter(df: pd.DataFrame) -> pd.DataFrame:
     df.loc[:, 'Beginner_Friendly'] = df['Keywords'].apply(lambda x: '#Easy' in x)
     df.loc[:, 'Vegetarian_Friendly'] = ~df['ingredients'].apply(is_non_vegetarian)
     df.loc[:, 'World_Cuisine'] = df['Keywords'].apply(find_world_cuisine)
+    df = df[df['World_Cuisine'].isin(df['World_Cuisine'].value_counts()[lambda x: x > 10].index)]
     logging.info("Nutrition data set loaded in --- %s seconds ---", (time.time() - start_time))
 
     return df
