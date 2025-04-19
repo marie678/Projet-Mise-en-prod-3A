@@ -17,9 +17,6 @@ with open(config_path, "r") as file:
     config = yaml.safe_load(file)
 DATA_DIR = config['DATA_DIR']
 
-# path1 = "https://minio.lab.sspcloud.fr/mmeyer/projet-mise-en-prod/data/raw/recipes.parquet"
-# path2 = "https://minio.lab.sspcloud.fr/mmeyer/projet-mise-en-prod/data/raw/recipes_data.parquet"
-
 recipe_nutrition_path = os.path.join(DATA_DIR, 'recipes.parquet').replace("\\", "/")
 recipe_measurements_path = os.path.join(DATA_DIR, 'recipes_data.parquet').replace("\\", "/")
 output_dir = PROJECT_ROOT / 'data'

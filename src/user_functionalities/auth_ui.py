@@ -1,7 +1,7 @@
 import streamlit as st
 import requests
 
-URI = "http://127.0.0.1:5000" 
+URI = "http://127.0.0.1:5000"
 
 def login_form():
     st.sidebar.header("🔐 Login / Register")
@@ -53,7 +53,7 @@ def show_user_panel():
                     liked_recipes = response.json()  # Attempt to parse JSON
                     st.session_state.liked_recipes = liked_recipes
                     if not liked_recipes:
-                        st.write("You have no liked recipes.")
+                        st.info("You have no liked recipes.")
                     else:
                         st.switch_page("pages/likes.py")
                 except requests.exceptions.JSONDecodeError as e:
