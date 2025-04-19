@@ -21,9 +21,13 @@ from src.preprocessing.load import merge
 from streamlit_extras.add_vertical_space import add_vertical_space
 from loguru import logger
 
+from src.authentification.auth_ui import show_user_panel
+
 
 # configuration parameters
 st.set_page_config(layout="wide", page_title='Recipe Finder', initial_sidebar_state='collapsed', page_icon="🍴")
+
+show_user_panel()  # <-- always displays login info in sidebar
 
 # import of the cleaned and formated dataset of 10k recipes :
 

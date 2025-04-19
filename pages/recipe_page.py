@@ -4,7 +4,13 @@ import streamlit as st
 import streamlit.components.v1 as components
 from jinja2 import Template
 
+from src.authentification.auth_ui import show_user_panel
+
 st.set_page_config(layout="wide", page_title='Recipe page', initial_sidebar_state='collapsed', page_icon="🍴")
+
+show_user_panel()  # <-- always displays login info in sidebar
+
+
 # Display header
 st.markdown(
     """
