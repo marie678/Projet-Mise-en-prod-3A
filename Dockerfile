@@ -23,6 +23,10 @@ RUN pip install -r requirements.lock.txt
 
 COPY . /app
 
+# Make run.sh executable
+RUN chmod +x run.sh
+
 EXPOSE 8501
 HEALTHCHECK CMD curl --fail http://localhost:8501/_stcore/health
-ENTRYPOINT ["streamlit", "run", "app.py", "--server.port=8501", "--server.address=0.0.0.0"]
+# ENTRYPOINT ["streamlit", "run", "app.py", "--server.port=8501", "--server.address=0.0.0.0"]
+ENTRYPOINT ["./run.sh"]
