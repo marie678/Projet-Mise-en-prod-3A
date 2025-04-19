@@ -6,8 +6,6 @@ It consits in an image tutorial and a usage example to guide our users, embeded 
 
 import os
 import streamlit as st
-import subprocess
-import time
 
 from src.application.recipe_finder_functions import display_html_in_streamlit
 from src.user_functionalities.auth_ui import login_form, show_user_panel

@@ -1,16 +1,11 @@
 from flask import Flask
-from flask_login import LoginManager, UserMixin
-import sqlite3
+from flask_login import LoginManager
 from pathlib import Path
 import yaml
 import os
 import sys
 
-
-# Add the parent directory to sys.path (this is where src and flask_backend should be located)
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-
-# Now you should be able to import flask_backend and src properly
 from flask_backend.login_api import login_routes
 from flask_backend.like_api import like_routes
 from src.user_functionalities.db import get_users_db
@@ -35,7 +30,7 @@ login_manager.init_app(app)
 app.register_blueprint(login_routes)
 app.register_blueprint(like_routes)
 
-    
+
 # Load a user from the database
 @login_manager.user_loader
 def load_user(user_id):
@@ -48,7 +43,6 @@ def load_user(user_id):
     except Exception as e:
         print(f"User load error: {e}")
     return None
-
 
 
 # Start server

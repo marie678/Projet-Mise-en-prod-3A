@@ -71,9 +71,8 @@ else:
         st.switch_page("pages/recipe_finder_page.py")
     if col2.button("🏠 Home page"):
         st.switch_page("app.py")
-    with col3:
-        if recipe_id:
-            like_recipe_button(recipe_id)
+    if recipe_id:
+        like_recipe_button(recipe_id, col1, col2, col3)
 
     with open("assets/html/templatev1.4.1.html", "r", encoding='utf-8') as template_file:
         template_content = template_file.read()
