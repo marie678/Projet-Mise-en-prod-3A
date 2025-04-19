@@ -44,6 +44,23 @@ def show_user_panel():
     if st.session_state.get("logged_in"):
         st.sidebar.write(f"👤 Logged in as: `{st.session_state.username}`")
 
+        if st.sidebar.button("❤ Liked recipes"):
+            response = requests.get(f"{URI}/liked_recipes", params={"username": str(st.session_state.username)})
+
+            # Debugging: Check if the response is valid
+            if response.status_code == 200:
+                try:
+                    liked_recipes = response.json()  # Attempt to parse JSON
+                    st.session_state.liked_recipes = liked_recipes
+                    if not liked_recipes:
+                        st.write("You have no liked recipes.")
+                    else:
+                        st.switch_page("pages/likes.py")
+                except requests.exceptions.JSONDecodeError as e:
+                    st.error(f"Failed to decode JSON: {e}. Response: {response.text}")
+            else:
+                st.error(f"Failed to get liked recipes. Status code: {response.status_code}, Response: {response.text}")
+
         if st.sidebar.button("Logout", key="logout_btn"):
             response = requests.post(f"{URI}/logout")
             if "successfully" in response.text:
@@ -52,4 +69,4 @@ def show_user_panel():
                 st.session_state.status_message = "✅ Logged out successfully"
                 st.rerun()
     else:
-        st.sidebar.info("🔒 You are not logged in.")
+        st.sidebar.info("🔒 You are not logged in \n\n ↪️ Go to Homepage to login or register!")

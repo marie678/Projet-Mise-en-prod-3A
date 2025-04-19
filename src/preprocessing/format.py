@@ -234,5 +234,8 @@ def data_preprocessing(df: pd.DataFrame) -> pd.DataFrame:
     # keep only one image link per recipe
     df.loc[:, 'Images'] = df['Images'].apply(lambda x: x[0])
 
+    # create recipe_id
+    df['recipe_id'] = df.index
+
     logging.info("Nutrition data set cleaned in --- %s seconds ---", (time.time() - start_time))
     return df

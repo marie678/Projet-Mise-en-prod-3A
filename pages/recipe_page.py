@@ -4,7 +4,8 @@ import streamlit as st
 import streamlit.components.v1 as components
 from jinja2 import Template
 
-from src.authentification.auth_ui import show_user_panel
+from src.user_functionalities.auth_ui import show_user_panel
+from src.user_functionalities.like import like_recipe_button
 
 st.set_page_config(layout="wide", page_title='Recipe page', initial_sidebar_state='collapsed', page_icon="🍴")
 
@@ -37,6 +38,7 @@ if 'title' not in st.session_state:
 
 else:
     # Get all the recipe elements from the session state
+    recipe_id = st.session_state.recipe_id
     recipe_title = st.session_state['title']
     ingredients = st.session_state['ingredients']
     directions = st.session_state['instructions']
@@ -63,11 +65,15 @@ else:
     fiber = st.session_state.fiber
     sugar = st.session_state.sugar
 
-    col1, col2, _ = st.columns([1, 1, 3])
+
+    _, col1, col2, col3, _ = st.columns([2, 3, 3, 1,2])
     if col1.button("🔎 Back to Recipe Finder"):
         st.switch_page("pages/recipe_finder_page.py")
     if col2.button("🏠 Home page"):
         st.switch_page("app.py")
+    with col3:
+        if recipe_id:
+            like_recipe_button(recipe_id)
 
     with open("assets/html/templatev1.4.1.html", "r", encoding='utf-8') as template_file:
         template_content = template_file.read()

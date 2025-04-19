@@ -5,19 +5,16 @@ It consits in an image tutorial and a usage example to guide our users, embeded 
 """
 
 import os
-import requests
 import streamlit as st
 import subprocess
+import time
 
 from src.application.recipe_finder_functions import display_html_in_streamlit
-from src.authentification.auth_ui import login_form, show_user_panel
+from src.user_functionalities.auth_ui import login_form, show_user_panel
 
 # Add a title to the page_title
 st.set_page_config(layout="wide", page_title='FRIDGE & COOK', initial_sidebar_state='collapsed', page_icon="🍴")
 
-if "flask_started" not in st.session_state:
-    subprocess.Popen(["python", "src/authentification/login_api.py"])
-    st.session_state.flask_started = True
 
 if "status_message" in st.session_state:
     st.success(st.session_state.status_message)
@@ -37,8 +34,6 @@ if os.path.exists(HTML_FILE_PATH):
     display_html_in_streamlit(HTML_FILE_PATH, CSS_FILE_PATH, height=2700, width=1080)
 else:
     st.error(f"The HTML file '{HTML_FILE_PATH}' does not exist. Please check the path.")
-
-
 
 
 # Show login form if user not logged in
