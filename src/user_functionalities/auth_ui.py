@@ -1,7 +1,9 @@
 import requests
 import streamlit as st
 
-URI = "http://127.0.0.1:5000"
+# URI = "http://127.0.0.1:5000"
+URI = "http://localhost:5000"
+
 
 
 def login_form():
