@@ -18,3 +18,5 @@ measurements_data:
   keep_col: ['title','directions','ingredients','link','NER']
   to_format: ['ingredients', 'directions', 'NER']
   list_var: ['ingredients', 'directions','NER']
+
+FLASK_SECRET_KEY: 'a7b9f3e4d2c14ef19874cfe124ab1e02'

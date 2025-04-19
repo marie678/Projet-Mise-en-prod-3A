@@ -15,6 +15,7 @@ def initialize_session_state() -> None:
     Allows for better readability in the app file
     """
     default_values = {
+        'recipe_id': '',
         'title': '',
         'ingredients': '',
         'instructions': '',
@@ -66,6 +67,7 @@ def handle_recipe_click(page: pd.DataFrame, index: int) -> None:
 
     Session State Variables Updated:
     -------------------------------
+    - `recipe_id`: str - Recipe id
     - `title`: str - Recipe title
     - `ingredients`: str - Ingredients list
     - `instructions`: str - Preparation instructions
@@ -94,6 +96,7 @@ def handle_recipe_click(page: pd.DataFrame, index: int) -> None:
     --------
     None
     """
+    st.session_state.recipe_id = page.iloc[index]['recipe_id']
     st.session_state.title = page.iloc[index]['title']
     st.session_state.ingredients = page.iloc[index]['ingredients']
     st.session_state.instructions = page.iloc[index]['directions']

@@ -21,9 +21,13 @@ from src.preprocessing.load import merge
 from streamlit_extras.add_vertical_space import add_vertical_space
 from loguru import logger
 
+from src.user_functionalities.auth_ui import show_user_panel
+
 
 # configuration parameters
 st.set_page_config(layout="wide", page_title='Recipe Finder', initial_sidebar_state='collapsed', page_icon="🍴")
+
+show_user_panel()  # <-- always displays login info in sidebar
 
 # import of the cleaned and formated dataset of 10k recipes :
 
@@ -36,7 +40,7 @@ DATA_DIR = config['DATA_DIR']
 NUTRITION_FILE_NAME = config['s3']['nutrition_file_name']
 MEASUREMENTS_FILE_NAME = config['s3']['measurements_file_name']
 
-data_folder = os.path.join(PROJECT_ROOT, "data")
+data_folder = os.path.join(PROJECT_ROOT, "data/recipe")
 
 # ADD A MESSAGE ON STREAMLIT TO WARN ABOUT LOADING TIME
 # if no data folder or if it is empty : create the dataset and save it in data folder

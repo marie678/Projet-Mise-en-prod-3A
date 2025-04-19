@@ -13,4 +13,6 @@ dependencies = [
     "s3fs>=2025.3.0",
     "streamlit>=1.40.2",
     "streamlit-extras>=0.5.5",
+    "flask",
+    "flask_login"
 ]
