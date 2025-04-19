@@ -1,9 +1,7 @@
-import streamlit as st
 import requests
+import streamlit as st
 
-
-URI = 'http://127.0.0.1:5000'  # URL for Flask app
-
+URI = "http://127.0.0.1:5000"  # URL for Flask app
 
 
 # Function to like a recipe
@@ -15,17 +13,21 @@ def like_recipe(conn, user_id, recipe_id):
     cursor = conn.cursor()
 
     # Check if the recipe is already liked by the user
-    cursor.execute("SELECT * FROM likes WHERE user_id=? AND recipe_id=?", (user_id, recipe_id))
+    cursor.execute(
+        "SELECT * FROM likes WHERE user_id=? AND recipe_id=?", (user_id, recipe_id)
+    )
     if cursor.fetchone():
         return {"message": "Recipe already liked."}, 400
 
     # Add the liked recipe to the 'likes' table
-    cursor.execute("INSERT INTO likes (user_id, recipe_id) VALUES (?, ?)", (user_id, recipe_id))
+    cursor.execute(
+        "INSERT INTO likes (user_id, recipe_id) VALUES (?, ?)", (user_id, recipe_id)
+    )
     conn.commit()
     return {"message": "Recipe liked successfully!"}, 200
 
 
-def like_recipe_button(recipe_id, col1, col2, col3):
+def like_recipe_button(recipe_id, col3):
     """
     This function displays a like button for the recipe and sends a request to like it.
     """
@@ -37,7 +39,10 @@ def like_recipe_button(recipe_id, col1, col2, col3):
 
         else:
             try:
-                response = requests.post(f"{URI}/like_recipe", json={"recipe_id": int(recipe_id), "user_id": str(user_id)})
+                response = requests.post(
+                    f"{URI}/like_recipe",
+                    json={"recipe_id": int(recipe_id), "user_id": str(user_id)},
+                )
 
                 if response.status_code == 200:
                     st.success("Recipe liked!")
@@ -57,11 +62,14 @@ def get_liked_recipes(conn, user_id):
     Returns all liked recipes for a given user.
     """
     cursor = conn.cursor()
-    cursor.execute("""
+    cursor.execute(
+        """
         SELECT recipe_id
         FROM likes
         WHERE user_id = ?
-    """, (user_id,))
+    """,
+        (user_id,),
+    )
 
     rows = cursor.fetchall()
     # Convert to plain list of recipe IDs

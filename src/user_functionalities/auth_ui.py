@@ -1,7 +1,8 @@
-import streamlit as st
 import requests
+import streamlit as st
 
 URI = "http://127.0.0.1:5000"
+
 
 def login_form():
     st.sidebar.header("🔐 Login / Register")
@@ -16,7 +17,9 @@ def login_form():
         if not username or not password:
             st.sidebar.warning("Please enter both username and password.")
         else:
-            response = requests.post(f"{URI}/login", data={"username": username, "password": password})
+            response = requests.post(
+                f"{URI}/login", data={"username": username, "password": password}
+            )
             if "successfully" in response.text:
                 st.session_state.logged_in = True
                 st.session_state.username = username
@@ -29,7 +32,9 @@ def login_form():
         if not username or not password:
             st.sidebar.warning("Please enter both username and password.")
         else:
-            response = requests.post(f"{URI}/register", data={"username": username, "password": password})
+            response = requests.post(
+                f"{URI}/register", data={"username": username, "password": password}
+            )
             if "successfully" in response.text:
                 st.session_state.logged_in = True
                 st.session_state.username = username
@@ -38,6 +43,7 @@ def login_form():
             else:
                 st.sidebar.error("Username is already taken.")
 
+
 def show_user_panel():
     st.sidebar.markdown("### 🔐 User Panel")
 
@@ -45,7 +51,10 @@ def show_user_panel():
         st.sidebar.write(f"👤 Logged in as: `{st.session_state.username}`")
 
         if st.sidebar.button("❤ Liked recipes"):
-            response = requests.get(f"{URI}/liked_recipes", params={"username": str(st.session_state.username)})
+            response = requests.get(
+                f"{URI}/liked_recipes",
+                params={"username": str(st.session_state.username)},
+            )
 
             # Debugging: Check if the response is valid
             if response.status_code == 200:
@@ -59,7 +68,9 @@ def show_user_panel():
                 except requests.exceptions.JSONDecodeError as e:
                     st.error(f"Failed to decode JSON: {e}. Response: {response.text}")
             else:
-                st.error(f"Failed to get liked recipes. Status code: {response.status_code}, Response: {response.text}")
+                st.error(
+                    f"Failed to get liked recipes. Status code: {response.status_code}, Response: {response.text}"
+                )
 
         if st.sidebar.button("Logout", key="logout_btn"):
             response = requests.post(f"{URI}/logout")
@@ -69,4 +80,6 @@ def show_user_panel():
                 st.session_state.status_message = "✅ Logged out successfully"
                 st.rerun()
     else:
-        st.sidebar.info("🔒 You are not logged in \n\n ↪️ Go to Homepage to login or register!")
+        st.sidebar.info(
+            "🔒 You are not logged in \n\n ↪️ Go to Homepage to login or register!"
+        )
