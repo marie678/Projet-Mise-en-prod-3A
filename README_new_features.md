@@ -14,20 +14,20 @@ Original project structure             |  Current project structure
 
 
 ## Repository organisation / architecture
-The new repository architecture was simplified: 
+The new repository architecture was simplified:
 
-- Insted of giving acces to older versions of the app via a "dev" folder in the repository, we used tags which allow us to retrace our steps and at the same time make the application architecture visible in root.
+- Instead of giving access to older versions of the app via a "dev" folder in the repository, we used tags which allow us to retrace our steps and at the same time make the application architecture visible in root.
 
-- There are no longer a separation between data, preprocessing and application folders. This also enables better visibility and faster understanding of the project.
+- There is no longer a separation between data, preprocessing and application folders. This also enables better visibility and faster understanding of the project.
 
-- A unique README now summurises all the application functionnalities and characteristics.
+- A unique README now summarizes all the application functionalities and characteristics.
 
 
-## Data externalisation 
+## Data externalisation
 
-Instead of doing the preprocessing locally on our computers, using the data sets downloaded from kaggle, and then saving the pre processed dataset in Github, we now do the preprocessing as part of the application code using the original data frames in an s3 folder.
+Instead of doing the preprocessing locally on our computers, using the datasets downloaded from kaggle and then saving the pre processed dataset in Github, we now do the preprocessing as part of the application code using the original dataframes in an s3 folder.
 
-We also directly use parquet files to do load and process the data wich saves time and memory. Indeed, 
+We also directly use parquet files to load and process the data which saves time and memory. Indeed,
 
 <table>
   <tr>
@@ -60,11 +60,11 @@ The preprocessing code was adapted to reduce the compute time.
 
 - The quality of the code was improved and tested (imports in order, pep8 coding conventions, typing, ...).
 
-- More functions were created and put in a unique structured folder. Rather than having them in a unique script we created 2 folders and 6 scripts with different functionality for more visibility.
+- More functions were created and put in a unique structured folder. Rather than having them in a unique script we created 3 folders and 11 scripts with different functionality for more visibility.
 
-- Load/create the preprocessed dataset when the app is opened for the first time.
+- Load/create the preprocessed dataset when the app is opened for the first time only.
 
-- External parametrizaion with YAML file: the dataframes related parameters (columns to keep or format, file names) and s3 connexion parameters were externalized.
+- External parametrization with YAML file: the dataframes related parameters (columns to keep or format, file names) and s3 connexion parameters were externalized.
 
 
 ## Application

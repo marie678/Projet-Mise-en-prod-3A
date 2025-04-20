@@ -3,37 +3,40 @@ Contains the streamlit code to display the search engine and criterias,
 as well as the search results.
 """
 
+import os
 from collections import Counter
+from pathlib import Path
 from typing import Any, List
 
-import os
-from pathlib import Path
-import yaml
 import pandas as pd
 import streamlit as st
+import yaml
+from loguru import logger
+from streamlit_extras.add_vertical_space import add_vertical_space
+
 from src.application.query_helpers import clean_query, query_error
 from src.application.recipe_finder_functions import search_recipes, split_frame
 from src.application.st_session_functions import (handle_recipe_click,
-                                        initialize_session_state)
+                                                  initialize_session_state)
 from src.preprocessing.filter import data_filter
 from src.preprocessing.format import data_preprocessing
 from src.preprocessing.load import merge
-from streamlit_extras.add_vertical_space import add_vertical_space
-from loguru import logger
-
 from src.user_functionalities.auth_ui import show_user_panel
 
-
 # configuration parameters
-st.set_page_config(layout="wide", page_title='Recipe Finder', initial_sidebar_state='collapsed', page_icon="🍴")
+st.set_page_config(
+    layout="wide",
+    page_title='Recipe Finder',
+    initial_sidebar_state='collapsed',
+    page_icon="🍴"
+)
 
-show_user_panel()  # <-- always displays login info in sidebar
+show_user_panel()  # always display login info in sidebar
 
 # import of the cleaned and formated dataset of 10k recipes :
-
-# Get the absolute path to the project root
-PROJECT_ROOT = Path(__file__).resolve().parent.parent
+PROJECT_ROOT = Path(__file__).resolve().parent.parent # absolute path to the project root
 config_path = PROJECT_ROOT / "utils" / "config.yaml"
+
 with open(config_path, "r") as file:
     config = yaml.safe_load(file)
 DATA_DIR = config['DATA_DIR']
@@ -42,7 +45,6 @@ MEASUREMENTS_FILE_NAME = config['s3']['measurements_file_name']
 
 data_folder = os.path.join(PROJECT_ROOT, "data/recipe")
 
-# ADD A MESSAGE ON STREAMLIT TO WARN ABOUT LOADING TIME
 # if no data folder or if it is empty : create the dataset and save it in data folder
 if not os.path.exists(data_folder) or not os.listdir(data_folder):
     with st.spinner("⏳ Initializing the dataset... This may take a few minutes."):
@@ -69,10 +71,6 @@ if not os.path.exists(data_folder) or not os.listdir(data_folder):
 DATASET_PATH = os.path.join(data_folder, 'final_df.parquet')
 df: pd.DataFrame = pd.read_parquet(DATASET_PATH)
 
-# idee : mettre ici if data directory vide / non existant : lancer data_cleaning module depuis ici
-# avec les loggers pour le suivi et afficher un message / loading dans st pour dire que ça prend du
-# temps mais que c'est qu'une fois.
-
 
 ####################################### FILTERS INITIALIZATION #####################################
 
@@ -85,7 +83,6 @@ provenance: set[str] = {x for x in sorted(set(df['World_Cuisine'])) if pd.notna(
 
 filter_columns: dict[str, str] = {
     'ingredients': 'NER',
-    # 'recipe_durations_cat': 'TotalTime_cat',
     'recipe_durations_min': 'TotalTime_minutes',
     'recipe_types': 'RecipeType',
     'vegetarian': 'Vegetarian_Friendly',
@@ -95,10 +92,10 @@ filter_columns: dict[str, str] = {
 filters: dict[str, Any] = {}
 research_summary: str = ''
 
-####################################### SESSION STATE INITIALIZATION ###############################
+######################## SESSION STATE INITIALIZATION ##########################
 initialize_session_state()
 
-######################################## WEB PAGE DISPLAY ##########################################
+############################# WEB PAGE DISPLAY #################################
 
 # Display header
 st.markdown(
