@@ -98,7 +98,9 @@ The final dataset includes new categorical and binary filters to enable users to
 
 #### As pure application users
 
-If you're simply looking to use the application without the need to interact with the backend code, no setup is required! Just follow this [link](https://frigo-vide.lab.sspcloud.fr/).
+If you're simply looking to use the application without the need to interact with the backend code, no setup is required! 
+
+Just follow this [link](https://frigo-vide.lab.sspcloud.fr/).
 
 
 #### With python
