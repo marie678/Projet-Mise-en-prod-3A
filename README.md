@@ -88,7 +88,7 @@ The final dataset includes new categorical and binary filters to enable users to
 Use the application link: https://frigo-vide.lab.sspcloud.fr/
 
 #### With python
-The web app is built with streamlit. You can run it with the following steps :
+The web app is built with a frontend in streamlit and a backend in flask. You can run it with the following steps :
 
 1. Clone this repository
 ```
@@ -98,10 +98,17 @@ git clone https://github.com/marie678/Projet-Mise-en-prod-3A.git
 ```
 pip install -r requirements.lock.txt
 ```
-3. Run the main page of the app
+3. Run the _run_ script which launches the flask backend first and then the main page of the app with streamlit. \
+- With linux :
 ```
-streamlit run app.py
+chmod +x run.sh
+./run.sh
 ```
+- With CMD/PowerShell :
+```
+.\run.bat
+```
+
 You can then navigate through the different pages within the app.
 
 #### With Docker
@@ -118,7 +125,7 @@ This part can take a few minutes to run.
 
 2. Run the Docker Container
 ```
-docker run -p 8501:8501 marie678/mise_en_prod:v3.0.0
+docker run -p 8501:8501 -p 5001:5000 marie678/mise_en_prod:v3.0.0
 ```
 3. Access the Application \
 Once the container is running, open your web browser and go to
