@@ -1,3 +1,7 @@
+"""
+Provides functions to connect to SQLite databases for users and likes,
+ensuring the database files exist and storing the connection in Flask's `g` context object.
+"""
 import os
 import sqlite3
 
