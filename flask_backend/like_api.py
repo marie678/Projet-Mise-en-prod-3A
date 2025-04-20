@@ -1,3 +1,7 @@
+"""
+Handles recipe like-related routes in a Flask app, including liking a recipe and retrieving liked
+recipes, with SQLite database initialization and teardown support.
+"""
 import os
 import sqlite3
 

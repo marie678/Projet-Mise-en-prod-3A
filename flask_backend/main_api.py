@@ -1,3 +1,7 @@
+"""
+Initializes and runs the Flask application, sets up user authentication with `flask-login`,
+loads configuration from a YAML file, and registers login and like feature routes using Blueprints.
+"""
 import os
 import sys
 from pathlib import Path
