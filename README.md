@@ -59,7 +59,7 @@ These files are stored in SSP Cloud's S3 storage bucket.
 
 **Data aggregation**
 
-The scripts in `src/preprocessing` loads, merges the two datasets and outputs a cleaned and processed dataframe in parquet format. The final dataset can be found at `data/final_df.parquet`.
+The scripts in `src/preprocessing` loads, merges the two datasets and outputs a cleaned and processed dataframe in parquet format. A detailed description of the final dataset is available in the 'Dataset Report' section of our website.
 
 The final dataset includes new categorical and binary filters to enable users to refine their recipe searches within the app:
 * `TotalTime_cat` ("< 30min", "< 1h", "> 1h")
@@ -85,7 +85,8 @@ The final dataset includes new categorical and binary filters to enable users to
 
 #### As pure application users
 
-Use the application link: https://frigo-vide.lab.sspcloud.fr/
+If you're simply looking to use the application without the need to interact with the backend code, no setup is required! Just follow this link: https://frigo-vide.lab.sspcloud.fr/.
+
 
 #### With python
 The web app is built with a frontend in streamlit and a backend in flask. You can run it with the following steps :
