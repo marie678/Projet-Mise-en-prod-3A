@@ -7,14 +7,18 @@ format:
         toc: true
         toc-depth: 2
 ---
-
+<!--
 [View on GitHub](https://github.com/marie678/Projet-Mise-en-prod-3A.git){.btn .btn-primary}
 
 ::: {.text-center .mb-4}
 <a href="https://frigo-vide.lab.sspcloud.fr" target="_blank" class="btn btn-dark">Go to the website</a>
+::: -->
+
+::: {.text-center .mb-4}
+[View on GitHub](https://github.com/marie678/Projet-Mise-en-prod-3A.git){.btn .btn-primary}
+
+[Go to the website](https://frigo-vide.lab.sspcloud.fr){.btn .btn-primary}
 :::
-
-
 
 # 🎯 Project Objective
 
@@ -45,7 +49,7 @@ The dataset contains nutritional and measurement data for thousands of recipes a
 
 # 🌐 Access the App
 
-You can access the deployed app here: [frigo-vide-test1.lab.sspcloud.fr](https://frigo-vide-test1.lab.sspcloud.fr) \
+You can access the deployed app here: [frigo-vide.lab.sspcloud.fr](https://frigo-vide.lab.sspcloud.fr) \
 You can access the GitHub repository here: [https://github.com/marie678/Projet-Mise-en-prod-3A.git](https://github.com/marie678/Projet-Mise-en-prod-3A.git)
 
 # 🛠️ Project Structure
