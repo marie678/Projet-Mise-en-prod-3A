@@ -65,6 +65,8 @@ The preprocessing code was adapted to reduce the compute time.
 - Load/create the preprocessed dataset when the app is opened for the first time only.
 
 - External parametrization with YAML file: the dataframes related parameters (columns to keep or format, file names) and s3 connexion parameters were externalized.
+  
+- Additional logging was added throughout the codebase to help track the application's state and performance. In particular, the entire preprocessing is now timed step by step, making it easier to identify bottlenecks and optimize performance when needed.
 
 ## User Functionality
 
