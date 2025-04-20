@@ -16,8 +16,8 @@ Our application is composed of 3 pages:
 
 - **Homepage**
 
-  - An image tutorial with a usage example to guide users through the application.
-  - A login pannel: you can create an account or log in to access personalized features — like saving your favorite recipes for later. Once you're logged in, every time you "like" a recipe, it gets saved to your personal space so you can easily find it again. No more forgetting that amazing pasta dish you found last week!
+  - An **image tutorial** with a usage example to guide users through the application.
+  - A **login panel**: you can create an account or log in to access personalized features — like saving your favorite recipes for later. Once you're logged in, every time you "like" a recipe, it gets saved to your personal space so you can easily find it again. No more forgetting that amazing pasta dish you found last week!
 
 - **Search Page**:
 
@@ -25,7 +25,7 @@ Our application is composed of 3 pages:
     *   **Search by title:** (e.g., pizza, burger, quiche, smoothie, cake).
     *   **Search by ingredients:** (e.g., egg, beef, strawberry). You can add multiple ingredients.
 
-  (\*) Note that you can search without any format restrictions (such as plural / singular, lower/upper case, poncutation between words).
+  (\*) Note that you can search without any format restrictions (such as plural / singular, lower/upper case, ponctuation between words).
   If you're unsure about the spelling of an ingredient, don't worry as we've integrated a spell checker !
   Even if you type "letuce," a suggestion appears below the search bar showing "Did you mean lettuce?".
 
