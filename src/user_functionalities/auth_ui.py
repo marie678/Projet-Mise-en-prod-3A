@@ -3,10 +3,20 @@ Provides a Streamlit sidebar interface for user authentication and session manag
 interacting with a backend API.
 Includes login, registration, and a user panel with options like viewing liked recipes and logging out.
 """
+
+from pathlib import Path
+
 import requests
 import streamlit as st
+import yaml
 
-URI = "http://localhost:5000"
+# Get URI parameter configuration
+PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
+config_path = PROJECT_ROOT / "utils" / "config.yaml"
+with open(config_path, "r") as file:
+    config = yaml.safe_load(file)
+
+URI = config['FLASK']['URI']
 
 
 def login_form():

@@ -2,10 +2,19 @@
 Provides functions to like a recipe, display a like button in the Streamlit UI,
 and retrieve liked recipes for a given user, using both local database access and Flask API requests.
 """
+from pathlib import Path
+
 import requests
 import streamlit as st
+import yaml
 
-URI = "http://127.0.0.1:5000"  # URL for Flask app
+# Get URI parameter configuration
+PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
+config_path = PROJECT_ROOT / "utils" / "config.yaml"
+with open(config_path, "r") as file:
+    config = yaml.safe_load(file)
+
+URI = config['FLASK']['URI'] 
 
 
 def like_recipe(conn, user_id, recipe_id):

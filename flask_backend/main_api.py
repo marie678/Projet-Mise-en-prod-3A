@@ -26,7 +26,7 @@ config_path = PROJECT_ROOT / "utils" / "config.yaml"
 with open(config_path, "r") as file:
     config = yaml.safe_load(file)
 
-app.secret_key = config['FLASK_SECRET_KEY']
+app.secret_key = config['FLASK']['FLASK_SECRET_KEY']
 
 # Setup login manager
 login_manager = LoginManager()
