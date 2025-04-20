@@ -1,0 +1,161 @@
+---
+title: "Dynamic Plotly Charts"
+format:
+  html
+kernel: python3
+execute: 
+  echo: false
+header-includes:
+  - |
+    <style>
+      /* Custom CSS for scrollable columns */
+      .dataTable td:nth-child(5),  /* 'Description' column */
+      .dataTable td:nth-child(6),  /* 'Images' column */
+      .dataTable td:nth-child(8),  /* 'Keywords' column */
+      .dataTable td:nth-child(22), /* 'directions' column */
+      .dataTable td:nth-child(23), /* 'ingredients' column */
+      .dataTable td:nth-child(24), /* 'link' column */
+      .dataTable td:nth-child(25)  /* 'NER' column */
+      {
+          max-width: 300px;
+          overflow-x: scroll;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+      }
+    </style>
+---
+
+# Data Overview
+
+In this chapter, we will show a small sample of the dataset to understand its structure.
+
+```{python}
+import pandas as pd
+from itables import show, init_notebook_mode
+init_notebook_mode(all_interactive=True)
+
+# Load your DataFrame (make sure to update this with the correct file path)
+df = pd.read_parquet("final_df.parquet")
+```
+
+```{python}
+# ColumnDefs to define the columns with scrollable content
+column_defs = [
+    {
+        'targets': [4, 5, 7, 21, 22, 23, 24],  # Targeting 'Description', 'Images', 'Keywords', 'directions', 'ingredients', 'link', 'NER'
+        'render': 'html',  # Render as HTML
+        'className': 'dt-center',  
+    }
+]
+
+# Display the DataFrame with itables and columnDefs for scrollable text
+show(df.sample(100), column_defs=column_defs)
+
+```
+
+# Interactive Visualizations
+
+
+```{python}
+import plotly.graph_objects as go
+
+# Your data 
+float_var=['Calories', 'FatContent', 'SaturatedFatContent',
+       'CholesterolContent', 'SodiumContent', 'CarbohydrateContent',
+       'FiberContent', 'SugarContent', 'ProteinContent']
+
+int_cat_var = ['CookTime', 'PrepTime', 'TotalTime','RecipeCategory','AggregatedRating',
+       'ReviewCount', 'RecipeServings',
+       'CookTime_minutes',
+       'PrepTime_minutes', 'TotalTime_minutes','TotalTime_cat',
+       'RecipeType', 'Beginner_Friendly', 'Vegetarian_Friendly',
+       'World_Cuisine']
+
+# Classify your columns
+all_cols = float_var + int_cat_var
+
+# Build the figure with one trace per column (some histogram, some pie)
+fig = go.Figure()
+buttons = []
+trace_idx = 0
+trace_map = {}
+
+for col in all_cols:
+    if col in float_var:
+        # Add histogram trace
+        fig.add_trace(go.Histogram(
+            x=df[col],
+            name=f'{col} Histogram',
+            visible=False,
+            showlegend=False,
+            marker_color='skyblue'
+        ))
+        trace_map[col] = [trace_idx]
+        trace_idx += 1
+
+    elif col in int_cat_var:
+        # Prepare pie chart with "Other" grouping
+        result = df[col].value_counts().reset_index()
+        result.columns = [col, 'count']
+        result = result.sort_values('count', ascending=False)
+
+        if len(result) > 10:
+            threshold = result['count'].values[9]
+            result[col] = result.apply(lambda row: 'Other' if row['count'] < threshold else row[col], axis=1)
+            result = result.groupby(col, as_index=False).sum()
+
+        fig.add_trace(go.Pie(
+            labels=result[col],
+            values=result['count'],
+            name=f'{col} Pie',
+            visible=False
+        ))
+        trace_map[col] = [trace_idx]
+        trace_idx += 1
+
+# Create dropdown buttons
+for col in all_cols:
+    visibility = [False] * trace_idx
+    for i in trace_map[col]:
+        visibility[i] = True
+
+    chart_type = 'Histogram' if col in float_var else 'Pie Chart'
+    buttons.append(dict(
+    label=col,
+    method='update',
+    args=[
+        {'visible': visibility},
+        {
+            'title': f'{chart_type} for {col}',
+            'xaxis': {'visible': col in float_var},
+            'yaxis': {'visible': col in float_var}
+        }
+    ]
+))
+
+# Set first visible trace
+for i in trace_map[all_cols[0]]:
+    fig.data[i].visible = True
+
+# Final layout
+fig.update_layout(
+    updatemenus=[dict(
+        active=0,
+        buttons=buttons,
+        x=0,
+        xanchor='center',
+        y=1.15,  # Position the dropdown above the plot
+        yanchor='bottom',  # Anchor dropdown at the bottom
+        direction='down',
+        showactive=True
+    )],
+    title=f'Histogram for {all_cols[0]}',
+    template='plotly_white',
+    margin=dict(t=100),  # Add extra top margin for spacing
+    title_x=0.5,  
+    title_y=0.85,  # Move title below dropdown (lower value for lower position)
+    showlegend=True
+)
+
+fig.show()
+```

@@ -167,7 +167,7 @@ cython_debug/
 # data
 .parquet
 .csv
-data/recipe/*
+data/recipe/final_df.parquet
 
 # quarto
 /.quarto/
