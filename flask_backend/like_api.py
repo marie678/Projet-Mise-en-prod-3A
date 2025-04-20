@@ -1,8 +1,9 @@
-from flask import Flask, request, jsonify, Blueprint, g  
 import os
 import sqlite3
+
+from flask import Blueprint, g, jsonify, request
 from src.user_functionalities.db import get_likes_db
-from src.user_functionalities.like import like_recipe, get_liked_recipes
+from src.user_functionalities.like import get_liked_recipes, like_recipe
 
 like_routes = Blueprint("like_routes", __name__)
 
@@ -10,11 +11,13 @@ like_routes = Blueprint("like_routes", __name__)
 os.makedirs("data/users", exist_ok=True)
 DATABASE = os.path.join("data/users", "likes.db")
 
+
 @like_routes.teardown_request
 def close_db(exception=None):
     db = g.pop('db', None)
     if db is not None:
         db.close()
+
 
 # Create the likes table if it doesn't exist
 def init_db():
@@ -31,6 +34,7 @@ def init_db():
     """)
     db.commit()
     db.close()
+
 
 init_db()
 
@@ -53,10 +57,11 @@ def like_recipe_route():
     conn.close()
     return jsonify({"message": message}), status_code
 
+
 # Route to get liked recipes
 @like_routes.route("/liked_recipes", methods=["GET"])
 def liked_recipes_route():
-    user_id = request.args.get("username")  
+    user_id = request.args.get("username")
     if not user_id:
         return jsonify({"message": "Username required"}), 400
 
@@ -65,4 +70,3 @@ def liked_recipes_route():
     conn.close()
 
     return jsonify(liked_recipes), 200
-
