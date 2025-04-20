@@ -10,6 +10,18 @@ URI = "http://localhost:5000"
 
 
 def login_form():
+    """
+    Handles the login or registration request and updates the session state.
+    
+    Args:
+        endpoint (str): The API endpoint for login or registration.
+        username (str): The username of the user.
+        password (str): The password of the user.
+        action (str): A string describing the action (login or register).
+    
+    Returns:
+        bool: True if action was successful, False otherwise.
+    """
     st.sidebar.header("🔐 Login / Register")
 
     username = st.sidebar.text_input("Username")
@@ -50,6 +62,15 @@ def login_form():
 
 
 def show_user_panel():
+    """
+    Displays the user panel in the sidebar, allowing logged-in users to:
+    - View their liked recipes.
+    - Log out of their account.
+    
+    For non-logged-in users, prompts them to log in or register.
+    Provides real-time feedback on actions like logging out and viewing liked recipes.
+    """
+   
     st.sidebar.markdown("### 🔐 User Panel")
 
     if st.session_state.get("logged_in"):
@@ -61,10 +82,10 @@ def show_user_panel():
                 params={"username": str(st.session_state.username)},
             )
 
-            # Debugging: Check if the response is valid
+            # Debugging
             if response.status_code == 200:
                 try:
-                    liked_recipes = response.json()  # Attempt to parse JSON
+                    liked_recipes = response.json()  
                     st.session_state.liked_recipes = liked_recipes
                     if not liked_recipes:
                         st.info("You have no liked recipes.")

@@ -8,11 +8,18 @@ import streamlit as st
 URI = "http://127.0.0.1:5000"  # URL for Flask app
 
 
-# Function to like a recipe
 def like_recipe(conn, user_id, recipe_id):
     """
-    Allows a user to like a recipe.
-    Checks if the recipe is already liked, if not, adds it to the likes table.
+    Allows a user to like a recipe. Checks if the recipe is already liked by the user. 
+    If not, inserts a new like into the 'likes' table.
+
+    Args:
+        conn (sqlite3.Connection): SQLite database connection.
+        user_id (str): The ID of the user liking the recipe.
+        recipe_id (int): The ID of the recipe being liked.
+
+    Returns:
+        tuple: A dictionary with a message and an HTTP-like status code.
     """
     cursor = conn.cursor()
 
@@ -33,7 +40,11 @@ def like_recipe(conn, user_id, recipe_id):
 
 def like_recipe_button(recipe_id, col3):
     """
-    This function displays a like button for the recipe and sends a request to like it.
+    Displays a like button for the recipe and sends a request to like it if the user is logged in.
+    
+    Args:
+        recipe_id (str): The ID of the recipe to be liked.
+        col3 (st.columns): The Streamlit column to display the like button.
     """
     user_id = st.session_state.get("username")
 
@@ -63,7 +74,14 @@ def like_recipe_button(recipe_id, col3):
 
 def get_liked_recipes(conn, user_id):
     """
-    Returns all liked recipes for a given user.
+    Returns a list of recipe IDs liked by a given user.
+    
+    Args:
+        conn (sqlite3.Connection): The SQLite database connection.
+        user_id (str): The ID of the user whose liked recipes are being fetched.
+
+    Returns:
+        list: A list of recipe IDs that the user has liked.
     """
     cursor = conn.cursor()
     cursor.execute(
@@ -76,5 +94,4 @@ def get_liked_recipes(conn, user_id):
     )
 
     rows = cursor.fetchall()
-    # Convert to plain list of recipe IDs
     return [row[0] for row in rows]

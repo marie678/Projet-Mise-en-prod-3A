@@ -46,16 +46,13 @@ init_db()
 # Routes for liking recipes
 @like_routes.route("/like_recipe", methods=["POST"])
 def like_recipe_route():
-    data = request.get_json()  # Use .get_json() for JSON data
+    data = request.get_json()  
     recipe_id = data.get("recipe_id")
     user_id = data.get('user_id')
-    # If recipe_id is not provided, return an error message
     if not recipe_id:
         return jsonify({"message": "Recipe ID is required"}), 400
     if not user_id:
         return jsonify({"message": "Unauthorized"}), 401
-
-    # Call the like_recipe function
     conn = get_likes_db()
     message, status_code = like_recipe(conn, user_id, recipe_id)
     conn.close()
@@ -68,7 +65,6 @@ def liked_recipes_route():
     user_id = request.args.get("username")
     if not user_id:
         return jsonify({"message": "Username required"}), 400
-
     conn = get_likes_db()
     liked_recipes = get_liked_recipes(conn, user_id)
     conn.close()

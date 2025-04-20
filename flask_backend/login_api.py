@@ -49,7 +49,7 @@ init_db()
 def index():
     return "Flask backend running."
 
-
+# Set up a route for loging in users
 @login_routes.route("/login", methods=["POST"])
 def login():
     cursor = get_users_db().cursor()
@@ -70,7 +70,7 @@ def login():
         return "Logged in successfully."
     return "Invalid username or password.", 401
 
-
+# Set up a route for registering users
 @login_routes.route("/register", methods=["POST"])
 def register():
     cursor = get_users_db().cursor()
