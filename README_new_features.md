@@ -66,6 +66,25 @@ The preprocessing code was adapted to reduce the compute time.
 
 - External parametrization with YAML file: the dataframes related parameters (columns to keep or format, file names) and s3 connexion parameters were externalized.
 
+## User Functionality
+
+A new set of user-related features was added to enhance personalization and interactivity:
+
+- User authentication: Users can now register and log in to the app. Authentication is handled via a Flask backend API, compatible with the Streamlit frontend.
+
+- Recipe liking: Logged-in users can like recipes, which are then saved to their personal user space for later access.
+
+- Database integration:
+
+  - A Users table stores authentication information.
+
+  - A Likes table stores the recipes liked by users.
+
+Both databases are implemented using SQLAlchemy for seamless integration with the backend API.
+
+This new layer of functionality lays the groundwork for future personalization features such as saved preferences, history tracking, and personalized recommendations. While we didn’t have time to implement those additional features yet, the most technically challenging part is now done.
+
+
 
 ## Application
 
