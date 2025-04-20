@@ -7,7 +7,8 @@
 
 This project is part of the "Mise en production des projets de Data Science" course. Based on an existing project, the goal is to develop an interactive application that addresses a business problem, and then deploy it on a production infrastructure. We decided to use a previous project we worked on for our "Infrastructures and software systems" class, in which the goal was to develop a Streamlit application that helps users find recipes based on the ingredients they have in their fridge.
 
-To understand where we began, please refer to the [Projet-Infra-3A repository](https://github.com/nguibe/Projet-Infra-3A). For details on what has been accomplished, including new features and, most importantly, the reorganization of architecture and code for improved productivity, check out the README_new_features.md file.
+To understand where we began, please refer to the [Projet-Infra-3A repository](https://github.com/nguibe/Projet-Infra-3A). For details on what has been accomplished, including new features and, most importantly, the reorganization of architecture and code for improved productivity, check out the [README_new_features](./README_new_features.md)
+ file.
 
 ## Features
 
