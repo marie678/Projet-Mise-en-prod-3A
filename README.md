@@ -53,8 +53,8 @@ To help you explore the app's full functionality without creating a new user, we
 This account already has liked recipes saved, allowing you to immediately see how your personal recipe space works.
 
 > 🔐 **Demo credentials**
-> 
-> **Username**: no_no  
+>
+> **Username**: no_no
 > **Password**: Ilovetomato
 
 ➜ Feel free to test the "like" functionality or explore previously liked recipes from this account.
@@ -98,7 +98,7 @@ The final dataset includes new categorical and binary filters to enable users to
 
 #### As pure application users
 
-If you're simply looking to use the application without the need to interact with the backend code, no setup is required! 
+If you're simply looking to use the application without the need to interact with the backend code, no setup is required!
 
 Just follow this [link](https://frigo-vide.lab.sspcloud.fr/).
 
@@ -135,13 +135,13 @@ Ensure that Docker is downloaded and installed on your system, and that you have
 
 1. Pull the Docker Image
 ```
-docker pull marie678/mise_en_prod:v3.0.1
+docker pull marie678/mise_en_prod:v3.0.2
 ```
 This part can take a few minutes to run.
 
 2. Run the Docker Container
 ```
-docker run -p 8501:8501 -p 5001:5000 marie678/mise_en_prod:v3.0.1
+docker run -p 8501:8501 -p 5001:5000 marie678/mise_en_prod:v3.0.2
 ```
 3. Access the Application \
 Once the container is running, open your web browser and go to
