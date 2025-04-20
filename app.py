@@ -10,7 +10,6 @@ import streamlit as st
 from src.application.recipe_finder_functions import display_html_in_streamlit
 from src.user_functionalities.auth_ui import login_form, show_user_panel
 
-# Add a title to the page_title
 st.set_page_config(layout="wide", page_title='FRIDGE & COOK',  page_icon="🍴")
 
 ####################################### LOGIN FUNCTIONNALITY ###############################
@@ -24,7 +23,7 @@ if not st.session_state.get("logged_in"):
     login_form()
 # if user is already logged in show user info, recipe liked and logout buttons
 else:
-    show_user_panel()  
+    show_user_panel()
     st.write("🎉 Welcome back!")
 
 ####################################### WELCOME PAGE DISPLAY ###############################
