@@ -93,7 +93,7 @@ ul.task-list li input[type="checkbox"] {
 <span class="menu-text">Home</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./data/recipe/data_report.qmd"> 
+    <a class="nav-link" href="./data/recipe/data_report.html"> 
 <span class="menu-text">Data Report</span></a>
   </li>  
 </ul>
@@ -127,6 +127,7 @@ ul.task-list li input[type="checkbox"] {
   <li><a href="#repository-organisation-architecture" id="toc-repository-organisation-architecture" class="nav-link" data-scroll-target="#repository-organisation-architecture">Repository organisation / architecture</a></li>
   <li><a href="#data-externalisation" id="toc-data-externalisation" class="nav-link" data-scroll-target="#data-externalisation">Data externalisation</a></li>
   <li><a href="#code" id="toc-code" class="nav-link" data-scroll-target="#code">Code</a></li>
+  <li><a href="#user-functionality" id="toc-user-functionality" class="nav-link" data-scroll-target="#user-functionality">User Functionality</a></li>
   <li><a href="#application" id="toc-application" class="nav-link" data-scroll-target="#application">Application</a></li>
   </ul></li>
   </ul>
@@ -140,6 +141,7 @@ ul.task-list li input[type="checkbox"] {
 
 <section id="changes-with-the-mise-en-production-course" class="level1">
 <h1>Changes with the ‘Mise en production’ course</h1>
+<p>The following general project and more detailed repository structure graphs illustrate how the project has evolved from its previous version. They highlight changes in architecture, data handling, and code structure. For more details on these improvements, refer to the sections below:</p>
 <table class="caption-top table">
 <colgroup>
 <col style="width: 50%">
@@ -172,7 +174,7 @@ ul.task-list li input[type="checkbox"] {
 <tbody>
 <tr class="odd">
 <td style="text-align: center;"><img src="https://github.com/user-attachments/assets/2b1a1195-0d0f-4f5d-82a8-c6ecc084dfcd.png" class="img-fluid"></td>
-<td style="text-align: center;"><img src="https://github.com/user-attachments/assets/50680326-2f31-46aa-98da-269cc9ed12e0.png" class="img-fluid"></td>
+<td style="text-align: center;"><img src="https://github.com/user-attachments/assets/ec2ceadd-666f-4937-adec-b52227ac49a8.png" class="img-fluid"></td>
 </tr>
 </tbody>
 </table>
@@ -180,15 +182,15 @@ ul.task-list li input[type="checkbox"] {
 <h2 class="anchored" data-anchor-id="repository-organisation-architecture">Repository organisation / architecture</h2>
 <p>The new repository architecture was simplified:</p>
 <ul>
-<li><p>Insted of giving acces to older versions of the app via a “dev” folder in the repository, we used tags which allow us to retrace our steps and at the same time make the application architecture visible in root.</p></li>
-<li><p>There are no longer a separation between data, preprocessing and application folders. This also enables better visibility and faster understanding of the project.</p></li>
-<li><p>A unique README now summurises all the application functionnalities and characteristics.</p></li>
+<li><p>Instead of giving access to older versions of the app via a “dev” folder in the repository, we used tags which allow us to retrace our steps and at the same time make the application architecture visible in root.</p></li>
+<li><p>There is no longer a separation between data, preprocessing and application folders. This also enables better visibility and faster understanding of the project.</p></li>
+<li><p>A unique README now summarizes all the application functionalities and characteristics.</p></li>
 </ul>
 </section>
 <section id="data-externalisation" class="level2">
 <h2 class="anchored" data-anchor-id="data-externalisation">Data externalisation</h2>
-<p>Instead of doing the preprocessing locally on our computers, using the data sets downloaded from kaggle, and then saving the pre processed dataset in Github, we now do the preprocessing as part of the application code using the original data frames in an s3 folder.</p>
-<p>We also directly use parquet files to do load and process the data wich saves time and memory. Indeed,</p>
+<p>Instead of doing the preprocessing locally on our computers, using the datasets downloaded from kaggle and then saving the pre processed dataset in Github, we now do the preprocessing as part of the application code using the original dataframes in an s3 folder.</p>
+<p>We also directly use parquet files to load and process the data which saves time and memory. Indeed,</p>
 <table>
 <tbody><tr>
 <td>
@@ -246,10 +248,26 @@ recipes_data
 <h2 class="anchored" data-anchor-id="code">Code</h2>
 <ul>
 <li><p>The quality of the code was improved and tested (imports in order, pep8 coding conventions, typing, …).</p></li>
-<li><p>More functions were created and put in a unique structured folder. Rather than having them in a unique script we created 2 folders and 6 scripts with different functionality for more visibility.</p></li>
-<li><p>Load/create the preprocessed dataset when the app is opened for the first time.</p></li>
-<li><p>External parametrizaion with YAML file: the dataframes related parameters (columns to keep or format, file names) and s3 connexion parameters were externalized.</p></li>
+<li><p>More functions were created and put in a unique structured folder. Rather than having them in a unique script we created 3 folders and 11 scripts with different functionality for more visibility.</p></li>
+<li><p>Load/create the preprocessed dataset when the app is opened for the first time only.</p></li>
+<li><p>External parametrization with YAML file: the dataframes related parameters (columns to keep or format, file names) and s3 connexion parameters were externalized.</p></li>
+<li><p>Additional logging was added throughout the codebase to help track the application’s state and performance. In particular, the entire preprocessing is now timed step by step, making it easier to identify bottlenecks and optimize performance when needed.</p></li>
 </ul>
+</section>
+<section id="user-functionality" class="level2">
+<h2 class="anchored" data-anchor-id="user-functionality">User Functionality</h2>
+<p>A new set of user-related features was added to enhance personalization and interactivity:</p>
+<ul>
+<li><p>User authentication: Users can now register and log in to the app. Authentication is handled via a Flask backend API, compatible with the Streamlit frontend.</p></li>
+<li><p>Recipe liking: Logged-in users can like recipes, which are then saved to their personal user space for later access.</p></li>
+<li><p>Database integration:</p>
+<ul>
+<li><p>A Users table stores authentication information.</p></li>
+<li><p>A Likes table stores the recipes liked by users.</p></li>
+</ul></li>
+</ul>
+<p>Both databases are implemented using SQLAlchemy for seamless integration with the backend API.</p>
+<p>This new layer of functionality lays the groundwork for future personalization features such as saved preferences, history tracking, and personalized recommendations. While we didn’t have time to implement those additional features yet, the most technically challenging part is now done.</p>
 </section>
 <section id="application" class="level2">
 <h2 class="anchored" data-anchor-id="application">Application</h2>
