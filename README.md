@@ -119,13 +119,13 @@ Ensure that Docker is downloaded and installed on your system, and that you have
 
 1. Pull the Docker Image
 ```
-docker pull marie678/mise_en_prod:v3.0.0
+docker pull marie678/mise_en_prod:v3.0.1
 ```
 This part can take a few minutes to run.
 
 2. Run the Docker Container
 ```
-docker run -p 8501:8501 -p 5001:5000 marie678/mise_en_prod:v3.0.0
+docker run -p 8501:8501 -p 5001:5000 marie678/mise_en_prod:v3.0.1
 ```
 3. Access the Application \
 Once the container is running, open your web browser and go to
