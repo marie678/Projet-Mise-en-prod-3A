@@ -80,7 +80,7 @@ MEASUREMENTS_FILE_NAME = config['s3']['measurements_file_name']
 data_folder = os.path.join(PROJECT_ROOT, "data/recipe")
 
 # if no data folder or if it's empty : create the dataset and save it in data folder
-if not os.path.exists(data_folder) or not os.listdir(data_folder):
+if not os.path.isfile(os.path.join(data_folder, 'final_df.parquet')):
     with st.spinner("⏳ Initializing the dataset... This may take a few minutes."):
         os.makedirs(data_folder, exist_ok=True)
         data_folder = Path(data_folder)
@@ -129,7 +129,7 @@ else:
     recipe_placeholder = st.container()
     bottom_menu = st.columns((4, 1, 1))
     with bottom_menu[2]:
-        batch_size = st.selectbox('Recipes per page', options=[5,10])
+        batch_size = st.selectbox('Recipes per page', options=[2,5,10])
         total_pages = int(len(df)/batch_size) if len(df) > batch_size else 1
     with bottom_menu[1]:
         current_page = st.number_input('Page', min_value=1, max_value=total_pages, step=1, key='page_input')

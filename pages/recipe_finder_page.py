@@ -47,7 +47,7 @@ MEASUREMENTS_FILE_NAME = config['s3']['measurements_file_name']
 data_folder = os.path.join(PROJECT_ROOT, "data/recipe")
 
 # if no data folder or if it is empty : create the dataset and save it in data folder
-if not os.path.exists(data_folder) or not os.listdir(data_folder):
+if not os.path.isfile(os.path.join(data_folder, 'final_df.parquet')):
     with st.spinner("⏳ Initializing the dataset... This may take a few minutes."):
         os.makedirs(data_folder, exist_ok=True)
         data_folder = Path(data_folder)
