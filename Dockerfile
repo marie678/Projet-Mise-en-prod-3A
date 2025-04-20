@@ -23,10 +23,12 @@ RUN pip install -r requirements.lock.txt
 
 COPY . /app
 
-# Make run.sh executable
-RUN chmod +x run.sh
+# Instead of copying the script create it directly to avoid errors
+RUN echo '#!/bin/bash\n\n# Start Flask backend in the background\npython3 flask_backend/main_api.py > flask.log 2>&1 &\n\n# Wait for Flask to start\necho "Waiting for Flask backend to start..."\nsleep 5\n\n# Start Streamlit frontend\nstreamlit run app.py --server.port=8501 --server.address=0.0.0.0' > /app/run.sh && \
+    chmod +x /app/run.sh
+
 
 EXPOSE 8501
+EXPOSE 5000
 HEALTHCHECK CMD curl --fail http://localhost:8501/_stcore/health
-# ENTRYPOINT ["streamlit", "run", "app.py", "--server.port=8501", "--server.address=0.0.0.0"]
-ENTRYPOINT ["./run.sh"]
+ENTRYPOINT ["/app/run.sh"]
