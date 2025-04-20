@@ -15,7 +15,8 @@ Our application is composed of 3 pages:
 
 - **Homepage**
 
-  - A homepage with an image tutorial and a usage example to guide users through the application.
+  - An image tutorial with a usage example to guide users through the application.
+  - A login pannel: you can create an account or log in to access personalized features — like saving your favorite recipes for later. Once you're logged in, every time you "like" a recipe, it gets saved to your personal space so you can easily find it again. No more forgetting that amazing pasta dish you found last week!
 
 - **Search Page**:
 
@@ -42,6 +43,7 @@ Our application is composed of 3 pages:
 - **Recipe Page**
 
   - Finally this printable recipe page provides all the information you need to prepare your best meal: preparation time, cooking time, ingredients, directions, ratings, nutrition facts, and a link to the recipe page on the original website it came from.
+  - If you're logged in, you can also like recipes, they'll be saved to your personal space so you can easily find them later.
 
 
 ## Data
