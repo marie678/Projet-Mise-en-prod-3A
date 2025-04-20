@@ -1,5 +1,6 @@
 # Changes with the 'Mise en production' course
 
+The following general project and more detailed repository structure graphs illustrate how the project has evolved from its previous version. They highlight changes in architecture, data handling, and code structure. For more details on these improvements, refer to the sections below:
 
 Original project structure             |  Current project structure
 :-------------------------:|:-------------------------:
@@ -7,8 +8,7 @@ Original project structure             |  Current project structure
 
  Original repository architecture             |  Current repository architecture
 :-------------------------:|:-------------------------:
- ![](https://github.com/user-attachments/assets/2b1a1195-0d0f-4f5d-82a8-c6ecc084dfcd) | ![](https://github.com/user-attachments/assets/50680326-2f31-46aa-98da-269cc9ed12e0)
-
+ ![](https://github.com/user-attachments/assets/2b1a1195-0d0f-4f5d-82a8-c6ecc084dfcd) | ![](https://github.com/user-attachments/assets/ec2ceadd-666f-4937-adec-b52227ac49a8)
 
 
 
