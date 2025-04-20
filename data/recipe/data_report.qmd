@@ -27,15 +27,42 @@ header-includes:
 
 # Data Overview
 
-In this chapter, we will show a small sample of the dataset to understand its structure.
+To get a clearer understanding of the dataset’s structure, we start with a brief interactive preview.
 
 ```{python}
+import os
 import pandas as pd
 from itables import show, init_notebook_mode
+from pathlib import Path
+import yaml
 init_notebook_mode(all_interactive=True)
+from urllib.parse import urlparse, urljoin
 
-# Load your DataFrame (make sure to update this with the correct file path)
-df = pd.read_parquet("final_df.parquet")
+# Get the absolute path to the dataset in s3
+base_path = Path().resolve()
+PROJECT_ROOT = base_path.resolve().parent.parent
+config_path = PROJECT_ROOT / "utils" / "config.yaml"
+
+with open(config_path, "r") as file:
+    config = yaml.safe_load(file)
+
+DATA_DIR = config['DATA_DIR']
+
+parsed_url = urlparse(DATA_DIR)
+
+if parsed_url.scheme in ['http', 'https']:  
+
+    parent_url = DATA_DIR.rstrip('/').rpartition('/')[0]  
+    data_path = urljoin(parent_url + '/', 'backup/final_df.parquet')
+else:  
+    data_path = (Path(DATA_DIR).parent / 'backup' / 'final_df.parquet').as_posix()
+
+# Load the processed DataFrame on s3
+df = pd.read_parquet(data_path)
+```
+
+```{python}
+print(f"Our final processed recipe dataset contains {len(df)} recipes, each described by a wide range of characteristics reflected in the dataset's columns.")
 ```
 
 ```{python}
@@ -55,6 +82,7 @@ show(df.sample(100), column_defs=column_defs)
 
 # Interactive Visualizations
 
+Our final processed dataset also covers a wide variety of types in terms of origin, preparation time, nutritional content. You can explore these features interactively using the dropdown menu below to browse through the different columns.
 
 ```{python}
 import plotly.graph_objects as go

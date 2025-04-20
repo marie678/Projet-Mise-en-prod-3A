@@ -3,6 +3,7 @@ s3:
   endpoint_url: "https://minio.lab.sspcloud.fr"
   nutrition_file_name: "recipes.parquet"
   measurements_file_name: "recipes_data.parquet"
+  final_df: 'final_df.parquet'
 
 nutrition_data:
   file: 'recipes.parquet'
