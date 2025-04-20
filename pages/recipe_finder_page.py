@@ -31,6 +31,7 @@ st.set_page_config(
     page_icon="🍴"
 )
 
+# displays login info in sidebar
 show_user_panel()  # always display login info in sidebar
 
 # import of the cleaned and formated dataset of 10k recipes :

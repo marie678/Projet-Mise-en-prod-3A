@@ -16,12 +16,16 @@ from src.user_functionalities.auth_ui import show_user_panel
 
 URI = 'http://127.0.0.1:5000'
 
+####################################### PAGE CONFIGURATION #####################################
+
+# configuration parameters
 st.set_page_config(
     layout="wide",
     page_title='Liked recipes',
     initial_sidebar_state='collapsed',
     page_icon="❤"
 )
+
 st.markdown(
     """
     <style>
@@ -52,8 +56,17 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
+# displays login info in sidebar
+show_user_panel()  
 
-show_user_panel()  # displays login info in sidebar
+# Home and recipe finder button
+_, col1, col2, _ = st.columns([2, 1, 1, 2])
+if col1.button("🔎 Recipe Finder"):
+    st.switch_page("pages/recipe_finder_page.py")
+if col2.button("🏠 Home Page"):
+    st.switch_page("app.py")
+
+####################################### IMPORT DATASET #####################################
 
 # import of the cleaned and formatted dataset of 10k recipes :
 PROJECT_ROOT = Path(__file__).resolve().parent.parent # absolute path to the project root
@@ -88,17 +101,11 @@ if not os.path.exists(data_folder) or not os.listdir(data_folder):
         logger.add("data_cleaning.log", rotation="10 MB", level="INFO", format="{time} - {level} - {message}")
     st.success("✅ Dataset loaded and ready to go!")
 
-
-# Home and recipe finder button
-_, col1, col2, _ = st.columns([2, 1, 1, 2])
-if col1.button("🔎 Recipe Finder"):
-    st.switch_page("pages/recipe_finder_page.py")
-if col2.button("🏠 Home Page"):
-    st.switch_page("app.py")
-
 # load the dataset
 DATASET_PATH = os.path.join(data_folder, 'final_df.parquet')
 df: pd.DataFrame = pd.read_parquet(DATASET_PATH)
+
+####################################### DISPLAY LIKED RCIPES #####################################
 
 # Get the list of liked recipes for the current user from the Flask backend
 liked_recipes = st.session_state.get("liked_recipes", [])
