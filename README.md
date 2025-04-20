@@ -45,6 +45,18 @@ Our application is composed of 3 pages:
   - Finally this printable recipe page provides all the information you need to prepare your best meal: preparation time, cooking time, ingredients, directions, ratings, nutrition facts, and a link to the recipe page on the original website it came from.
   - If you're logged in, you can also like recipes, they'll be saved to your personal space so you can easily find them later.
 
+## Demo Account
+
+To help you explore the app's full functionality without creating a new user, we provide a demo account you can use to log in.
+
+This account already has liked recipes saved, allowing you to immediately see how your personal recipe space works.
+
+> 🔐 **Demo credentials**
+> 
+> **Username**: no_no  
+> **Password**: Ilovetomato
+
+➜ Feel free to test the "like" functionality or explore previously liked recipes from this account.
 
 ## Data
 
