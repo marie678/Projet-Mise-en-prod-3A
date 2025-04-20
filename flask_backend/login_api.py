@@ -1,3 +1,7 @@
+"""
+Provides authentication routes for a Flask app, including user registration, login, and logout,
+with automatic SQLite database setup and connection management.
+"""
 # Flask app setup
 import os
 import sqlite3
