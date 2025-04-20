@@ -1,5 +1,6 @@
 # Changes with the 'Mise en production' course
 
+The following general project and more detailed repository structure graphs illustrate how the project has evolved from its previous version. They highlight changes in architecture, data handling, and code structure. For more details on these improvements, refer to the sections below:
 
 Original project structure             |  Current project structure
 :-------------------------:|:-------------------------:
@@ -7,8 +8,7 @@ Original project structure             |  Current project structure
 
  Original repository architecture             |  Current repository architecture
 :-------------------------:|:-------------------------:
- ![](https://github.com/user-attachments/assets/2b1a1195-0d0f-4f5d-82a8-c6ecc084dfcd) | ![](https://github.com/user-attachments/assets/50680326-2f31-46aa-98da-269cc9ed12e0)
-
+ ![](https://github.com/user-attachments/assets/2b1a1195-0d0f-4f5d-82a8-c6ecc084dfcd) | ![](https://github.com/user-attachments/assets/ec2ceadd-666f-4937-adec-b52227ac49a8)
 
 
 
@@ -65,6 +65,27 @@ The preprocessing code was adapted to reduce the compute time.
 - Load/create the preprocessed dataset when the app is opened for the first time only.
 
 - External parametrization with YAML file: the dataframes related parameters (columns to keep or format, file names) and s3 connexion parameters were externalized.
+  
+- Additional logging was added throughout the codebase to help track the application's state and performance. In particular, the entire preprocessing is now timed step by step, making it easier to identify bottlenecks and optimize performance when needed.
+
+## User Functionality
+
+A new set of user-related features was added to enhance personalization and interactivity:
+
+- User authentication: Users can now register and log in to the app. Authentication is handled via a Flask backend API, compatible with the Streamlit frontend.
+
+- Recipe liking: Logged-in users can like recipes, which are then saved to their personal user space for later access.
+
+- Database integration:
+
+  - A Users table stores authentication information.
+
+  - A Likes table stores the recipes liked by users.
+
+Both databases are implemented using SQLAlchemy for seamless integration with the backend API.
+
+This new layer of functionality lays the groundwork for future personalization features such as saved preferences, history tracking, and personalized recommendations. While we didn’t have time to implement those additional features yet, the most technically challenging part is now done.
+
 
 
 ## Application
