@@ -1,9 +1,12 @@
+"""
+Provides a Streamlit sidebar interface for user authentication and session management,
+interacting with a backend API.
+Includes login, registration, and a user panel with options like viewing liked recipes and logging out.
+"""
 import requests
 import streamlit as st
 
-# URI = "http://127.0.0.1:5000"
 URI = "http://localhost:5000"
-
 
 
 def login_form():

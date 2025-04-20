@@ -1,27 +1,27 @@
-import streamlit as st
-import pandas as pd
-import requests
 import os
 from pathlib import Path
+
+import pandas as pd
+import streamlit as st
 import yaml
 from loguru import logger
-
 from streamlit_extras.add_vertical_space import add_vertical_space
+
 from src.application.recipe_finder_functions import split_frame
-from src.user_functionalities.auth_ui import show_user_panel
-from src.user_functionalities.like import get_liked_recipes
+from src.application.st_session_functions import handle_recipe_click
 from src.preprocessing.filter import data_filter
 from src.preprocessing.format import data_preprocessing
 from src.preprocessing.load import merge
-from src.application.st_session_functions import handle_recipe_click
+from src.user_functionalities.auth_ui import show_user_panel
 
+URI = 'http://127.0.0.1:5000'
 
-URI = 'http://127.0.0.1:5000'  # URL for your Flask app
-
-# configuration parameters
-st.set_page_config(layout="wide", page_title='Liked recipes', initial_sidebar_state='collapsed', page_icon="❤")
-
-# Display header
+st.set_page_config(
+    layout="wide",
+    page_title='Liked recipes',
+    initial_sidebar_state='collapsed',
+    page_icon="❤"
+)
 st.markdown(
     """
     <style>
@@ -53,12 +53,10 @@ st.markdown(
 )
 
 
-show_user_panel()  # <-- always displays login info in sidebar
+show_user_panel()  # displays login info in sidebar
 
-# import of the cleaned and formated dataset of 10k recipes :
-
-# Get the absolute path to the project root
-PROJECT_ROOT = Path(__file__).resolve().parent.parent
+# import of the cleaned and formatted dataset of 10k recipes :
+PROJECT_ROOT = Path(__file__).resolve().parent.parent # absolute path to the project root
 config_path = PROJECT_ROOT / "utils" / "config.yaml"
 with open(config_path, "r") as file:
     config = yaml.safe_load(file)
@@ -68,7 +66,7 @@ MEASUREMENTS_FILE_NAME = config['s3']['measurements_file_name']
 
 data_folder = os.path.join(PROJECT_ROOT, "data/recipe")
 
-# if no data folder or if it is empty : create the dataset and save it in data folder
+# if no data folder or if it's empty : create the dataset and save it in data folder
 if not os.path.exists(data_folder) or not os.listdir(data_folder):
     with st.spinner("⏳ Initializing the dataset... This may take a few minutes."):
         os.makedirs(data_folder, exist_ok=True)
@@ -102,18 +100,21 @@ if col2.button("🏠 Home Page"):
 DATASET_PATH = os.path.join(data_folder, 'final_df.parquet')
 df: pd.DataFrame = pd.read_parquet(DATASET_PATH)
 
-
 # Get the list of liked recipes for the current user from the Flask backend
 liked_recipes = st.session_state.get("liked_recipes", [])
 
 if not liked_recipes:
     st.info("You have no liked recipes or data was not loaded.")
-else: 
+else:
     df = df[df['recipe_id'].isin(liked_recipes)]
     st.session_state.total_recipes = len(df)
 
     # Display the results
-    if st.session_state.total_recipes != 0:
+    if st.session_state.total_recipes == 1:
+        NUMBER_RECIPES = f"There is **{st.session_state.total_recipes} recipe** you liked :"
+        st.write(NUMBER_RECIPES)
+        add_vertical_space(2)
+    elif st.session_state.total_recipes > 1:
         NUMBER_RECIPES = f"There are **{st.session_state.total_recipes} recipes** you liked :"
         st.write(NUMBER_RECIPES)
         add_vertical_space(2)
@@ -136,8 +137,8 @@ else:
     # Display filtered recipes with pagination + html formatting
     for i in range(len(page)):
         recipe = page.iloc[i]
-        recipe_id = recipe['recipe_id']  
-    
+        recipe_id = recipe['recipe_id']
+
         # Display recipe info with formatting
         recipe_placeholder.markdown(
         f"""
@@ -159,7 +160,7 @@ else:
     </div>
     """,
         unsafe_allow_html=True)
-    
+
         # "Go to Recipe" button to redirect to the recipe page
         if recipe_placeholder.button(
             "Go to Recipe",

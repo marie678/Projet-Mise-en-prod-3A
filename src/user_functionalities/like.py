@@ -1,3 +1,7 @@
+"""
+Provides functions to like a recipe, display a like button in the Streamlit UI,
+and retrieve liked recipes for a given user, using both local database access and Flask API requests.
+"""
 import requests
 import streamlit as st
 

@@ -7,10 +7,14 @@ from jinja2 import Template
 from src.user_functionalities.auth_ui import show_user_panel
 from src.user_functionalities.like import like_recipe_button
 
-st.set_page_config(layout="wide", page_title='Recipe page', initial_sidebar_state='collapsed', page_icon="🍴")
+st.set_page_config(
+    layout="wide",
+    page_title='Recipe page',
+    initial_sidebar_state='collapsed',
+    page_icon="🍴"
+)
 
-show_user_panel()  # <-- always displays login info in sidebar
-
+show_user_panel()  # always display login info in sidebar
 
 # Display header
 st.markdown(
@@ -42,8 +46,6 @@ else:
     recipe_title = st.session_state['title']
     ingredients = st.session_state['ingredients']
     directions = st.session_state['instructions']
-    # link = st.session_state['link']
-    # correspondance_rate = st.session_state['correspondance_rate']
     rating = st.session_state.rating
     vote = st.session_state.vote
     author = st.session_state.author
@@ -64,7 +66,6 @@ else:
     carbo = st.session_state.carbo
     fiber = st.session_state.fiber
     sugar = st.session_state.sugar
-
 
     _, col1, col2, col3, _ = st.columns([2, 3, 3, 1,2])
     if col1.button("🔎 Back to Recipe Finder"):

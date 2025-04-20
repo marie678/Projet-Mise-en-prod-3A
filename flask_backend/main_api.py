@@ -1,15 +1,17 @@
-from flask import Flask
-from flask_login import LoginManager
-from pathlib import Path
-import yaml
 import os
 import sys
+from pathlib import Path
+
+import yaml
+from flask import Flask
+from flask_login import LoginManager
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-from flask_backend.login_api import login_routes
-from flask_backend.like_api import like_routes
 from src.user_functionalities.db import get_users_db
 from src.user_functionalities.user_model import User
+
+from flask_backend.like_api import like_routes
+from flask_backend.login_api import login_routes
 
 # Create Flask app
 app = Flask(__name__)
